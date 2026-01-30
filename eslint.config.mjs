@@ -1,4 +1,4 @@
-import js from 'eslint/js'
+import eslintJs from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -9,7 +9,7 @@ export default [
     ignores: ['**/node_modules/**', '**/dist/**', '**/build/**'],
   },
 
-  js.configs.recommended,
+  eslintJs.configs.recommended,
 
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -27,12 +27,12 @@ export default [
     rules: {
       ...tsPlugin.configs.recommended.rules,
       ...prettierConfig.rules,
-
       'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
+
   {
     files: ['backend/**/*.ts'],
     languageOptions: {

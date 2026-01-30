@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "mindfire",
+    "database": "fitness_tracking",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "mindfire",
+    "database": "fitness_tracking",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "mindfire",
+    "database": "fitness_tracking",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
