@@ -13,3 +13,9 @@ export async function findUserByEmail(email: string) {
 export async function createUser(data: CreateUserInput) {
   return User.create(data);
 }
+
+export async function findUserById(id: string) {
+  return User.findByPk(id, {
+    attributes: ['id', 'email', 'createdAt'],
+  });
+}

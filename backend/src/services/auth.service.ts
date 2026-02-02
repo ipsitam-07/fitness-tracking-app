@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { findUserByEmail, createUser } from '../repositories/auth.repository';
 import { AppError } from '../utils/error';
 import authConfig from '../config/auth.config';
-import jwt from 'jsonwebtoken';
+import { signToken } from '../utils/jwt';
 
 interface IRegisterInput {
   email: string;
@@ -49,16 +49,7 @@ export async function loginUserService({ email, password }: ILoginInput) {
     throw new AppError('Invalid password', 400);
   }
 
-  const accessToken = jwt.sign(
-    {
-      userId: user.id,
-    },
-    authConfig.jwtSkey,
-    {
-      expiresIn: authConfig.jwtExp as any,
-    },
-  );
-
+  const accessToken = signToken({ userId: user.id });
   return {
     accessToken,
     user: {
