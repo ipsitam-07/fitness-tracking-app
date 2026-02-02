@@ -55,7 +55,7 @@ export async function loginUserService({ email, password }: ILoginInput) {
     },
     authConfig.jwtSkey,
     {
-      expiresIn: authConfig.jwtSkey as any,
+      expiresIn: authConfig.jwtExp as any,
     },
   );
 

@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../index';
+import { sequelize } from '../sequelize';
 
 export type GoalType = 'workouts_per_week' | 'calories_per_week' | 'weight';
 
