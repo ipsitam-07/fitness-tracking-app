@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser } from '../controllers/auth.controller';
+import { loginUser, registerUser } from '../controllers/auth.controller';
 
 const router = Router();
 /**
@@ -28,11 +28,40 @@ const router = Router();
  *     responses:
  *       201:
  *         description: User registered successfully
- *      400:
+ *       400:
  *         description: Invalid input
- *      404:
+ *       404:
  *         description: Not found
  */
 router.post('/register', registerUser);
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login user and return JWT access token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Invalid credentials
+ *
+ */
+router.post('/login', loginUser);
 
 export default router;

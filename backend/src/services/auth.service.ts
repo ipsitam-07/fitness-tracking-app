@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import { findUserByEmail, createUser } from '../repositories/auth.repository';
 import { AppError } from '../utils/error';
+import authConfig from '../config/auth.config';
+import jwt from 'jsonwebtoken';
 
 interface IRegisterInput {
   email: string;
@@ -8,6 +10,11 @@ interface IRegisterInput {
   password: string;
 }
 
+interface ILoginInput {
+  email: string;
+  password: string;
+}
+//Register New User
 export async function registerUserService({ email, name, password }: IRegisterInput) {
   if (!email || !password) {
     throw new AppError('Email and password are required', 400);
@@ -26,4 +33,38 @@ export async function registerUserService({ email, name, password }: IRegisterIn
     name,
     passwordHash,
   });
+}
+
+//Login Existing User and send Access Token
+export async function loginUserService({ email, password }: ILoginInput) {
+  const user = await findUserByEmail(email);
+
+  if (!user) {
+    throw new AppError('Invalid credentials', 400);
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+
+  if (!isPasswordValid) {
+    throw new AppError('Invalid password', 400);
+  }
+
+  const accessToken = jwt.sign(
+    {
+      userId: user.id,
+    },
+    authConfig.jwtSkey,
+    {
+      expiresIn: authConfig.jwtSkey as any,
+    },
+  );
+
+  return {
+    accessToken,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  };
 }

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
-import { registerUserService } from '../services/auth.service';
+import { registerUserService, loginUserService } from '../services/auth.service';
 import { AppError } from '../utils/error';
 
 export const registerUser = async (req: IAuthRequest, res: Response) => {
@@ -25,5 +25,21 @@ export const registerUser = async (req: IAuthRequest, res: Response) => {
       email: user.email,
       name: user.name,
     },
+  });
+};
+
+export const loginUser = async (req: IAuthRequest, res: Response) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new AppError('Invalid credentials', 400);
+  }
+
+  const userData = await loginUserService({ email, password });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged in successfully',
+    userData,
   });
 };
