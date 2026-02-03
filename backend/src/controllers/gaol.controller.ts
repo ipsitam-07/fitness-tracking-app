@@ -4,8 +4,9 @@ import {
   createGoalsService,
   getGoalsService,
   findGoalsbyIDService,
+  updateUserGoalService,
 } from '../services/goal.service';
-import { ICreateGoalsDTO } from '../dtos/goals.dto';
+import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
 
 //Controller for goal creation
@@ -28,7 +29,7 @@ export const getUserGoals = async (req: IAuthRequest, res: Response) => {
 
   const goals = await getGoalsService(userId);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: goals,
   });
@@ -44,8 +45,21 @@ export const getGoalsbyID = async (req: IAuthRequest, res: Response) => {
 
   const goal = await findGoalsbyIDService(user!, goalId);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: goal,
   });
+};
+
+export const updateGoals = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const goalId = req.params.id;
+
+  const payload = req.body as IUpdateGoalsDTO;
+
+  if (!goalId || typeof goalId !== 'string') {
+    return null;
+  }
+  const goal = await updateUserGoalService(userId!, goalId, payload);
+  res.status(200).json({ success: true, data: goal });
 };

@@ -1,5 +1,5 @@
 import { Goal } from '../database/models';
-import { ICreateGoalsDTO } from '../dtos/goals.dto';
+import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
 
 //Create goals for authenticated user
 export async function createGoal(
@@ -18,4 +18,8 @@ export async function getGoalbyUserID(userId: string) {
 
 export async function getGoalsbyGoalID(goalId: string) {
   return Goal.findByPk(goalId);
+}
+
+export function updateGoal(goal: Goal, payload: IUpdateGoalsDTO) {
+  return goal.update(payload);
 }

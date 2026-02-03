@@ -30,7 +30,7 @@ export const getUserWorkout = async (req: IAuthRequest, res: Response) => {
 
   const workouts = await getUserWorkoutsService(userId);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: workouts,
   });
@@ -52,7 +52,7 @@ export const getWorkoutbyID = async (req: IAuthRequest, res: Response) => {
 
   const workout = await getWorkoutbyWorkoutIDService(workoutId, userId);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: workout,
   });
@@ -74,7 +74,7 @@ export const updateWorkoutbyID = async (req: IAuthRequest, res: Response) => {
 
   const updatedWorkout = await updateWorkoutbyIDService(workoutId, userId, payload);
 
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
     data: updatedWorkout,
   });
@@ -93,7 +93,7 @@ export const deleteWorkoutbyiD = async (req: IAuthRequest, res: Response) => {
 
   await deleteWorkoutbyIDService(workoutId, userId);
 
-  return res.status(204).json({
+  res.status(204).json({
     success: true,
   });
 };

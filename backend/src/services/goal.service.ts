@@ -1,5 +1,10 @@
-import { createGoal, getGoalbyUserID, getGoalsbyGoalID } from '../repositories/goals.repository';
-import { ICreateGoalsDTO } from '../dtos/goals.dto';
+import {
+  createGoal,
+  getGoalbyUserID,
+  getGoalsbyGoalID,
+  updateGoal,
+} from '../repositories/goals.repository';
+import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
 
 //Create gaols for an user
@@ -43,4 +48,17 @@ export async function findGoalsbyIDService(userId: string, goalId: string) {
   const goals = await getGoalsbyGoalID(goalId);
 
   return goals;
+}
+
+export async function updateUserGoalService(
+  userId: string,
+  goalId: string,
+  payload: IUpdateGoalsDTO,
+) {
+  if (Object.keys(payload).length === 0) {
+    throw new AppError('No fields provided to update', 400);
+  }
+
+  const goal = await findGoalsbyIDService(userId, goalId);
+  return updateGoal(goal!, payload);
 }
