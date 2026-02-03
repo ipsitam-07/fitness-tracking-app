@@ -15,8 +15,8 @@ app.use(cors());
 swaggerDocs(app);
 //routes
 app.use('/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api', workoutRoutes);
+app.use('/users', userRoutes);
+app.use('/', workoutRoutes);
 
 //swagger
 

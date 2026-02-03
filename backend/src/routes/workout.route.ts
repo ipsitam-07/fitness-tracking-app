@@ -13,7 +13,7 @@ const router = Router();
 router.use(authenticationReq);
 /**
  * @swagger
- * /api/workouts:
+ * /workouts:
  *   post:
  *     summary: Log a workout
  *     tags: [Workout]
@@ -46,19 +46,145 @@ router.use(authenticationReq);
  *       400:
  *         description: Invalid workout data
  */
-//POST /api/workouts
+//POST /workouts
 router.post('/workouts', createWorkout);
 
-//GET /api/workouts
+/**
+ * @swagger
+ * /workouts:
+ *   get:
+ *     summary: Get all workouts of a logged in user
+ *     tags: [Workout]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of workouts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *       401:
+ *         description: Unauthorized
+ */
+
+//GET /workouts
 router.get('/workouts', getUserWorkout);
 
-//GET /api/workouts/:id
+/**
+ * @swagger
+ * /workouts/{id}:
+ *   get:
+ *     summary: Get workout by ID
+ *     tags: [Workout]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Workout ID
+ *     responses:
+ *       200:
+ *         description: Workout details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 userId:
+ *                   type: string
+ *                 type:
+ *                   type: string
+ *                 durationMinutes:
+ *                   type: number
+ *                 caloriesBurned:
+ *                   type: number
+ *                 date:
+ *                   type: string
+ *                   format: date
+ *       400:
+ *         description: Invalid ID
+ *       401:
+ *         description: Unauthorized
+ */
+//GET /workouts/:id
 router.get('/workouts/:id', getWorkoutbyID);
 
-//PATCH /api/workouts/:id
+/**
+ * @swagger
+ * /workouts/{id}:
+ *   patch:
+ *     summary: Update workout info by ID
+ *     tags: [Workout]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Workout ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                   type: string
+ *               durationMinutes:
+ *                   type: number
+ *               caloriesBurned:
+ *                   type: number
+ *               date:
+ *                   type: string
+ *                   format: date
+ *     responses:
+ *       200:
+ *         description: Workout info updated
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Workout not found
+ */
+
+//PATCH /workouts/:id
 router.patch('/workouts/:id', updateWorkoutbyID);
 
-//DELETE /api/workouts/:id
+/**
+ * @swagger
+ * /workouts/{id}:
+ *   delete:
+ *     summary: Delete a workout
+ *     tags: [Workout]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: No Content
+ *       400:
+ *         description: Invalid ID
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Workout not found
+ */
+//DELETE /workouts/:id
 router.delete('/workouts/:id', deleteWorkoutbyiD);
 
 export default router;

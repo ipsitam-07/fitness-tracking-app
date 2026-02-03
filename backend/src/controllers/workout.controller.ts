@@ -9,7 +9,6 @@ import {
 } from '../services/workout.service';
 import { ICreateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
-import { deleteWorkoutbyID } from '../repositories/workout.repository';
 
 //Controller for workout creation
 export const createWorkout = async (req: IAuthRequest, res: Response) => {

@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * @swagger
- * /users/me:
+ * /api/users/me:
  *   get:
  *     summary: Get current authenticated user
  *     description: Returns the profile of the currently authenticated user based on JWT.
