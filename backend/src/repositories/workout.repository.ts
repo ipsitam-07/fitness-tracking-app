@@ -1,11 +1,19 @@
 import { Workout } from '../database/models';
 import { ICreateWorkoutDTO } from '../dtos/workout.dto';
+
+//Create workout for authenticated user
 export async function createWorkout(data: ICreateWorkoutDTO & { userId: string }) {
   return Workout.create(data);
 }
 
+//Find all workouts of the user by authenticated user id
 export async function findWorkoutsByUserId(userId: string) {
   return Workout.findAll({
     where: { userId },
   });
+}
+
+//Find workout of the authenticated user using workout id
+export async function findWorkoutbyWorkoutID(workoutId: string) {
+  return Workout.findByPk(workoutId);
 }

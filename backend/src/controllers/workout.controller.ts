@@ -1,9 +1,14 @@
 import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
-import { createUserWorkoutService, getUserWorkoutsService } from '../services/workout.service';
+import {
+  createUserWorkoutService,
+  getUserWorkoutsService,
+  getWorkoutbyWorkoutIDService,
+} from '../services/workout.service';
 import { ICreateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
 
+//Controller for workout creation
 export const createWorkout = async (req: IAuthRequest, res: Response) => {
   const workout = await createUserWorkoutService(req.user!.id, req.body as ICreateWorkoutDTO);
 
@@ -13,6 +18,7 @@ export const createWorkout = async (req: IAuthRequest, res: Response) => {
   });
 };
 
+//Controller for fetching all workouts of an user
 export const getUserWorkout = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
 
@@ -25,5 +31,27 @@ export const getUserWorkout = async (req: IAuthRequest, res: Response) => {
   return res.status(200).json({
     success: true,
     data: workouts,
+  });
+};
+
+//Controller for fetching workout by an id
+export const getWorkoutbyID = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return null;
+  }
+
+  const workoutId = req.params.id;
+
+  if (!workoutId || typeof workoutId !== 'string') {
+    throw new AppError('Invalid id', 400);
+  }
+
+  const workout = await getWorkoutbyWorkoutIDService(workoutId, userId);
+
+  return res.status(200).json({
+    success: true,
+    data: workout,
   });
 };
