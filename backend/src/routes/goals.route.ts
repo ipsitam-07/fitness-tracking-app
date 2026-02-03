@@ -5,6 +5,7 @@ import {
   getUserGoals,
   getGoalsbyID,
   updateGoals,
+  deleteGoals,
 } from '../controllers/gaol.controller';
 
 const router = Router();
@@ -25,4 +26,7 @@ router.get('/goals/:id', getGoalsbyID);
 
 //PATCH /goals/:id
 router.patch('/goals/:id', updateGoals);
+
+//DELETE /goals/:id
+router.delete('/goals/:id', deleteGoals);
 export default router;

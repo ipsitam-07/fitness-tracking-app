@@ -23,3 +23,7 @@ export async function getGoalsbyGoalID(goalId: string) {
 export function updateGoal(goal: Goal, payload: IUpdateGoalsDTO) {
   return goal.update(payload);
 }
+
+export function deleteGoal(goal: Goal) {
+  return goal.destroy();
+}

@@ -3,6 +3,7 @@ import {
   getGoalbyUserID,
   getGoalsbyGoalID,
   updateGoal,
+  deleteGoal,
 } from '../repositories/goals.repository';
 import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
@@ -61,4 +62,9 @@ export async function updateUserGoalService(
 
   const goal = await findGoalsbyIDService(userId, goalId);
   return updateGoal(goal!, payload);
+}
+
+export async function deleteUserGoalService(userId: string, goalId: string) {
+  const goal = await findGoalsbyIDService(userId, goalId);
+  await deleteGoal(goal!);
 }
