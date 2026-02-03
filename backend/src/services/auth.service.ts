@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import { findUserByEmail, createUser } from '../repositories/auth.repository';
 import { AppError } from '../utils/error';
-import authConfig from '../config/auth.config';
 import { signToken } from '../utils/jwt';
 
 interface IRegisterInput {
@@ -19,7 +18,7 @@ export async function registerUserService({ email, name, password }: IRegisterIn
   if (!email || !password) {
     throw new AppError('Email and password are required', 400);
   }
-
+  email = email.trim().toLowerCase();
   const userExists = await findUserByEmail(email);
 
   if (userExists) {
@@ -28,17 +27,23 @@ export async function registerUserService({ email, name, password }: IRegisterIn
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  return createUser({
+  const user = await createUser({
     email,
     name,
     passwordHash,
   });
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  };
 }
 
 //Login Existing User and send Access Token
 export async function loginUserService({ email, password }: ILoginInput) {
   const user = await findUserByEmail(email);
-
+  email = email.trim().toLowerCase();
   if (!user) {
     throw new AppError('Invalid credentials', 400);
   }
