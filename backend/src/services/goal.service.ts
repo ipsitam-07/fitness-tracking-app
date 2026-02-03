@@ -1,7 +1,8 @@
-import { createGoal } from '../repositories/goals.repository';
+import { createGoal, getGoalbyUserID } from '../repositories/goals.repository';
 import { ICreateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
 
+//Create gaols for an user
 export async function createGoalsService(userId: string, payload: ICreateGoalsDTO) {
   if (!userId) {
     throw new AppError('Unauthorized', 401);
@@ -12,4 +13,12 @@ export async function createGoalsService(userId: string, payload: ICreateGoalsDT
   }
 
   return createGoal({ ...payload, userId });
+}
+
+//Fetch all goals for an user
+export async function getGoalsService(userId: string) {
+  if (!userId) {
+    throw new AppError('User not found', 404);
+  }
+  return getGoalbyUserID(userId);
 }

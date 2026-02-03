@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
-import { createGoals } from '../controllers/gaol.controller';
+import { createGoals, getUserGoals } from '../controllers/gaol.controller';
 
 const router = Router();
 
@@ -12,4 +12,6 @@ router.use(authenticationReq);
 //POST /goals
 router.post('/goals', createGoals);
 
+//GET /goals
+router.get('/goals', getUserGoals);
 export default router;

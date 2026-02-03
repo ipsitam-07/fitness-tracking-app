@@ -13,14 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+//swagger
 swaggerDocs(app);
+
 //routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/', workoutRoutes);
 app.use('/', goalsRoutes);
-
-//swagger
 
 //global error handler
 app.use(errorHandler);

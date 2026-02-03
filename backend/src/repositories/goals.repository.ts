@@ -9,3 +9,9 @@ export async function createGoal(
 ) {
   return Goal.create(data);
 }
+
+export async function getGoalbyUserID(userId: string) {
+  return Goal.findAll({
+    where: { userId },
+  });
+}
