@@ -4,6 +4,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.route';
 import { errorHandler } from './middlewares/error.middleware';
 import userRoutes from './routes/user.route';
+import workoutRoutes from './routes/workout.route';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 //routes
 app.use('/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api', workoutRoutes);
 
 //swagger
 swaggerDocs(app);
