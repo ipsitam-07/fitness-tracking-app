@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.route';
 import { errorHandler } from './middlewares/error.middleware';
 import userRoutes from './routes/user.route';
 import workoutRoutes from './routes/workout.route';
+import goalsRoutes from './routes/goals.route';
 
 const app = express();
 
@@ -17,6 +18,7 @@ swaggerDocs(app);
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/', workoutRoutes);
+app.use('/', goalsRoutes);
 
 //swagger
 
