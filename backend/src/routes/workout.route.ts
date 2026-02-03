@@ -11,7 +11,41 @@ import {
 const router = Router();
 //JWT auth middleware
 router.use(authenticationReq);
-
+/**
+ * @swagger
+ * /api/workouts:
+ *   post:
+ *     summary: Log a workout
+ *     tags: [Workout]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - type
+ *               - date
+ *             properties:
+ *               type:
+ *                 type: string
+ *               durationMinutes:
+ *                 type: number
+ *               caloriesBurned:
+ *                 type: number
+ *               date:
+ *                 type: string
+ *                 format: date
+ *     responses:
+ *       201:
+ *         description: Workout created successfully
+ *       401:
+ *         description: Unauthorized
+ *       400:
+ *         description: Invalid workout data
+ */
 //POST /api/workouts
 router.post('/workouts', createWorkout);
 

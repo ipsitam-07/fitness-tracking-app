@@ -32,7 +32,7 @@ export async function registerUserService({ email, name, password }: IRegisterIn
 }
 
 //Login Existing User and send Access Token
-export async function loginUserService({ email, password }: IRegisterInputDTO) {
+export async function loginUserService({ email, password }: ILoginInputDTO) {
   const user = await findUserByEmail(email);
   email = email.trim().toLowerCase();
   if (!user) {

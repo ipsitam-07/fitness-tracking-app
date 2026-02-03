@@ -12,13 +12,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+swaggerDocs(app);
 //routes
 app.use('/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', workoutRoutes);
 
 //swagger
-swaggerDocs(app);
+
 //global error handler
 app.use(errorHandler);
 app.get('/api/health', (_req, res) => {
