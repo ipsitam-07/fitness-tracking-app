@@ -24,3 +24,10 @@ export async function updateWorkoutbyID(id: string, data: IUpdateWorkoutDTO) {
     where: { id },
   });
 }
+
+//Delete workout of an user by using workout id
+export async function deleteWorkoutbyID(id: string) {
+  return Workout.destroy({
+    where: { id },
+  });
+}

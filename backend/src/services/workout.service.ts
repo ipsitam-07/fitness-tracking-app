@@ -3,6 +3,7 @@ import {
   findWorkoutsByUserId,
   findWorkoutbyWorkoutID,
   updateWorkoutbyID,
+  deleteWorkoutbyID,
 } from '../repositories/workout.repository';
 import { ICreateWorkoutDTO, IUpdateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
@@ -66,4 +67,24 @@ export async function updateWorkoutbyIDService(
 
   await workout.update(payload);
   return workout;
+}
+
+//Delete workout of an user using id
+export async function deleteWorkoutbyIDService(workoutId: string, userId: string) {
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+  if (!workoutId) {
+    throw new AppError('Invalid workout id', 400);
+  }
+
+  const workout = await findWorkoutbyWorkoutID(workoutId);
+
+  if (!workout) {
+    throw new AppError('Workout not found', 404);
+  }
+
+  await deleteWorkoutbyID(workoutId);
+
+  return true;
 }

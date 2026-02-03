@@ -2,12 +2,14 @@ import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
 import {
   createUserWorkoutService,
+  deleteWorkoutbyIDService,
   getUserWorkoutsService,
   getWorkoutbyWorkoutIDService,
   updateWorkoutbyIDService,
 } from '../services/workout.service';
 import { ICreateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
+import { deleteWorkoutbyID } from '../repositories/workout.repository';
 
 //Controller for workout creation
 export const createWorkout = async (req: IAuthRequest, res: Response) => {
@@ -76,5 +78,23 @@ export const updateWorkoutbyID = async (req: IAuthRequest, res: Response) => {
   return res.status(200).json({
     success: true,
     data: updatedWorkout,
+  });
+};
+
+//Controller for deleting a workout
+export const deleteWorkoutbyiD = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const workoutId = req.params.id;
+  if (!workoutId || typeof workoutId !== 'string') {
+    return null;
+  }
+  if (!userId || typeof userId !== 'string') {
+    return null;
+  }
+
+  await deleteWorkoutbyIDService(workoutId, userId);
+
+  return res.status(204).json({
+    success: true,
   });
 };
