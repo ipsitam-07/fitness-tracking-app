@@ -1,6 +1,10 @@
-import { response, Response } from 'express';
+import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
-import { createGoalsService, getGoalsService } from '../services/goal.service';
+import {
+  createGoalsService,
+  getGoalsService,
+  findGoalsbyIDService,
+} from '../services/goal.service';
 import { ICreateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
 
@@ -27,5 +31,21 @@ export const getUserGoals = async (req: IAuthRequest, res: Response) => {
   return res.status(200).json({
     success: true,
     data: goals,
+  });
+};
+
+//Controller for fetching a specific goal by goal ID
+export const getGoalsbyID = async (req: IAuthRequest, res: Response) => {
+  const user = req.user?.id;
+  const goalId = req.params.id;
+  if (!goalId || typeof goalId !== 'string') {
+    return null;
+  }
+
+  const goal = await findGoalsbyIDService(user!, goalId);
+
+  return res.status(200).json({
+    success: true,
+    data: goal,
   });
 };

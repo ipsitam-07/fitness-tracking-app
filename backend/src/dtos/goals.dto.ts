@@ -6,3 +6,9 @@ export interface ICreateGoalsDTO {
   endDate?: Date;
   status: 'active' | 'completed';
 }
+
+export interface IUpdateGoalsDTO {
+  targetValue?: number;
+  endDate?: Date;
+  status: 'active' | 'completed';
+}

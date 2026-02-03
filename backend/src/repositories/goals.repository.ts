@@ -15,3 +15,7 @@ export async function getGoalbyUserID(userId: string) {
     where: { userId },
   });
 }
+
+export async function getGoalsbyGoalID(goalId: string) {
+  return Goal.findByPk(goalId);
+}

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
-import { createGoals, getUserGoals } from '../controllers/gaol.controller';
+import { createGoals, getUserGoals, getGoalsbyID } from '../controllers/gaol.controller';
 
 const router = Router();
 
@@ -14,4 +14,7 @@ router.post('/goals', createGoals);
 
 //GET /goals
 router.get('/goals', getUserGoals);
+
+//GET /goals/:id
+router.get('/goals/:id', getGoalsbyID);
 export default router;

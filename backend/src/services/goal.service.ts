@@ -1,4 +1,4 @@
-import { createGoal, getGoalbyUserID } from '../repositories/goals.repository';
+import { createGoal, getGoalbyUserID, getGoalsbyGoalID } from '../repositories/goals.repository';
 import { ICreateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
 
@@ -12,6 +12,13 @@ export async function createGoalsService(userId: string, payload: ICreateGoalsDT
     throw new AppError('Invalid or missing data', 400);
   }
 
+  if (payload.targetValue <= 0) {
+    throw new AppError('Target value must be greater than zero', 400);
+  }
+
+  if (new Date(payload.endDate!) < new Date(payload.startDate)) {
+    throw new AppError('End date must be after start date', 400);
+  }
   return createGoal({ ...payload, userId });
 }
 
@@ -21,4 +28,19 @@ export async function getGoalsService(userId: string) {
     throw new AppError('User not found', 404);
   }
   return getGoalbyUserID(userId);
+}
+
+//Fetch a specific goal by id
+export async function findGoalsbyIDService(userId: string, goalId: string) {
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  if (!goalId) {
+    throw new AppError('Invalid', 400);
+  }
+
+  const goals = await getGoalsbyGoalID(goalId);
+
+  return goals;
 }
