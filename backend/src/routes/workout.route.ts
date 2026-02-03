@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
-import { createWorkout, getUserWorkout, getWorkoutbyID } from '../controllers/workout.controller';
+import {
+  createWorkout,
+  getUserWorkout,
+  getWorkoutbyID,
+  updateWorkoutbyID,
+} from '../controllers/workout.controller';
 
 const router = Router();
 //JWT auth middleware
@@ -14,5 +19,8 @@ router.get('/workouts', getUserWorkout);
 
 //GET /api/workouts/:id
 router.get('/workouts/:id', getWorkoutbyID);
+
+//PATCH /api/workouts/:id
+router.patch('/workouts/:id', updateWorkoutbyID);
 
 export default router;

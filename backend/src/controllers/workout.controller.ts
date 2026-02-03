@@ -4,6 +4,7 @@ import {
   createUserWorkoutService,
   getUserWorkoutsService,
   getWorkoutbyWorkoutIDService,
+  updateWorkoutbyIDService,
 } from '../services/workout.service';
 import { ICreateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
@@ -53,5 +54,27 @@ export const getWorkoutbyID = async (req: IAuthRequest, res: Response) => {
   return res.status(200).json({
     success: true,
     data: workout,
+  });
+};
+
+//Controller for updating a workout
+export const updateWorkoutbyID = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const workoutId = req.params.id;
+  const payload = req.body;
+
+  if (!workoutId || typeof workoutId !== 'string') {
+    return null;
+  }
+
+  if (!userId || typeof userId !== 'string') {
+    return null;
+  }
+
+  const updatedWorkout = await updateWorkoutbyIDService(workoutId, userId, payload);
+
+  return res.status(200).json({
+    success: true,
+    data: updatedWorkout,
   });
 };

@@ -1,5 +1,5 @@
 import { Workout } from '../database/models';
-import { ICreateWorkoutDTO } from '../dtos/workout.dto';
+import { ICreateWorkoutDTO, IUpdateWorkoutDTO } from '../dtos/workout.dto';
 
 //Create workout for authenticated user
 export async function createWorkout(data: ICreateWorkoutDTO & { userId: string }) {
@@ -16,4 +16,11 @@ export async function findWorkoutsByUserId(userId: string) {
 //Find workout of the authenticated user using workout id
 export async function findWorkoutbyWorkoutID(workoutId: string) {
   return Workout.findByPk(workoutId);
+}
+
+//Update workout of the authenticated user using workout id
+export async function updateWorkoutbyID(id: string, data: IUpdateWorkoutDTO) {
+  return Workout.update(data, {
+    where: { id },
+  });
 }
