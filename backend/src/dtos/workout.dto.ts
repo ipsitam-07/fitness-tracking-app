@@ -1,4 +1,4 @@
-export interface CreateWorkoutDTO {
+export interface ICreateWorkoutDTO {
   type: string;
   durationMinutes: number;
   caloriesBurned: number;

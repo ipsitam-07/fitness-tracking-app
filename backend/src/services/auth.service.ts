@@ -2,19 +2,10 @@ import bcrypt from 'bcrypt';
 import { findUserByEmail, createUser } from '../repositories/auth.repository';
 import { AppError } from '../utils/error';
 import { signToken } from '../utils/jwt';
+import { IRegisterInputDTO, ILoginInputDTO } from '../dtos/auth.dto';
 
-interface IRegisterInput {
-  email: string;
-  name: string;
-  password: string;
-}
-
-interface ILoginInput {
-  email: string;
-  password: string;
-}
 //Register New User
-export async function registerUserService({ email, name, password }: IRegisterInput) {
+export async function registerUserService({ email, name, password }: IRegisterInputDTO) {
   if (!email || !password) {
     throw new AppError('Email and password are required', 400);
   }
@@ -41,7 +32,7 @@ export async function registerUserService({ email, name, password }: IRegisterIn
 }
 
 //Login Existing User and send Access Token
-export async function loginUserService({ email, password }: ILoginInput) {
+export async function loginUserService({ email, password }: IRegisterInputDTO) {
   const user = await findUserByEmail(email);
   email = email.trim().toLowerCase();
   if (!user) {
