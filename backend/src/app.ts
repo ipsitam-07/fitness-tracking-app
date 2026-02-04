@@ -4,6 +4,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.route';
 import { errorHandler } from './middlewares/error.middleware';
 import userRoutes from './routes/user.route';
+import statsRoutes from './routes/goals.route';
 import workoutRoutes from './routes/workout.route';
 import goalsRoutes from './routes/goals.route';
 
@@ -19,6 +20,7 @@ swaggerDocs(app);
 //routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/', statsRoutes);
 app.use('/', workoutRoutes);
 app.use('/', goalsRoutes);
 
