@@ -1,4 +1,5 @@
 import { ExerciseType } from '../database/models/Workout';
+import { GoalStatus, GoalType } from '../database/models/Goals';
 
 export interface IWorkoutStatsDTO {
   totalWorkouts: number;
@@ -45,4 +46,24 @@ export interface IWeeklyTrendDTO {
   workouts: number;
   duration: number;
   calories: number;
+}
+
+export interface IGoalProgressDTO {
+  goal: {
+    id: string;
+    goalType: GoalType;
+    targetValue: number;
+    currentValue: number;
+    startDate: Date;
+    endDate: Date;
+    status: GoalStatus;
+    description?: string;
+  };
+  progress: number;
+  remaining: number;
+  daysLeft: number;
+  isCompleted: boolean;
+  isOnTrack: boolean;
+  dailyTarget: number;
+  projectedCompletion: Date | null;
 }

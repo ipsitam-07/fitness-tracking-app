@@ -1,4 +1,4 @@
-import { IWorkoutStatsDTO, IDashboardStatsDTO } from '../dtos/stats.dto';
+import { IWorkoutStatsDTO, IDashboardStatsDTO, IGoalProgressDTO } from '../dtos/stats.dto';
 import { AppError } from '../utils/error';
 import {
   getActiveGoals,
@@ -10,6 +10,7 @@ import {
   getWorkoutStats,
   getWorkoutsByWeeks,
 } from '../repositories/stats.repository';
+import { getGoalsbyGoalID } from '../repositories/goals.repository';
 import { ExerciseType } from '../database/models/Workout';
 import { IWeeklyTrendDTO } from '../dtos/stats.dto';
 //Get workout statictics for an user
@@ -247,4 +248,87 @@ function getWeekDates(year: number, week: number): { startDate: Date; endDate: D
   weekEnd.setDate(weekStart.getDate() + 6);
 
   return { startDate: weekStart, endDate: weekEnd };
+}
+
+//Get goal progress
+export async function getGoalProgressService(userId: string, goalId: string) {
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  if (!goalId) {
+    throw new AppError('Goal ID is required', 400);
+  }
+
+  const goal = await getGoalsbyGoalID(goalId);
+
+  if (!goal) {
+    throw new AppError('Goal not found', 404);
+  }
+
+  if (goal.userId !== userId) {
+    throw new AppError('Forbidden: You do not have access to this goal', 403);
+  }
+
+  const progress = Math.min((goal.currentValue / goal.targetValue) * 100, 100);
+
+  const remaining = Math.max(goal.targetValue - goal.currentValue, 0);
+
+  const now = new Date();
+  const startDate = new Date(goal.startDate);
+  const endDate = new Date(goal.endDate);
+
+  const daysLeft = Math.max(
+    Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)),
+    0,
+  );
+
+  const isCompleted = goal.currentValue >= goal.targetValue;
+
+  const totalDays = Math.max(
+    Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
+    1,
+  );
+
+  const dailyTarget = goal.targetValue / totalDays;
+
+  const daysPassed = Math.max(
+    Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
+    0,
+  );
+
+  const expectedProgress = dailyTarget * daysPassed;
+  const isOnTrack = goal.currentValue >= expectedProgress;
+
+  let projectedCompletion: Date | null = null;
+
+  if (goal.currentValue > 0 && !isCompleted) {
+    const dailyRate = goal.currentValue / Math.max(daysPassed, 1);
+
+    const daysToComplete = Math.ceil((goal.targetValue - goal.currentValue) / dailyRate);
+
+    projectedCompletion = new Date(now.getTime() + daysToComplete * 24 * 60 * 60 * 1000);
+  }
+
+  const result: IGoalProgressDTO = {
+    goal: {
+      id: goal.id,
+      goalType: goal.goalType,
+      targetValue: goal.targetValue,
+      currentValue: goal.currentValue,
+      startDate: goal.startDate,
+      endDate: goal.endDate,
+      status: goal.status,
+      description: goal.description!,
+    },
+    progress: Math.round(progress * 100) / 100,
+    remaining: Math.round(remaining * 100) / 100,
+    daysLeft,
+    isCompleted,
+    isOnTrack,
+    dailyTarget: Math.round(dailyTarget * 100) / 100,
+    projectedCompletion,
+  };
+
+  return result;
 }

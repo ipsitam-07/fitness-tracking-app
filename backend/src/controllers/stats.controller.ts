@@ -2,7 +2,11 @@ import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
 import { getWorkoutStatsService } from '../services/stats.service';
 import { AppError } from '../utils/error';
-import { getDashboardStatsService, getWeeklyTrendsService } from '../services/stats.service';
+import {
+  getDashboardStatsService,
+  getWeeklyTrendsService,
+  getGoalProgressService,
+} from '../services/stats.service';
 
 export const getWorkoutStats = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
@@ -60,5 +64,26 @@ export const getWeeklyTrends = async (req: IAuthRequest, res: Response) => {
   res.status(200).json({
     success: true,
     data: trends,
+  });
+};
+
+//Controller for getting goal progress
+export const getGoalProgress = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const goalId = req.params.id;
+
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  if (!goalId || typeof goalId !== 'string') {
+    throw new AppError('Invalid goal ID', 400);
+  }
+
+  const progress = await getGoalProgressService(userId, goalId);
+
+  res.status(200).json({
+    success: true,
+    data: progress,
   });
 };

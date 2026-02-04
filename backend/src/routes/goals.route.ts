@@ -7,12 +7,14 @@ import {
   updateGoals,
   deleteGoals,
 } from '../controllers/gaol.controller';
+import { getGoalProgress } from '../controllers/stats.controller';
 
 const router = Router();
 
 // JWT Auth middleware
 router.use(authenticationReq);
 
+router.get('/:id/progress', getGoalProgress);
 /**
  * @swagger
  * /goals:
