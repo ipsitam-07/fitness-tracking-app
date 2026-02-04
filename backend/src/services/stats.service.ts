@@ -1,4 +1,4 @@
-import { IWorkoutStatsDTO } from '../dtos/stats.dto';
+import { IWorkoutStatsDTO, IDashboardStatsDTO } from '../dtos/stats.dto';
 import { AppError } from '../utils/error';
 import {
   getActiveGoals,
@@ -110,38 +110,47 @@ export async function getDashboardStatsService(userId: string) {
   if (!userId) {
     throw new AppError('User ID is required', 400);
   }
-
-  const allWorkouts = getWorkoutStats(userId);
-  const recentWorkouts = getRecentWorkouts(userId, 5);
-  const activeGoals = getActiveGoals(userId);
-  const completedGoals = getCompletedGoalsCount(userId);
-  const weekWorkouts = getThisWeekWorkouts(userId);
-  const monthWorkouts = getThisMonthWorkouts(userId);
-  const sortedWorkouts = getAllWorkoutsSorted(userId);
+  const [
+    allWorkouts,
+    recentWorkouts,
+    activeGoals,
+    completedGoals,
+    weekWorkouts,
+    monthWorkouts,
+    sortedWorkouts,
+  ] = await Promise.all([
+    getWorkoutStats(userId),
+    getRecentWorkouts(userId, 5),
+    getActiveGoals(userId),
+    getCompletedGoalsCount(userId),
+    getThisWeekWorkouts(userId),
+    getThisMonthWorkouts(userId),
+    getAllWorkoutsSorted(userId),
+  ]);
 
   //Calculating totals
-  const totalWorkouts = (await allWorkouts).length;
-  const totalDuration = (await allWorkouts).reduce((sum, w) => sum + w.duration, 0);
-  const totalCalories = (await allWorkouts).reduce((sum, w) => sum + w.caloriesBurned, 0);
+  const totalWorkouts = allWorkouts.length;
+  const totalDuration = allWorkouts.reduce((sum, w) => sum + w.duration, 0);
+  const totalCalories = allWorkouts.reduce((sum, w) => sum + w.caloriesBurned, 0);
 
   //Calculating weekly stats
   const thisWeek = {
-    workouts: (await weekWorkouts).length,
-    duration: (await weekWorkouts).reduce((sum, w) => sum + w.duration, 0),
-    calories: (await weekWorkouts).reduce((sum, w) => sum + w.caloriesBurned, 0),
+    workouts: weekWorkouts.length,
+    duration: weekWorkouts.reduce((sum, w) => sum + w.duration, 0),
+    calories: weekWorkouts.reduce((sum, w) => sum + w.caloriesBurned, 0),
   };
 
   //Calculating monthly stats
   const thisMonth = {
-    workouts: (await monthWorkouts).length,
-    duration: (await monthWorkouts).reduce((sum, w) => sum + w.duration, 0),
-    calories: (await monthWorkouts).reduce((sum, w) => sum + w.caloriesBurned, 0),
+    workouts: monthWorkouts.length,
+    duration: monthWorkouts.reduce((sum, w) => sum + w.duration, 0),
+    calories: monthWorkouts.reduce((sum, w) => sum + w.caloriesBurned, 0),
   };
 
   const { currentStreak, longestStreak } = calculateStreak(await sortedWorkouts);
 
   const typeCount: Record<string, number> = {};
-  (await allWorkouts).forEach((workout) => {
+  allWorkouts.forEach((workout) => {
     typeCount[workout.exerciseType] = (typeCount[workout.exerciseType] || 0) + 1;
   });
 
@@ -154,7 +163,7 @@ export async function getDashboardStatsService(userId: string) {
     }
   });
 
-  return {
+  const result: IDashboardStatsDTO = {
     totalWorkouts,
     totalCalories,
     totalDuration,
@@ -165,7 +174,7 @@ export async function getDashboardStatsService(userId: string) {
     thisWeek: thisWeek,
     thisMonth: thisMonth,
     favoriteExerciseType,
-    recentWorkouts: (await recentWorkouts).map((w) => ({
+    recentWorkouts: recentWorkouts.map((w) => ({
       id: w.id,
       exerciseName: w.exerciseName,
       exerciseType: w.exerciseType,
@@ -173,6 +182,9 @@ export async function getDashboardStatsService(userId: string) {
       caloriesBurned: w.caloriesBurned,
       date: w.date,
     })),
+  };
+  return {
+    result,
   };
 }
 
