@@ -41,7 +41,7 @@ export const getWorkoutbyID = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
 
   if (!userId) {
-    return null;
+    throw new AppError('Unauthorized', 401);
   }
 
   const workoutId = req.params.id;
@@ -64,12 +64,11 @@ export const updateWorkoutbyID = async (req: IAuthRequest, res: Response) => {
   const workoutId = req.params.id;
   const payload = req.body;
 
-  if (!workoutId || typeof workoutId !== 'string') {
-    return null;
-  }
-
   if (!userId || typeof userId !== 'string') {
-    return null;
+    throw new AppError('Unauthorized', 401);
+  }
+  if (!workoutId || typeof workoutId !== 'string') {
+    throw new AppError('Invalid ID', 400);
   }
 
   const updatedWorkout = await updateWorkoutbyIDService(workoutId, userId, payload);
@@ -84,16 +83,15 @@ export const updateWorkoutbyID = async (req: IAuthRequest, res: Response) => {
 export const deleteWorkoutbyiD = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
   const workoutId = req.params.id;
-  if (!workoutId || typeof workoutId !== 'string') {
-    return null;
-  }
+
   if (!userId || typeof userId !== 'string') {
-    return null;
+    throw new AppError('Unauthorized', 401);
+  }
+  if (!workoutId || typeof workoutId !== 'string') {
+    throw new AppError('Invalid ID', 400);
   }
 
   await deleteWorkoutbyIDService(workoutId, userId);
 
-  res.status(204).json({
-    success: true,
-  });
+  res.status(204).send();
 };

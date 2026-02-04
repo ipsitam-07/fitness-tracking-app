@@ -1,13 +1,18 @@
+import { ExerciseType } from '../database/models/Workout';
+
 export interface ICreateWorkoutDTO {
-  type: string;
-  durationMinutes: number;
+  exerciseType: ExerciseType;
+  exerciseName: string;
+  duration: number;
   caloriesBurned: number;
   date: Date;
+  notes?: string;
 }
-
 export interface IUpdateWorkoutDTO {
-  type?: string;
-  durationMinutes?: number;
+  exerciseType?: ExerciseType;
+  exerciseName?: string;
+  duration?: number;
   caloriesBurned?: number;
   date?: Date;
+  notes?: string;
 }

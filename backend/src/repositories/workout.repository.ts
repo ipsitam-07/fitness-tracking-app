@@ -10,6 +10,7 @@ export async function createWorkout(data: ICreateWorkoutDTO & { userId: string }
 export async function findWorkoutsByUserId(userId: string) {
   return Workout.findAll({
     where: { userId },
+    order: [['date', 'DESC']],
   });
 }
 
