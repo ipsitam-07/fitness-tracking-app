@@ -7,6 +7,7 @@ import {
   updateWorkoutbyID,
   deleteWorkoutbyiD,
 } from '../controllers/workout.controller';
+import { getWorkoutStats } from '../controllers/stats.controller';
 
 const router = Router();
 //JWT auth middleware
@@ -70,7 +71,7 @@ router.post('/workouts', createWorkout);
 
 //GET /workouts
 router.get('/workouts', getUserWorkout);
-
+router.get('/workouts/stats', getWorkoutStats);
 /**
  * @swagger
  * /workouts/{id}:

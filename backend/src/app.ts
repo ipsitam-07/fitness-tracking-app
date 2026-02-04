@@ -20,9 +20,9 @@ swaggerDocs(app);
 //routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
-app.use('/', statsRoutes);
 app.use('/', workoutRoutes);
 app.use('/', goalsRoutes);
+app.use('/', statsRoutes);
 
 //global error handler
 app.use(errorHandler);

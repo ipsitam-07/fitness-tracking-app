@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/users/me:
+ * /users/me:
  *   get:
  *     summary: Get current authenticated user
  *     description: Returns the profile of the currently authenticated user based on JWT.
@@ -24,8 +24,6 @@ const router = Router();
  *                 success:
  *                   type: boolean
  *                   example: true
- *                 data:
- *                   $ref: '#/components/schemas/User'
  *       401:
  *         description: Unauthorized (missing or invalid token)
  */
