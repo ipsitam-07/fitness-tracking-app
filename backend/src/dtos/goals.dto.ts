@@ -1,14 +1,16 @@
-import { GoalType } from '../database/models/Goals';
+import { GoalType, GoalStatus } from '../database/models/Goals';
 export interface ICreateGoalsDTO {
-  type: GoalType;
+  goalType: GoalType;
   targetValue: number;
+  currentValue: number;
   startDate: Date;
-  endDate?: Date;
-  status: 'active' | 'completed';
+  endDate: Date;
+  description?: string;
 }
-
 export interface IUpdateGoalsDTO {
   targetValue?: number;
+  currentValue?: number;
   endDate?: Date;
-  status: 'active' | 'completed';
+  status?: GoalStatus;
+  description?: string;
 }

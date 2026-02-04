@@ -13,6 +13,7 @@ export async function createGoal(
 export async function getGoalbyUserID(userId: string) {
   return Goal.findAll({
     where: { userId },
+    order: [['createdAt', 'DESC']],
   });
 }
 

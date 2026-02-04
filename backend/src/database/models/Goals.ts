@@ -1,16 +1,31 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../sequelize';
 
-export type GoalType = 'workouts_per_week' | 'calories_per_week' | 'weight';
+export enum GoalType {
+  WORKOUT_COUNT = 'workout_count',
+  WEIGHT = 'weight',
+  CALORIES = 'calories',
+  DURATION = 'duration',
+}
+
+export enum GoalStatus {
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+  ABANDONED = 'abandoned',
+}
 
 interface GoalAttributes {
   id: string;
   userId: string;
-  type: GoalType;
+  goalType: GoalType;
   targetValue: number;
+  currentValue: number;
   startDate: Date;
-  endDate?: Date;
-  status: 'active' | 'completed';
+  endDate: Date;
+  status: GoalStatus;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface GoalCreationAttributes extends Optional<GoalAttributes, 'id' | 'status'> {}
@@ -18,13 +33,31 @@ interface GoalCreationAttributes extends Optional<GoalAttributes, 'id' | 'status
 export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implements GoalAttributes {
   public id!: string;
   public userId!: string;
-  public type!: GoalType;
+  public goalType!: GoalType;
   public targetValue!: number;
+  public currentValue!: number;
   public startDate!: Date;
-  public endDate?: Date;
-  public status!: 'active' | 'completed';
-}
+  public endDate!: Date;
+  public status!: GoalStatus;
+  public description?: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 
+  public getProgress(): number {
+    return Math.min((this.currentValue / this.targetValue) * 100, 100);
+  }
+
+  public isCompleted(): boolean {
+    return this.currentValue >= this.targetValue;
+  }
+
+  public getDaysRemaining(): number {
+    const now = new Date();
+    const end = new Date(this.endDate);
+    const diffTime = end.getTime() - now.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+}
 Goal.init(
   {
     id: {
@@ -36,29 +69,52 @@ Goal.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    type: {
-      type: DataTypes.ENUM('workouts_per_week', 'calories_per_week', 'weight'),
+    goalType: {
+      type: DataTypes.ENUM(...Object.values(GoalType)),
       allowNull: false,
     },
     targetValue: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        min: 0,
+      },
+    },
+    currentValue: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+      validate: {
+        min: 0,
+      },
     },
     startDate: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     endDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
+      type: DataTypes.DATE,
+      allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('active', 'completed'),
-      defaultValue: 'active',
+      type: DataTypes.ENUM(...Object.values(GoalStatus)),
+      allowNull: false,
+      defaultValue: GoalStatus.ACTIVE,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   },
   {
     sequelize,
     tableName: 'goals',
+    timestamps: true,
+    indexes: [
+      {
+        fields: ['userId', 'status'],
+      },
+    ],
   },
 );

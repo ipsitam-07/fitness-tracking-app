@@ -38,40 +38,49 @@ export const getUserGoals = async (req: IAuthRequest, res: Response) => {
 
 //Controller for fetching a specific goal by goal ID
 export const getGoalsbyID = async (req: IAuthRequest, res: Response) => {
-  const user = req.user?.id;
+  const userId = req.user?.id;
   const goalId = req.params.id;
-  if (!goalId || typeof goalId !== 'string') {
-    return null;
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
   }
-
-  const goal = await findGoalsbyIDService(user!, goalId);
-
+  if (!goalId || typeof goalId !== 'string') {
+    throw new AppError('Invalid goal ID', 400);
+  }
+  const goal = await findGoalsbyIDService(userId, goalId);
   res.status(200).json({
     success: true,
     data: goal,
   });
 };
 
+//Controller for updating goals by specific ID
 export const updateGoals = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
   const goalId = req.params.id;
-
   const payload = req.body as IUpdateGoalsDTO;
-
-  if (!goalId || typeof goalId !== 'string') {
-    return null;
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
   }
-  const goal = await updateUserGoalService(userId!, goalId, payload);
-  res.status(200).json({ success: true, data: goal });
+  if (!goalId || typeof goalId !== 'string') {
+    throw new AppError('Invalid goal ID', 400);
+  }
+  const goal = await updateUserGoalService(userId, goalId, payload);
+  res.status(200).json({
+    success: true,
+    data: goal,
+  });
 };
 
+//Controller for deleting goals by a specific ID
 export const deleteGoals = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
   const goalId = req.params.id;
-  if (!goalId || typeof goalId !== 'string') {
-    return null;
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
   }
-  await deleteUserGoalService(userId!, goalId);
-
+  if (!goalId || typeof goalId !== 'string') {
+    throw new AppError('Invalid goal ID', 400);
+  }
+  await deleteUserGoalService(userId, goalId);
   res.status(204).send();
 };
