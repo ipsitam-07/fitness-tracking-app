@@ -5,13 +5,16 @@ import { signToken } from '../utils/jwt';
 import { IRegisterInputDTO, ILoginInputDTO } from '../dtos/auth.dto';
 
 //Register New User
-export async function registerUserService({ email, name, password }: IRegisterInputDTO) {
-  if (!email || !password) {
-    throw new AppError('Email and password are required', 400);
-  }
-  email = email.trim().toLowerCase();
-  const userExists = await findUserByEmail(email);
+export async function registerUserService(data: IRegisterInputDTO) {
+  const { email: inputEmail, name, password } = data;
 
+  if (!inputEmail || !password || !name) {
+    throw new AppError('Email, name, and password are required', 400);
+  }
+
+  const email = inputEmail.trim().toLowerCase();
+
+  const userExists = await findUserByEmail(email);
   if (userExists) {
     throw new AppError('User already exists', 409);
   }
@@ -23,7 +26,6 @@ export async function registerUserService({ email, name, password }: IRegisterIn
     name,
     passwordHash,
   });
-
   return {
     id: user.id,
     name: user.name,
@@ -32,20 +34,27 @@ export async function registerUserService({ email, name, password }: IRegisterIn
 }
 
 //Login Existing User and send Access Token
-export async function loginUserService({ email, password }: ILoginInputDTO) {
+export async function loginUserService(data: ILoginInputDTO) {
+  const { email: inputEmail, password } = data;
+
+  if (!inputEmail || !password) {
+    throw new AppError('Email and password are required', 400);
+  }
+
+  const email = inputEmail.trim().toLowerCase();
+
   const user = await findUserByEmail(email);
-  email = email.trim().toLowerCase();
   if (!user) {
-    throw new AppError('Invalid credentials', 400);
+    throw new AppError('Invalid credentials', 401);
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-
   if (!isPasswordValid) {
-    throw new AppError('Invalid password', 400);
+    throw new AppError('Invalid credentials', 401);
   }
 
   const accessToken = signToken({ userId: user.id });
+
   return {
     accessToken,
     user: {
