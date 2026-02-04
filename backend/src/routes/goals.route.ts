@@ -55,7 +55,7 @@ router.use(authenticationReq);
  */
 
 //POST /goals
-router.post('/goals', createGoals);
+router.post('/', createGoals);
 
 /**
  * @swagger
@@ -79,7 +79,7 @@ router.post('/goals', createGoals);
  */
 
 //GET /goals
-router.get('/goals', getUserGoals);
+router.get('/', getUserGoals);
 
 /**
  * @swagger
@@ -129,7 +129,7 @@ router.get('/goals', getUserGoals);
  */
 
 //GET /goals/:id
-router.get('/goals/:id', getGoalsbyID);
+router.get('/:id', getGoalsbyID);
 
 /**
  * @swagger
@@ -174,7 +174,7 @@ router.get('/goals/:id', getGoalsbyID);
  */
 
 //PATCH /goals/:id
-router.patch('/goals/:id', updateGoals);
+router.patch('/:id', updateGoals);
 
 /**
  * @swagger
@@ -201,6 +201,6 @@ router.patch('/goals/:id', updateGoals);
  *         description: Goal not found
  */
 //DELETE /goals/:id
-router.delete('/goals/:id', deleteGoals);
+router.delete('/:id', deleteGoals);
 
 export default router;

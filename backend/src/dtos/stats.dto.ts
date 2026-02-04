@@ -37,3 +37,12 @@ export interface IDashboardStatsDTO {
     date: Date;
   }>;
 }
+
+export interface IWeeklyTrendDTO {
+  week: string;
+  startDate: string;
+  endDate: string;
+  workouts: number;
+  duration: number;
+  calories: number;
+}

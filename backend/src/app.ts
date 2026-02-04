@@ -4,7 +4,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.route';
 import { errorHandler } from './middlewares/error.middleware';
 import userRoutes from './routes/user.route';
-import statsRoutes from './routes/goals.route';
+import statsRoutes from './routes/stats.route';
 import workoutRoutes from './routes/workout.route';
 import goalsRoutes from './routes/goals.route';
 
@@ -20,9 +20,9 @@ swaggerDocs(app);
 //routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
-app.use('/', workoutRoutes);
-app.use('/', goalsRoutes);
-app.use('/', statsRoutes);
+app.use('/stats', statsRoutes);
+app.use('/workouts', workoutRoutes);
+app.use('/goals', goalsRoutes);
 
 //global error handler
 app.use(errorHandler);

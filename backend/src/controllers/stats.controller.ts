@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { IAuthRequest } from '../interfaces';
 import { getWorkoutStatsService } from '../services/stats.service';
 import { AppError } from '../utils/error';
-import { getDashboardStatsService } from '../services/stats.service';
+import { getDashboardStatsService, getWeeklyTrendsService } from '../services/stats.service';
 
 export const getWorkoutStats = async (req: IAuthRequest, res: Response) => {
   const userId = req.user?.id;
@@ -38,5 +38,27 @@ export const getDashboardStats = async (req: IAuthRequest, res: Response) => {
   res.status(200).json({
     success: true,
     data: stats,
+  });
+};
+
+//Controller for getting weekly workout trends
+export const getWeeklyTrends = async (req: IAuthRequest, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  const weeks = req.query.weeks ? parseInt(req.query.weeks as string, 10) : 4;
+
+  if (isNaN(weeks)) {
+    throw new AppError('Invalid weeks parameter', 400);
+  }
+
+  const trends = await getWeeklyTrendsService(userId, weeks);
+
+  res.status(200).json({
+    success: true,
+    data: trends,
   });
 };

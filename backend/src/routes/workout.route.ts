@@ -48,7 +48,7 @@ router.use(authenticationReq);
  *         description: Invalid workout data
  */
 //POST /workouts
-router.post('/workouts', createWorkout);
+router.post('/', createWorkout);
 
 /**
  * @swagger
@@ -70,8 +70,8 @@ router.post('/workouts', createWorkout);
  */
 
 //GET /workouts
-router.get('/workouts', getUserWorkout);
-router.get('/workouts/stats', getWorkoutStats);
+router.get('/', getUserWorkout);
+router.get('/stats', getWorkoutStats);
 /**
  * @swagger
  * /workouts/{id}:
@@ -114,7 +114,7 @@ router.get('/workouts/stats', getWorkoutStats);
  *         description: Unauthorized
  */
 //GET /workouts/:id
-router.get('/workouts/:id', getWorkoutbyID);
+router.get('/:id', getWorkoutbyID);
 
 /**
  * @swagger
@@ -159,7 +159,7 @@ router.get('/workouts/:id', getWorkoutbyID);
  */
 
 //PATCH /workouts/:id
-router.patch('/workouts/:id', updateWorkoutbyID);
+router.patch('/:id', updateWorkoutbyID);
 
 /**
  * @swagger
@@ -186,6 +186,6 @@ router.patch('/workouts/:id', updateWorkoutbyID);
  *         description: Workout not found
  */
 //DELETE /workouts/:id
-router.delete('/workouts/:id', deleteWorkoutbyiD);
+router.delete('/:id', deleteWorkoutbyiD);
 
 export default router;

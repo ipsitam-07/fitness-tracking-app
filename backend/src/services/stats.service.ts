@@ -8,9 +8,10 @@ import {
   getThisMonthWorkouts,
   getThisWeekWorkouts,
   getWorkoutStats,
+  getWorkoutsByWeeks,
 } from '../repositories/stats.repository';
 import { ExerciseType } from '../database/models/Workout';
-
+import { IWeeklyTrendDTO } from '../dtos/stats.dto';
 //Get workout statictics for an user
 export async function getWorkoutStatsService(userId: string, startDate?: Date, endDate?: Date) {
   if (!userId) {
@@ -173,4 +174,65 @@ export async function getDashboardStatsService(userId: string) {
       date: w.date,
     })),
   };
+}
+
+//Get weekly trends of workouts
+export async function getWeeklyTrendsService(userId: string, weeks: number = 4) {
+  if (!userId) {
+    throw new AppError('UserID is required', 400);
+  }
+
+  if (weeks <= 0 || weeks > 52) {
+    throw new AppError('Weeks must be between 1 and 52', 400);
+  }
+
+  const workouts = await getWorkoutsByWeeks(userId, weeks);
+
+  // Group workouts by week
+  const weeklyData: Record<string, IWeeklyTrendDTO> = {};
+
+  workouts.forEach((workout) => {
+    const date = new Date(workout.date);
+    const year = date.getFullYear();
+    const weekNumber = getWeekNumber(date);
+    const weekKey = `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+
+    if (!weeklyData[weekKey]) {
+      const { startDate, endDate } = getWeekDates(year, weekNumber);
+      weeklyData[weekKey] = {
+        week: weekKey,
+        startDate: startDate.toISOString().split('T')[0]!,
+        endDate: endDate.toISOString().split('T')[0]!,
+        workouts: 0,
+        duration: 0,
+        calories: 0,
+      };
+    }
+
+    weeklyData[weekKey].workouts++;
+    weeklyData[weekKey].duration += workout.duration;
+    weeklyData[weekKey].calories += workout.caloriesBurned;
+  });
+
+  return Object.values(weeklyData).sort((a, b) => b.week.localeCompare(a.week));
+}
+
+function getWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+}
+
+function getWeekDates(year: number, week: number): { startDate: Date; endDate: Date } {
+  const jan4 = new Date(year, 0, 4);
+  const dayOfWeek = jan4.getDay() || 7;
+  const weekStart = new Date(jan4);
+  weekStart.setDate(jan4.getDate() - dayOfWeek + 1 + (week - 1) * 7);
+
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+
+  return { startDate: weekStart, endDate: weekEnd };
 }
