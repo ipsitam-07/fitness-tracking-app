@@ -28,11 +28,23 @@ export const getUserGoals = async (req: IAuthRequest, res: Response) => {
     throw new AppError('Unauthorized', 401);
   }
 
-  const goals = await getGoalsService(userId);
+  const { page, limit, search, type, status, startDate, endDate } = req.query;
+
+  const result = await getGoalsService({
+    userId,
+    page: page ? Number(page) : 1,
+    limit: limit ? Number(limit) : 10,
+    search: search as string,
+    type: type as string,
+    status: status as string,
+    startDate: startDate as string,
+    endDate: endDate as string,
+  });
 
   res.status(200).json({
     success: true,
-    data: goals,
+    data: result.goals,
+    pagination: result.pagination,
   });
 };
 

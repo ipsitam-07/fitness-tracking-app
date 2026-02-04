@@ -6,6 +6,7 @@ import {
 } from '../repositories/workout.repository';
 import { ICreateWorkoutDTO, IUpdateWorkoutDTO } from '../dtos/workout.dto';
 import { AppError } from '../utils/error';
+import { GetWorkoutsParams } from '../interfaces/workout';
 
 //Create workout for authenticated user
 export async function createUserWorkoutService(userId: string, payload: ICreateWorkoutDTO) {
@@ -23,11 +24,34 @@ export async function createUserWorkoutService(userId: string, payload: ICreateW
 }
 
 //Get all workouts of the authenticatd user
-export async function getUserWorkoutsService(userId: string) {
+export async function getUserWorkoutsService(params: GetWorkoutsParams) {
+  const { userId, page = 1, limit = 10, search, type, startDate, endDate } = params;
+
   if (!userId) {
     throw new AppError('User ID is required', 400);
   }
-  return findWorkoutsByUserId(userId);
+
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await findWorkoutsByUserId({
+    userId,
+    limit: Number(limit),
+    offset,
+    search,
+    type,
+    startDate,
+    endDate,
+  });
+
+  return {
+    workouts: rows,
+    pagination: {
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: Number(page),
+      limit: Number(limit),
+    },
+  };
 }
 //Get workout of authenticated user by workout id
 

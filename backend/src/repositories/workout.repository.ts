@@ -1,5 +1,7 @@
 import { Workout } from '../database/models';
 import { ICreateWorkoutDTO, IUpdateWorkoutDTO } from '../dtos/workout.dto';
+import { Op } from 'sequelize';
+import { WorkoutFilters } from '../interfaces/workout';
 
 //Create workout for authenticated user
 export async function createWorkout(data: ICreateWorkoutDTO & { userId: string }) {
@@ -7,9 +9,32 @@ export async function createWorkout(data: ICreateWorkoutDTO & { userId: string }
 }
 
 //Find all workouts of the user by authenticated user id
-export async function findWorkoutsByUserId(userId: string) {
-  return Workout.findAll({
-    where: { userId },
+export async function findWorkoutsByUserId(filters: WorkoutFilters) {
+  const { userId, limit, offset, search, type, startDate, endDate } = filters;
+
+  const whereClause: any = { userId };
+
+  if (search) {
+    whereClause[Op.or] = [
+      { exerciseName: { [Op.iLike]: `%${search}%` } },
+      { type: { [Op.iLike]: `%${search}%` } },
+    ];
+  }
+
+  if (type) whereClause.type = type;
+
+  if (startDate && endDate) {
+    whereClause.date = {
+      [Op.between]: [new Date(startDate), new Date(endDate)],
+    };
+  } else if (startDate) {
+    whereClause.date = { [Op.gte]: new Date(startDate) };
+  }
+
+  return Workout.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
     order: [['date', 'DESC']],
   });
 }

@@ -28,11 +28,22 @@ export const getUserWorkout = async (req: IAuthRequest, res: Response) => {
     throw new AppError('Unauthorized', 401);
   }
 
-  const workouts = await getUserWorkoutsService(userId);
+  const { page, limit, search, type, startDate, endDate } = req.query;
+
+  const result = await getUserWorkoutsService({
+    userId,
+    page: page ? Number(page) : 1,
+    limit: limit ? Number(limit) : 10,
+    search: search as string,
+    type: type as string,
+    startDate: startDate as string,
+    endDate: endDate as string,
+  });
 
   res.status(200).json({
     success: true,
-    data: workouts,
+    data: result.workouts,
+    pagination: result.pagination,
   });
 };
 

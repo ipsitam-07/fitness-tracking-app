@@ -7,6 +7,7 @@ import {
 } from '../repositories/goals.repository';
 import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
 import { AppError } from '../utils/error';
+import { GetGoalsParams } from '../interfaces/goals';
 
 //Create gaols for an user
 export async function createGoalsService(userId: string, payload: ICreateGoalsDTO) {
@@ -29,13 +30,36 @@ export async function createGoalsService(userId: string, payload: ICreateGoalsDT
 }
 
 //Fetch all goals for an user
-export async function getGoalsService(userId: string) {
+export async function getGoalsService(params: GetGoalsParams) {
+  const { userId, page = 1, limit = 10, search, type, status, startDate, endDate } = params;
+
   if (!userId) {
     throw new AppError('User ID is required', 400);
   }
-  return getGoalbyUserID(userId);
-}
 
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await getGoalbyUserID({
+    userId,
+    search,
+    type,
+    status,
+    startDate,
+    endDate,
+    limit,
+    offset,
+  });
+
+  return {
+    goals: rows,
+    pagination: {
+      totalItems: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: Number(page),
+      limit: Number(limit),
+    },
+  };
+}
 //Fetch a specific goal by id
 export async function findGoalsbyIDService(userId: string, goalId: string) {
   if (!userId) {
