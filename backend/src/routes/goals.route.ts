@@ -8,11 +8,15 @@ import {
   deleteGoals,
 } from '../controllers/gaol.controller';
 import { getGoalProgress } from '../controllers/stats.controller';
+import { apiRateLimiter } from '../middlewares/rateLimiter';
 
 const router = Router();
 
 // JWT Auth middleware
 router.use(authenticationReq);
+
+//Rate limiters
+router.use(apiRateLimiter);
 
 router.get('/:id/progress', getGoalProgress);
 /**

@@ -8,10 +8,14 @@ import {
   deleteWorkoutbyiD,
 } from '../controllers/workout.controller';
 import { getWorkoutStats } from '../controllers/stats.controller';
+import { apiRateLimiter } from '../middlewares/rateLimiter';
 
 const router = Router();
 //JWT auth middleware
 router.use(authenticationReq);
+
+//Rate limiter
+router.use(apiRateLimiter);
 /**
  * @swagger
  * /workouts:

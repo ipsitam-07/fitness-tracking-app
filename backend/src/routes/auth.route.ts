@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { loginUser, registerUser } from '../controllers/auth.controller';
+import { authRateLimiter } from '../middlewares/rateLimiter';
 
 const router = Router();
+
+//Rate limiter
+router.use(authRateLimiter);
 /**
  * @swagger
  * /auth/register:
