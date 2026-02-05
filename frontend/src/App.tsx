@@ -1,10 +1,9 @@
-import { Button } from './components/ui/button';
-import './App.css';
+import SignupForm from './pages/auth/SignupForm';
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
+    <div className="flex flex-col gap-6">
+      <SignupForm />
     </div>
   );
 }
