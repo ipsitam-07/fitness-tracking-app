@@ -31,18 +31,25 @@ router.use(apiRateLimiter);
  *           schema:
  *             type: object
  *             required:
- *               - type
+ *               - exerciseType
+ *               - exerciseName
+ *               - duration
+ *               - caloriesBurned
  *               - date
  *             properties:
- *               type:
+ *               exerciseType:
  *                 type: string
- *               durationMinutes:
+ *               exerciseName:
+ *                 type: string
+ *               duration:
  *                 type: number
  *               caloriesBurned:
  *                 type: number
  *               date:
  *                 type: string
  *                 format: date
+ *               notes:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Workout created successfully
@@ -58,23 +65,140 @@ router.post('/', createWorkout);
  * @swagger
  * /workouts:
  *   get:
- *     summary: Get all workouts of a logged in user
+ *     summary: Get all workouts of a logged in user with pagination and search
  *     tags: [Workout]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by workout name or type
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *         description: Filter by exact workout type
  *     responses:
  *       200:
  *         description: List of workouts
  *         content:
  *           application/json:
  *             schema:
- *               type: array
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     totalItems:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     currentPage:
+ *                       type: integer
  *       401:
  *         description: Unauthorized
  */
 
 //GET /workouts
 router.get('/', getUserWorkout);
+
+/**
+ * @swagger
+ * /workouts/stats:
+ *   get:
+ *     summary: Get workout statistics
+ *     description: Retrieve aggregated statistics for user's workouts with optional date filtering
+ *     tags: [Statistics]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for filtering (YYYY-MM-DD)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for filtering (YYYY-MM-DD)
+ *     responses:
+ *       200:
+ *         description: Workout statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalWorkouts:
+ *                       type: number
+ *                       example: 25
+ *                     totalDuration:
+ *                       type: number
+ *                       example: 1200
+ *                       description: Total minutes
+ *                     totalCalories:
+ *                       type: number
+ *                       example: 5500
+ *                     averageDuration:
+ *                       type: number
+ *                       example: 48
+ *                     averageCalories:
+ *                       type: number
+ *                       example: 220
+ *                     workoutsByType:
+ *                       type: object
+ *                       properties:
+ *                         cardio:
+ *                           type: number
+ *                           example: 10
+ *                         strength:
+ *                           type: number
+ *                           example: 8
+ *                         flexibility:
+ *                           type: number
+ *                           example: 5
+ *                         sports:
+ *                           type: number
+ *                           example: 2
+ *                         other:
+ *                           type: number
+ *                           example: 0
+ *       401:
+ *         description: Unauthorized
+ *       400:
+ *         description: Invalid parameters
+ */
+
+//GET /workouts/stats
 router.get('/stats', getWorkoutStats);
 /**
  * @swagger
@@ -103,15 +227,19 @@ router.get('/stats', getWorkoutStats);
  *                   type: string
  *                 userId:
  *                   type: string
- *                 type:
+ *                 exerciseType:
  *                   type: string
- *                 durationMinutes:
+ *                 exerciseName:
+ *                   type: string
+ *                 duration:
  *                   type: number
  *                 caloriesBurned:
  *                   type: number
  *                 date:
  *                   type: string
  *                   format: date
+ *                 notes:
+ *                   type: string
  *       400:
  *         description: Invalid ID
  *       401:
@@ -142,15 +270,19 @@ router.get('/:id', getWorkoutbyID);
  *           schema:
  *             type: object
  *             properties:
- *               type:
- *                   type: string
- *               durationMinutes:
- *                   type: number
+ *               exerciseType:
+ *                 type: string
+ *               exerciseName:
+ *                 type: string
+ *               duration:
+ *                 type: number
  *               caloriesBurned:
- *                   type: number
+ *                 type: number
  *               date:
- *                   type: string
- *                   format: date
+ *                 type: string
+ *                 format: date
+ *               notes:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Workout info updated

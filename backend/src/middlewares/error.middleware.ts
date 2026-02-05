@@ -17,6 +17,5 @@ export function errorHandler(err: Error, _req: IAuthRequest, res: Response, _nex
       message: 'User already exists',
     });
   }
-  console.error(err);
   res.status(500).json({ success: false, message: 'Internal Server Error' });
 }

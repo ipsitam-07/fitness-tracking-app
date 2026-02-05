@@ -3,7 +3,6 @@ import { authenticationReq } from '../middlewares/auth.middleware';
 import { getCurrentUser } from '../controllers/user.controller';
 
 const router = Router();
-
 /**
  * @swagger
  * /users/me:
