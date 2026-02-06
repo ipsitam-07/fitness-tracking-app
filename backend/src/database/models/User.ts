@@ -6,11 +6,20 @@ interface UserAttributes {
   name: string;
   email: string;
   passwordHash: string;
+
+  age?: number | null;
+  height?: number | null;
+  weight?: number | null;
+  gender?: 'male' | 'female' | 'other' | null;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<
+  UserAttributes,
+  'id' | 'age' | 'height' | 'weight' | 'gender'
+> {}
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
@@ -20,6 +29,11 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public age!: number | null;
+  public height!: number | null;
+  public weight!: number | null;
+  public gender!: 'male' | 'female' | 'other' | null;
 }
 
 User.init(
@@ -44,6 +58,26 @@ User.init(
     passwordHash: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+
+    age: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+
+    height: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+
+    weight: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+
+    gender: {
+      type: DataTypes.ENUM('male', 'female', 'other'),
+      allowNull: true,
     },
   },
   {
