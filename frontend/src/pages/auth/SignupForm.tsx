@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { SignupHeader } from '@/components/auth/SignupHeader';
+import { Footer } from '@/components/auth/Footer';
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +33,7 @@ function SignUpForm() {
   return (
     <>
       <div className="auth-bg">
-        <Header />
+        <SignupHeader />
 
         <main className="grow flex items-center justify-center p-6 bg-gradient-mesh">
           <div className="auth-card">
@@ -44,11 +44,11 @@ function SignUpForm() {
                   <span className="text-xs font-bold uppercase tracking-widest text-primary">
                     Get Started
                   </span>
-                  <h3 className="text-text-primary dark:text-white text-sm font-medium">
+                  <h3 className="text-foreground dark:text-white text-sm font-medium">
                     Step 1 of 2: Profile Setup
                   </h3>
                 </div>
-                <span className="text-sm font-bold text-text-primary dark:text-white">50%</span>
+                <span className="text-sm font-bold text-foreground dark:text-white">50%</span>
               </div>
               <div className="w-full bg-border-light dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
                 <div className="bg-primary h-full w-1/2 rounded-full transition-all duration-500"></div>
@@ -57,10 +57,10 @@ function SignUpForm() {
 
             {/* Form Header */}
             <div className="mb-10 text-center">
-              <h1 className="text-text-primary dark:text-white text-3xl font-bold mb-3">
+              <h1 className="text-foreground dark:text-white text-3xl font-bold mb-3">
                 Start Your Journey
               </h1>
-              <p className="text-text-secondary dark:text-gray-400 text-base">
+              <p className="text-muted-foreground dark:text-gray-400 text-base">
                 Join 50,000+ athletes reaching their fitness goals today.
               </p>
             </div>
@@ -71,13 +71,13 @@ function SignUpForm() {
               <div>
                 <Label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                  className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
                   Full Name
                 </Label>
                 <div className="relative">
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-gray-500"
                     size={20}
                   />
                   <Input
@@ -87,8 +87,7 @@ function SignUpForm() {
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
-                    required
+                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
                   />
                 </div>
               </div>
@@ -97,13 +96,13 @@ function SignUpForm() {
               <div>
                 <Label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                  className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
                   Email Address
                 </Label>
                 <div className="relative">
                   <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-gray-500"
                     size={20}
                   />
                   <Input
@@ -113,8 +112,7 @@ function SignUpForm() {
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
-                    required
+                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
                   />
                 </div>
               </div>
@@ -123,13 +121,13 @@ function SignUpForm() {
               <div>
                 <Label
                   htmlFor="password"
-                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                  className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
                   Password
                 </Label>
                 <div className="relative">
                   <Lock
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-gray-500"
                     size={20}
                   />
                   <Input
@@ -139,13 +137,12 @@ function SignUpForm() {
                     placeholder="Min. 8 characters"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-12 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
-                    required
+                    className="w-full pl-12 pr-12 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-primary transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -163,7 +160,7 @@ function SignUpForm() {
             </form>
 
             {/* T&C Section */}
-            <p className="mt-8 text-center text-xs text-text-secondary dark:text-gray-500 leading-relaxed px-4">
+            <p className="mt-8 text-center text-xs text-muted-foreground dark:text-gray-500 leading-relaxed px-4">
               By signing up, you agree to our{' '}
               <Link to="/terms" className="text-primary hover:underline font-semibold">
                 Terms of Service

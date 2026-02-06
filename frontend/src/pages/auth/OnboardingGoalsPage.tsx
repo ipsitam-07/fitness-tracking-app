@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { SignupHeader } from '@/components/auth/SignupHeader';
+import { Footer } from '@/components/auth/Footer';
 import { TrendingDown, Dumbbell, Heart, Zap, Rocket, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -59,7 +59,7 @@ function GoalsRegisterPage() {
   return (
     <>
       <div className="auth-bg">
-        <Header />
+        <SignupHeader />
 
         <main className="grow flex items-center justify-center p-6 bg-gradient-mesh">
           <div className="auth-card">
@@ -106,16 +106,16 @@ function GoalsRegisterPage() {
                   />
                   <Label
                     htmlFor={goal.id}
-                    className="flex items-center gap-4 p-5 rounded-xl border-2 border-border bg-muted/50 cursor-pointer transition-all hover:border-primary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-1 peer-data-[state=checked]:ring-ring peer-data-[state=checked]:bg-primary/5 group"
+                    className="h-30 flex items-center gap-5 p-5 rounded-xl border-2 border-border bg-muted/50 cursor-pointer transition-all hover:border-primary/50 peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-1 peer-data-[state=checked]:ring-ring peer-data-[state=checked]:bg-primary/5 group"
                   >
-                    <div className="w-12 h-12 flex items-center justify-center bg-white dark:bg-white/10 rounded-lg shadow-sm transition-transform group-hover:scale-110">
+                    <div className="w-25 h-15 flex items-center justify-center bg-white dark:bg-white/10 rounded-lg shadow-sm transition-transform group-hover:scale-110">
                       {goal.icon}
                     </div>
                     <div className="flex flex-col">
-                      <span className="mb-1 font-bold text-text-primary dark:text-white">
+                      <span className="mb-1 font-bold text-foreground dark:text-white">
                         {goal.title}
                       </span>
-                      <span className="mt-1 text-xs text-text-secondary dark:text-gray-400">
+                      <span className="mt-1 text-xs text-muted-foreground dark:text-gray-400">
                         {goal.description}
                       </span>
                     </div>
@@ -137,7 +137,7 @@ function GoalsRegisterPage() {
               <Button
                 onClick={handleBack}
                 variant="ghost"
-                className="w-full h-12 bg-transparent text-text-secondary dark:text-gray-400 font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-all"
+                className="w-full h-12 bg-transparent text-muted-foreground dark:text-gray-400 font-semibold rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-white/5 transition-all"
               >
                 <ArrowLeft size={18} />
                 Back
