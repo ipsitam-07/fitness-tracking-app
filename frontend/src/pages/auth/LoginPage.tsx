@@ -20,7 +20,7 @@ function LoginPage() {
     e.preventDefault();
     console.log('Login submitted:', formData);
 
-    navigate('/dashboard');
+    navigate('/profile');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +70,6 @@ function LoginPage() {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
-                    required
                   />
                 </div>
               </div>
@@ -104,7 +103,6 @@ function LoginPage() {
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full pl-12 pr-12 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
-                    required
                   />
                   <button
                     type="button"
