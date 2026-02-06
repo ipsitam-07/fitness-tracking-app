@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
+import { login } from '@/api/auth.api';
+import { setToken } from '@/utils/storage';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -16,11 +18,15 @@ function LoginPage() {
     password: '',
   });
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Login submitted:', formData);
-
-    navigate('/profile');
+    try {
+      const { token } = await login(formData);
+      setToken(token);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login failed', error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

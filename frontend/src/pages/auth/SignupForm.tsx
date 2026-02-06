@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
+import { signup } from '@/api/auth.api';
+import { setToken } from '@/utils/storage';
 
 function SignUpForm() {
   const navigate = useNavigate();
@@ -17,10 +19,16 @@ function SignUpForm() {
     password: '',
   });
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    navigate('/goalsRegister');
+    try {
+      const { token } = await signup(formData);
+      setToken(token);
+      navigate('/goalsRegister');
+    } catch (error) {
+      console.error('Signup failed', error);
+      //toast
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
