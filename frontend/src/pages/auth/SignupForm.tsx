@@ -1,64 +1,186 @@
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import '../../index.css';
 
-export function SignupForm({ className, ...props }: React.ComponentProps<'div'>) {
+function SignUpForm() {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    navigate('/goalsRegister');
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card className="overflow-hidden items-center w-full p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
-            <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
-                <p className="text-muted-foreground text-sm text-balance">
-                  Enter your email below to create your account
-                </p>
+    <>
+      <div className="auth-bg">
+        <Header />
+
+        <main className="grow flex items-center justify-center p-6 bg-gradient-mesh">
+          <div className="auth-card">
+            {/* Progress Section */}
+            <div className="mb-10">
+              <div className="flex justify-between items-end mb-3">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                    Get Started
+                  </span>
+                  <h3 className="text-text-primary dark:text-white text-sm font-medium">
+                    Step 1 of 2: Profile Setup
+                  </h3>
+                </div>
+                <span className="text-sm font-bold text-text-primary dark:text-white">50%</span>
               </div>
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input id="email" type="email" placeholder="m@example.com" required />
-                <FieldDescription>
-                  We&apos;ll use this to contact you. We will not share your email with anyone else.
-                </FieldDescription>
-              </Field>
-              <Field>
-                <Field className="grid grid-cols-2 gap-4">
-                  <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-                    <Input id="confirm-password" type="password" required />
-                  </Field>
-                </Field>
-                <FieldDescription>Must be at least 8 characters long.</FieldDescription>
-              </Field>
-              <Field>
-                <Button type="submit">Create Account</Button>
-              </Field>
-              <FieldDescription className="text-center">
-                Already have an account? <a href="#">Sign in</a>
-              </FieldDescription>
-            </FieldGroup>
-          </form>
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
+              <div className="w-full bg-border-light dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
+                <div className="bg-primary h-full w-1/2 rounded-full transition-all duration-500"></div>
+              </div>
+            </div>
+
+            {/* Form Header */}
+            <div className="mb-10 text-center">
+              <h1 className="text-text-primary dark:text-white text-3xl font-bold mb-3">
+                Start Your Journey
+              </h1>
+              <p className="text-text-secondary dark:text-gray-400 text-base">
+                Join 50,000+ athletes reaching their fitness goals today.
+              </p>
+            </div>
+
+            {/* Registration Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name Field */}
+              <div>
+                <Label
+                  htmlFor="name"
+                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                >
+                  Full Name
+                </Label>
+                <div className="relative">
+                  <User
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    size={20}
+                  />
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <Label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                >
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    size={20}
+                  />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <Label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-text-primary dark:text-white mb-2"
+                >
+                  Password
+                </Label>
+                <div className="relative">
+                  <Lock
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary dark:text-gray-500"
+                    size={20}
+                  />
+                  <Input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Min. 8 characters"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-12 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-text-secondary/50"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-primary transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                className="w-full h-14 bg-primary text-primary-foreground font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(19,236,128,0.4)] transition-all transform active:scale-[0.98]"
+              >
+                Continue to Goals
+                <ArrowRight size={20} />
+              </Button>
+            </form>
+
+            {/* T&C Section */}
+            <p className="mt-8 text-center text-xs text-text-secondary dark:text-gray-500 leading-relaxed px-4">
+              By signing up, you agree to our{' '}
+              <Link to="/terms" className="text-primary hover:underline font-semibold">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link to="/privacy" className="text-primary hover:underline font-semibold">
+                Privacy Policy
+              </Link>
+              .
+            </p>
           </div>
-        </CardContent>
-      </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and{' '}
-        <a href="#">Privacy Policy</a>.
-      </FieldDescription>
-    </div>
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 }
-export default SignupForm;
+
+export default SignUpForm;

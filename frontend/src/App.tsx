@@ -1,10 +1,15 @@
-import SignupForm from './pages/auth/SignupForm';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SignUpForm from './pages/auth/SignupForm';
+import GoalsRegisterPage from './pages/auth/GoalsRegisterPage';
 
 function App() {
   return (
-    <div className="flex flex-col gap-6">
-      <SignupForm />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/goalsRegister" element={<GoalsRegisterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
