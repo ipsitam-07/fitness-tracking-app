@@ -19,9 +19,18 @@ const menuItems = [
   { icon: BarChart3, label: 'Stats', path: '/stats' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
+import { useAuthStore } from '@/store/auth.store';
+import { useNavigate } from 'react-router-dom';
 
 export function Sidebar() {
   const location = useLocation();
+  const logout = useAuthStore((s) => s.logout);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   return (
     <aside className="w-64 h-full border-r flex flex-col shrink-0 z-50 border-border bg-background-light">
@@ -73,7 +82,10 @@ export function Sidebar() {
             </p>
             <p className="text-[10px] truncate text-muted-foreground">Premium Member</p>
           </div>
-          <Button className="hover:text-red-500 flex items-center justify-center transition-colors text-muted-foreground bg-transparent shadow-transparent hover:bg-transparent p-0">
+          <Button
+            className="hover:text-red-500 flex items-center justify-center transition-colors text-muted-foreground bg-transparent shadow-transparent hover:bg-transparent p-0"
+            onClick={handleLogout}
+          >
             <LogOut size={18} />
           </Button>
         </div>

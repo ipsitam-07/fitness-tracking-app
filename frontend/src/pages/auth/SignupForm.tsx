@@ -7,10 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
-import { signup } from '@/api/auth.api';
-import { setToken } from '@/utils/storage';
+import { useSignup } from '@/hooks/useSignUp';
 
 function SignUpForm() {
+  const signUp = useSignup();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,14 +21,11 @@ function SignUpForm() {
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const { token } = await signup(formData);
-      setToken(token);
-      navigate('/goalsRegister');
-    } catch (error) {
-      console.error('Signup failed', error);
-      //toast
-    }
+    signUp.mutate(formData, {
+      onSuccess: () => {
+        navigate('/goalsRegister');
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,11 +157,15 @@ function SignUpForm() {
               {/* Submit Button */}
               <Button
                 type="submit"
+                disabled={signUp.isPending}
                 className="w-full h-14 bg-primary text-primary-foreground font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(19,236,128,0.4)] transition-all transform active:scale-[0.98]"
               >
-                Continue to Goals
+                {signUp.isPending ? 'Creating account...' : 'Continue to Goals'}
                 <ArrowRight size={20} />
               </Button>
+              {signUp.isError && (
+                <p className="text-sm text-red-500 mt-2">Signup failed. Please try again.</p>
+              )}
             </form>
 
             {/* T&C Section */}

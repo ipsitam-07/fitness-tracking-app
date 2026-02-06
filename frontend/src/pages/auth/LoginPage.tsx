@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
-import { login } from '@/api/auth.api';
-import { setToken } from '@/utils/storage';
+import { useLogin } from '@/hooks/useLogin';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const login = useLogin();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -20,13 +20,11 @@ function LoginPage() {
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const { token } = await login(formData);
-      setToken(token);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Login failed', error);
-    }
+    login.mutate(formData, {
+      onSuccess: () => {
+        navigate('/profile');
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,11 +121,15 @@ function LoginPage() {
               {/* Submit Button */}
               <Button
                 type="submit"
+                disabled={login.isPending}
                 className="w-full h-14 bg-primary text-primary-foreground font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(19,236,128,0.4)] transition-all transform active:scale-[0.98] mt-8"
               >
-                Sign In
+                {login.isPending ? 'Signing in...' : 'Sign In'}
                 <LogIn size={20} />
               </Button>
+              {login.isError && (
+                <p className="text-sm text-red-500 mt-2">Invalid email or password</p>
+              )}
             </form>
 
             {/* Sign Up Link */}
