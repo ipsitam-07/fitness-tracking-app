@@ -9,5 +9,6 @@ export function useCurrentUser() {
     queryKey: ['currentUser'],
     queryFn: getCurrentUser,
     enabled: isAuthenticated,
+    staleTime: 0,
   });
 }

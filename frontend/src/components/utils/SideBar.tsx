@@ -22,6 +22,8 @@ const menuItems = [
 import { useAuthStore } from '@/store/auth.store';
 import { useNavigate } from 'react-router-dom';
 
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+
 export function Sidebar() {
   const location = useLocation();
   const logout = useAuthStore((s) => s.logout);
@@ -32,6 +34,7 @@ export function Sidebar() {
     navigate('/login', { replace: true });
   };
 
+  const { data: user } = useCurrentUser();
   return (
     <aside className="w-64 h-full border-r flex flex-col shrink-0 z-50 border-border bg-background-light">
       {/* Logo */}
@@ -77,9 +80,7 @@ export function Sidebar() {
             <User className="text-primary" size={20} />
           </div>
           <div className="grow overflow-hidden">
-            <p className="text-sm font-semibold truncate text-foreground">
-              Ipsita Mohanty {/* Dynamic data to be added */}
-            </p>
+            <p className="text-sm font-semibold truncate text-foreground">{user?.name}</p>
             <p className="text-[10px] truncate text-muted-foreground">Premium Member</p>
           </div>
           <Button

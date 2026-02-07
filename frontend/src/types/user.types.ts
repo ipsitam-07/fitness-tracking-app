@@ -8,4 +8,4 @@ export interface User {
   gender?: Gender | null;
 }
 
-export type Gender = 'male' | 'female' | 'other';
+export type Gender = 'Male' | 'Female' | 'Other';

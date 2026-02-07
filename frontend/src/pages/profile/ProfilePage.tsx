@@ -18,17 +18,20 @@ import type { Gender } from '@/types/user.types';
 
 export default function ProfilePage() {
   const { data: user, isLoading, isError } = useCurrentUser();
+
   const updateUser = useUpdateUser();
   const [formData, setFormData] = useState<{
     gender?: Gender;
     name: string;
     weight: string;
     height: string;
+    age: string;
   }>({
     name: '',
     weight: '',
     height: '',
     gender: undefined,
+    age: '',
   });
 
   //hydrate from api intially
@@ -38,6 +41,7 @@ export default function ProfilePage() {
         name: user.name ?? '',
         weight: user.weight?.toString() ?? '',
         height: user.height?.toString() ?? '',
+        age: user.age?.toString() ?? '',
         gender: user.gender ?? undefined,
       });
     }
@@ -63,6 +67,7 @@ export default function ProfilePage() {
       weight: formData.weight ? Number(formData.weight) : undefined,
       height: formData.height ? Number(formData.height) : undefined,
       gender: formData.gender || undefined,
+      age: formData.age ? Number(formData.age) : undefined,
     });
   };
 
@@ -73,6 +78,7 @@ export default function ProfilePage() {
       name: user.name ?? '',
       weight: user.weight?.toString() ?? '',
       height: user.height?.toString() ?? '',
+      age: user.age?.toString() ?? '',
       gender: user.gender ?? undefined,
     });
   };
@@ -81,7 +87,7 @@ export default function ProfilePage() {
     return <div className="p-10">Loading profile…</div>;
   }
 
-  if (!user) {
+  if (!user || isError) {
     return <div className="p-10">No user data found.</div>;
   }
 
@@ -169,7 +175,7 @@ export default function ProfilePage() {
                     type="email"
                     value={user.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
+                    className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light cursor-not-allowed"
                   />
                 </div>
 
@@ -198,20 +204,6 @@ export default function ProfilePage() {
                     className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
                   />
                 </div>
-
-                {/* <div>
-                  <Label className="block text-sm font-semibold mb-2 text-foreground">
-                    Date of Birth
-                  </Label>
-                  <Input
-                    name="dateOfBirth"
-                    type="date"
-                    value={formData.dateOfBirth}
-                    onChange={handleChange}
-                    className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
-                  />
-                </div> */}
-
                 <div>
                   <Label className="block text-sm font-semibold mb-2 text-foreground">Gender</Label>
                   <Select value={formData.gender} onValueChange={handleGenderChange}>
@@ -225,6 +217,16 @@ export default function ProfilePage() {
                     </SelectContent>
                   </Select>
                 </div>
+                <div>
+                  <Label className="block text-sm font-semibold mb-2 text-foreground">Age</Label>
+                  <Input
+                    name="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={handleChange}
+                    className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -234,8 +236,8 @@ export default function ProfilePage() {
             <div className="p-8 rounded-2xl bg-accent-foreground text-accent">
               <h3 className="font-bold text-lg mb-4">Daily Motivation</h3>
               <p className="text-sm opacity-80 italic">
-                "Consistency is the key to unlocking your true potential. Keep pushing, Ipsita!"{' '}
-                {/* the last name should be api fetched */}
+                "Consistency is the key to unlocking your true potential. Keep pushing, {user.name}
+                !" {/* the last name should be api fetched */}
               </p>
               <div className="mt-6 flex justify-between items-center">
                 <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">
