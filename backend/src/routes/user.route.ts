@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
-import { getCurrentUser } from '../controllers/user.controller';
+import { getCurrentUser, updateCurrentUser } from '../controllers/user.controller';
 
 const router = Router();
 /**
@@ -28,5 +28,24 @@ const router = Router();
  */
 
 router.get('/me', authenticationReq, getCurrentUser);
+
+/**
+ * @swagger
+ * /users/me:
+ *   put:
+ *     summary: Update current user profile
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *     responses:
+ *       200:
+ *         description: Updated user profile
+ */
+
+router.patch('/me', authenticationReq, updateCurrentUser);
 
 export default router;
