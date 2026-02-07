@@ -36,7 +36,7 @@ importers:
         version: 10.1.8(eslint@9.39.2(jiti@2.6.1))
       eslint-js:
         specifier: github:eslint/js
-        version: https://codeload.github.com/eslint/js/tar.gz/1135f33d1b63fbc3be1557c1a1a59b64e821a26b
+        version: https://codeload.github.com/eslint/js/tar.gz/a7ca435415ff9e0564f6471cfcb2f914fb59461a
       eslint-plugin-prettier:
         specifier: ^5.5.5
         version: 5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))(prettier@3.8.1)
@@ -184,7 +184,7 @@ importers:
         version: 1.2.4(@types/react@19.2.10)(react@19.2.4)
       '@reduxjs/toolkit':
         specifier: ^2.11.2
-        version: 2.11.2(@types/react@19.2.10)(react-redux@9.2.0(@types/react@19.2.10)(react@19.2.4)(redux@5.0.1))(react@19.2.4)
+        version: 2.11.2(react-redux@9.2.0(@types/react@19.2.10)(react@19.2.4)(redux@5.0.1))(react@19.2.4)
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.1(@types/node@24.10.9)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.2))
@@ -211,7 +211,7 @@ importers:
         version: 2.1.1
       lucide-react:
         specifier: ^0.563.0
-        version: 0.563.0(@types/react@19.2.10)(react@19.2.4)
+        version: 0.563.0(react@19.2.4)
       react:
         specifier: ^19.2.0
         version: 19.2.4
@@ -1457,7 +1457,6 @@ packages:
         integrity: sha512-Kd6kAHTA6/nUpp8mySPqj3en3dm0tdMIgbttnQ1xFMVpufoj+ADi8pXLBsd4xzTRHQa7t/Jv8W5UnCuW4kuWMQ==,
       }
     peerDependencies:
-      '@types/react': '*'
       react: ^16.9.0 || ^17.0.0 || ^18 || ^19
       react-redux: ^7.2.1 || ^8.1.3 || ^9.0.0
     peerDependenciesMeta:
@@ -1990,12 +1989,6 @@ packages:
         integrity: sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==,
       }
 
-  '@types/graceful-fs@4.1.9':
-    resolution:
-      {
-        integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==,
-      }
-
   '@types/http-errors@2.0.5':
     resolution:
       {
@@ -2080,12 +2073,6 @@ packages:
     resolution:
       {
         integrity: sha512-8mam4H1NHLtu7nmtalF7eyBH14QyOASmcxHhSfEoRyr0nP/YdoesEtU+uSRvMe96TW/HPTtkoKqQLl53N7UXMQ==,
-      }
-
-  '@types/set-cookie-parser@2.4.10':
-    resolution:
-      {
-        integrity: sha512-GGmQVGpQWUe5qglJozEjZV/5dyxbOOZ0LHe/lqyWssB88Y4svNfst0uqBVscdDeIKl5Jy5+aPSvy7mI9tYRguw==,
       }
 
   '@types/strip-bom@3.0.0':
@@ -2992,10 +2979,10 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-js@https://codeload.github.com/eslint/js/tar.gz/1135f33d1b63fbc3be1557c1a1a59b64e821a26b:
+  eslint-js@https://codeload.github.com/eslint/js/tar.gz/a7ca435415ff9e0564f6471cfcb2f914fb59461a:
     resolution:
       {
-        tarball: https://codeload.github.com/eslint/js/tar.gz/1135f33d1b63fbc3be1557c1a1a59b64e821a26b,
+        tarball: https://codeload.github.com/eslint/js/tar.gz/a7ca435415ff9e0564f6471cfcb2f914fb59461a,
       }
     version: 0.0.0
 
@@ -4060,7 +4047,6 @@ packages:
         integrity: sha512-8dXPB2GI4dI8jV4MgUDGBeLdGk8ekfqVZ0BdLcrRzocGgG75ltNEmWS+gE7uokKF/0oSUuczNDT+g9hFJ23FkA==,
       }
     peerDependencies:
-      '@types/react': '*'
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   magic-string@0.30.21:
@@ -6600,11 +6586,10 @@ snapshots:
 
   '@radix-ui/rect@1.1.1': {}
 
-  '@reduxjs/toolkit@2.11.2(@types/react@19.2.10)(react-redux@9.2.0(@types/react@19.2.10)(react@19.2.4)(redux@5.0.1))(react@19.2.4)':
+  '@reduxjs/toolkit@2.11.2(react-redux@9.2.0(@types/react@19.2.10)(react@19.2.4)(redux@5.0.1))(react@19.2.4)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
-      '@types/react': 19.2.10
       immer: 11.1.3
       redux: 5.0.1
       redux-thunk: 3.1.0(redux@5.0.1)
@@ -6898,10 +6883,6 @@ snapshots:
       '@types/express-serve-static-core': 5.1.1
       '@types/serve-static': 2.2.0
 
-  '@types/graceful-fs@4.1.9':
-    dependencies:
-      '@types/node': 25.1.0
-
   '@types/http-errors@2.0.5': {}
 
   '@types/json-schema@7.0.15': {}
@@ -6948,10 +6929,6 @@ snapshots:
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 25.1.0
-
-  '@types/set-cookie-parser@2.4.10':
-    dependencies:
       '@types/node': 25.1.0
 
   '@types/strip-bom@3.0.0': {}
@@ -7476,7 +7453,6 @@ snapshots:
 
   enhanced-resolve@5.18.4:
     dependencies:
-      '@types/graceful-fs': 4.1.9
       graceful-fs: 4.2.11
       tapable: 2.3.0
 
@@ -7542,7 +7518,7 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
-  eslint-js@https://codeload.github.com/eslint/js/tar.gz/1135f33d1b63fbc3be1557c1a1a59b64e821a26b:
+  eslint-js@https://codeload.github.com/eslint/js/tar.gz/a7ca435415ff9e0564f6471cfcb2f914fb59461a:
     {}
 
   eslint-plugin-prettier@5.5.5(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))(prettier@3.8.1):
@@ -8172,9 +8148,8 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.563.0(@types/react@19.2.10)(react@19.2.4):
+  lucide-react@0.563.0(react@19.2.4):
     dependencies:
-      '@types/react': 19.2.10
       react: 19.2.4
 
   magic-string@0.30.21:
@@ -8548,7 +8523,6 @@ snapshots:
 
   react-router@7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
-      '@types/set-cookie-parser': 2.4.10
       cookie: 1.1.1
       react: 19.2.4
       set-cookie-parser: 2.7.2
