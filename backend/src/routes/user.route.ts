@@ -3,6 +3,7 @@ import { authenticationReq } from '../middlewares/auth.middleware';
 import { getCurrentUser, updateCurrentUser } from '../controllers/user.controller';
 
 const router = Router();
+
 /**
  * @swagger
  * /users/me:
@@ -23,17 +24,38 @@ const router = Router();
  *                 success:
  *                   type: boolean
  *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     weight:
+ *                       type: number
+ *                       nullable: true
+ *                     height:
+ *                       type: number
+ *                       nullable: true
+ *                     gender:
+ *                       type: string
+ *                       nullable: true
+ *                     age:
+ *                       type: number
+ *                       nullable: true
  *       401:
  *         description: Unauthorized (missing or invalid token)
  */
-
 router.get('/me', authenticationReq, getCurrentUser);
 
 /**
  * @swagger
  * /users/me:
- *   put:
- *     summary: Update current user profile
+ *   patch:
+ *     summary: Update current authenticated user
+ *     description: Updates profile information for the currently authenticated user
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -41,11 +63,28 @@ router.get('/me', authenticationReq, getCurrentUser);
  *       required: true
  *       content:
  *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               weight:
+ *                 type: number
+ *               height:
+ *                 type: number
+ *               gender:
+ *                 type: string
+ *                 enum: [Male, Female, Other]
+ *               age:
+ *                 type: number
  *     responses:
  *       200:
- *         description: Updated user profile
+ *         description: Successfully updated user
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
  */
-
 router.patch('/me', authenticationReq, updateCurrentUser);
 
 export default router;

@@ -23,5 +23,11 @@ export async function updateCurrentUserService(userId: string, payload: UpdateUs
     throw new AppError('User not found', 404);
   }
 
+  if (payload.name !== undefined) user.name = payload.name;
+  if (payload.weight !== undefined) user.weight = payload.weight;
+  if (payload.height !== undefined) user.height = payload.height;
+  if (payload.gender !== undefined) user.gender = payload.gender;
+  if (payload.age !== undefined) user.age = payload.age;
+
   return updateUser(user, payload);
 }

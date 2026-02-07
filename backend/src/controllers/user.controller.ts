@@ -4,25 +4,56 @@ import { IAuthRequest } from '../interfaces';
 import { AppError } from '../utils/error';
 import { asyncHandler } from '../utils/asyncHandler';
 export const getCurrentUser = async (req: IAuthRequest, res: Response) => {
-  const user = req.user?.id;
+  const userId = req.user?.id;
 
-  if (!user) {
+  if (!userId) {
     throw new AppError('User not found', 404);
   }
 
-  await getCurrentUserService(user);
+  const user = await getCurrentUserService(userId);
 
   res.status(200).json({
     success: true,
-    data: user,
+    data: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      weight: user.weight,
+      height: user.height,
+      gender: user.gender,
+      age: user.age,
+    },
   });
 };
 
 export const updateCurrentUser = asyncHandler(async (req: IAuthRequest, res: Response) => {
-  const user = await updateCurrentUserService(req.user!.id, req.body);
+  const userId = req.user?.id;
+
+  if (!userId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  const { name, weight, height, gender, age } = req.body;
+
+  const updatedUser = await updateCurrentUserService(userId, {
+    name,
+    weight,
+    height,
+    gender,
+    age,
+  });
 
   res.status(200).json({
     success: true,
-    data: user,
+    message: 'User updated successfully',
+    data: {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      weight: updatedUser.weight,
+      height: updatedUser.height,
+      gender: updatedUser.gender,
+      age: updatedUser.age,
+    },
   });
 });
