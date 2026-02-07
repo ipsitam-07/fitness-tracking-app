@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { getToken, setToken, clearToken } from '@/utils/storage';
-import type { SignupRequest } from '@/types/auth.types';
+import type { User } from '@/types/auth.types';
 
 type AuthState = {
   isAuthenticated: boolean;
-  user: SignupRequest | null;
+  user: User | null;
 
   setAuthToken: (token: string) => void;
-  setUser: (user: SignupRequest) => void;
+  setUser: (user: User) => void;
   logout: () => void;
 };
 
@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isAuthenticated: true });
   },
 
-  setUser: (user: SignupRequest) => {
+  setUser: (user: User) => {
     set({ user });
   },
 

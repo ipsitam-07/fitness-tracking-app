@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/utils/SideBar';
 import { Camera, UserPen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -12,58 +12,78 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import avatar from '../../../public/assets/avatar.jpg';
-
-// Static data
-const staticProfileData = {
-  name: 'Ipsita Mohanty',
-  email: 'ipsita@gmail.com',
-  memberSince: 'Feb 2026',
-  accountType: 'Premium Account',
-  weight: '55',
-  height: '182',
-  dateOfBirth: '2003-11-07',
-  gender: 'Female',
-};
+import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { useUpdateUser } from '@/hooks/useUpdateUser';
+import type { Gender } from '@/types/user.types';
 
 export default function ProfilePage() {
-  const [formData, setFormData] = useState({
-    name: staticProfileData.name,
-    email: staticProfileData.email,
-    weight: staticProfileData.weight,
-    height: staticProfileData.height,
-    dateOfBirth: staticProfileData.dateOfBirth,
-    gender: staticProfileData.gender,
+  const { data: user, isLoading, isError } = useCurrentUser();
+  const updateUser = useUpdateUser();
+  const [formData, setFormData] = useState<{
+    gender?: Gender;
+    name: string;
+    weight: string;
+    height: string;
+  }>({
+    name: '',
+    weight: '',
+    height: '',
+    gender: undefined,
   });
 
+  //hydrate from api intially
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name ?? '',
+        weight: user.weight?.toString() ?? '',
+        height: user.height?.toString() ?? '',
+        gender: user.gender ?? undefined,
+      });
+    }
+  }, [user]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
-  const handleGenderChange = (value: string) => {
-    setFormData({
-      ...formData,
+  const handleGenderChange = (value: Gender) => {
+    setFormData((prev) => ({
+      ...prev,
       gender: value,
-    });
+    }));
   };
 
   const handleSave = () => {
-    console.log('Saving profile:', formData);
-    // API call would go here
+    updateUser.mutate({
+      name: formData.name,
+      weight: formData.weight ? Number(formData.weight) : undefined,
+      height: formData.height ? Number(formData.height) : undefined,
+      gender: formData.gender || undefined,
+    });
   };
 
   const handleDiscard = () => {
+    if (!user) return;
+
     setFormData({
-      name: staticProfileData.name,
-      email: staticProfileData.email,
-      weight: staticProfileData.weight,
-      height: staticProfileData.height,
-      dateOfBirth: staticProfileData.dateOfBirth,
-      gender: staticProfileData.gender,
+      name: user.name ?? '',
+      weight: user.weight?.toString() ?? '',
+      height: user.height?.toString() ?? '',
+      gender: user.gender ?? undefined,
     });
   };
+
+  if (isLoading) {
+    return <div className="p-10">Loading profile…</div>;
+  }
+
+  if (!user) {
+    return <div className="p-10">No user data found.</div>;
+  }
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
@@ -86,15 +106,11 @@ export default function ProfilePage() {
 
             <div>
               {/* Name and Email section */}
-              <h2 className="text-3xl font-bold text-primary-foreground">
-                {staticProfileData.name}
-              </h2>
-              <p className="text-muted-foreground text-xs">
-                {staticProfileData.email} • Member since {staticProfileData.memberSince}
-              </p>
+              <h2 className="text-3xl font-bold text-primary-foreground">{user.name}</h2>
+              <p className="text-muted-foreground text-xs">{user.email} • Member since 2026</p>
               <div className="flex gap-2 mt-3">
                 <span className="px-3 py-1 text-xs font-bold rounded-full border uppercase tracking-wider bg-primary/10 text-primary border-primary/50">
-                  {staticProfileData.accountType}
+                  PREMIUM ACCOUNT
                 </span>
               </div>
             </div>
@@ -151,7 +167,7 @@ export default function ProfilePage() {
                   <Input
                     name="email"
                     type="email"
-                    value={formData.email}
+                    value={user.email}
                     onChange={handleChange}
                     className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
                   />
@@ -183,7 +199,7 @@ export default function ProfilePage() {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <Label className="block text-sm font-semibold mb-2 text-foreground">
                     Date of Birth
                   </Label>
@@ -194,7 +210,7 @@ export default function ProfilePage() {
                     onChange={handleChange}
                     className="w-full px-4 py-6.5 rounded-xl bg-muted border-border-light"
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <Label className="block text-sm font-semibold mb-2 text-foreground">Gender</Label>

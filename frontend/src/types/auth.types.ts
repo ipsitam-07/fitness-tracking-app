@@ -9,6 +9,22 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export interface AuthResponse {
-  token: string;
+  success: boolean;
+  message?: string;
+  data: {
+    accessToken: string;
+    user: User;
+  };
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  data: User;
 }
