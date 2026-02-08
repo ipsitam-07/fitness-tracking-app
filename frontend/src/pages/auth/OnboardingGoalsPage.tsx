@@ -8,6 +8,9 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import '../../index.css';
 
+import { useCreateGoal } from '@/hooks/useCreateGoal';
+import type { GoalType } from '@/types/goals.types';
+
 type GoalOption = {
   id: string;
   title: string;
@@ -44,12 +47,23 @@ const goalOptions: GoalOption[] = [
 
 function GoalsRegisterPage() {
   const navigate = useNavigate();
-  const [selectedGoal, setSelectedGoal] = useState<string>('workout_count');
+
+  const createGoal = useCreateGoal();
+  const [selectedGoal, setSelectedGoal] = useState<GoalType>('workout_count');
 
   const handleFinish = () => {
-    console.log('Selected goal:', selectedGoal);
-
-    navigate('/dashboard');
+    createGoal.mutate(
+      {
+        type: selectedGoal,
+        targetValue: 1,
+        startDate: new Date().toISOString().split('T')[0],
+      },
+      {
+        onSuccess: () => {
+          navigate('/dashboard');
+        },
+      },
+    );
   };
 
   const handleBack = () => {
@@ -94,7 +108,7 @@ function GoalsRegisterPage() {
             {/* Goals Selection */}
             <RadioGroup
               value={selectedGoal}
-              onValueChange={setSelectedGoal}
+              onValueChange={(value) => setSelectedGoal(value as GoalType)}
               className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10"
             >
               {goalOptions.map((goal) => (

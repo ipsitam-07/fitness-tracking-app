@@ -4,6 +4,7 @@ import GoalsRegisterPage from './pages/auth/OnboardingGoalsPage';
 import LoginPage from './pages/auth/LoginPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import { AuthGuard } from './routes/AuthGuard';
+import DashboardPage from './pages/dashboard/Dashboard';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
 
         <Route element={<AuthGuard />}>
           <Route path="/goalsRegister" element={<GoalsRegisterPage />} />
-
+          <Route path="/dashboard" element={<DashboardPage />}></Route>
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
