@@ -44,6 +44,15 @@ export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implemen
   public readonly updatedAt!: Date;
 
   public getProgress(): number {
+    if (this.goalType === GoalType.WEIGHT) {
+      if (this.currentValue <= this.targetValue) {
+        return 100;
+      }
+      const weightToLose = this.currentValue - this.targetValue;
+      const weightLost = Math.max(0, this.currentValue - this.targetValue);
+      return Math.min((weightLost / weightToLose) * 100, 100);
+    }
+
     return Math.min((this.currentValue / this.targetValue) * 100, 100);
   }
 
