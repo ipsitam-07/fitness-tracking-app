@@ -20,6 +20,7 @@ interface GoalAttributes {
   goalType: GoalType;
   targetValue: number;
   currentValue: number;
+  startingValue?: number;
   startDate: Date;
   endDate: Date;
   status: GoalStatus;
@@ -36,6 +37,7 @@ export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implemen
   public goalType!: GoalType;
   public targetValue!: number;
   public currentValue!: number;
+  public startingValue?: number;
   public startDate!: Date;
   public endDate!: Date;
   public status!: GoalStatus;
@@ -44,15 +46,17 @@ export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implemen
   public readonly updatedAt!: Date;
 
   public getProgress(): number {
-    if (this.goalType === GoalType.WEIGHT) {
-      if (this.currentValue <= this.targetValue) {
-        return 100;
-      }
-      const weightToLose = this.currentValue - this.targetValue;
-      const weightLost = Math.max(0, this.currentValue - this.targetValue);
-      return Math.min((weightLost / weightToLose) * 100, 100);
+    if (this.goalType === GoalType.WEIGHT && this.startingValue) {
+      // For weight loss: progress based on how much you've lost
+      const totalToLose = this.startingValue - this.targetValue;
+      const amountLost = this.startingValue - this.currentValue;
+
+      if (totalToLose <= 0) return 100; // Already at or below target
+
+      return Math.min((amountLost / totalToLose) * 100, 100);
     }
 
+    // For other goals, higher current value = more progress
     return Math.min((this.currentValue / this.targetValue) * 100, 100);
   }
 
