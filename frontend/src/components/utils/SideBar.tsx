@@ -1,14 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  Dumbbell,
-  Flag,
-  User,
-  BarChart3,
-  Settings,
-  Zap,
-  LogOut,
-} from 'lucide-react';
+import { LayoutDashboard, Dumbbell, Flag, User, Zap, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 
 const menuItems = [
@@ -16,8 +7,6 @@ const menuItems = [
   { icon: Dumbbell, label: 'Workout', path: '/workout' },
   { icon: Flag, label: 'Goals', path: '/goals' },
   { icon: User, label: 'Profile', path: '/profile' },
-  { icon: BarChart3, label: 'Stats', path: '/stats' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
 ];
 import { useAuthStore } from '@/store/auth.store';
 import { useNavigate } from 'react-router-dom';

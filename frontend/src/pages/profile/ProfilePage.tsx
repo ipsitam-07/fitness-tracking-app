@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/utils/SideBar';
-import { Camera, UserPen } from 'lucide-react';
+import { UserPen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import avatar from '../../../public/assets/avatar.jpg';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useUpdateUser } from '@/hooks/useUpdateUser';
 import type { Gender } from '@/types/user.types';
@@ -99,17 +98,6 @@ export default function ProfilePage() {
         {/* Profile Header */}
         <div className="flex items-center justify-between mb-10 p-8 rounded-2xl border border-border-light shadow-emerald-300">
           <div className="flex items-center gap-6">
-            <div className="relative group">
-              <img
-                alt="Profile"
-                className="w-24 h-24 rounded-2xl object-cover border-4 border-none shadow-xl bg-background-light"
-                src={avatar}
-              />
-              <button className="absolute -bottom-2 -right-2 p-2 rounded-lg shadow-lg hover:scale-105 transition-transform bg-primary text-muted-foreground cursor-pointer">
-                <Camera size={16} />
-              </button>
-            </div>
-
             <div>
               {/* Name and Email section */}
               <h2 className="text-3xl font-bold text-primary-foreground">{user.name}</h2>
