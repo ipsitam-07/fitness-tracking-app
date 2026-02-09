@@ -22,7 +22,7 @@ function LoginPage() {
     e.preventDefault();
     login.mutate(formData, {
       onSuccess: () => {
-        navigate('/profile');
+        navigate('/dashboard');
       },
     });
   };

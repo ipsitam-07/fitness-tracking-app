@@ -1,3 +1,4 @@
+import type { PaginationParams } from './pagination.types';
 export interface Workout {
   id: string;
   userId?: string;
@@ -26,26 +27,6 @@ export interface WorkoutStats {
   };
 }
 
-export interface PaginationParams {
-  page?: number;
-  limit?: number;
-  search?: string;
-}
-
 export interface WorkoutPaginationParams extends PaginationParams {
   type?: string;
-}
-
-export interface GoalPaginationParams extends PaginationParams {
-  status?: 'active' | 'completed' | 'abandoned';
-}
-
-export interface PaginatedResponse<T> {
-  success: boolean;
-  data: T[];
-  pagination: {
-    totalItems: number;
-    totalPages: number;
-    currentPage: number;
-  };
 }

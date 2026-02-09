@@ -1,4 +1,4 @@
-import type { PaginationParams } from '@/types/workout.types';
+import type { PaginationParams } from '@/types/pagination.types';
 
 // Query keys
 export const queryKeys = {
