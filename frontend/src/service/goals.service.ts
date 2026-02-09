@@ -1,4 +1,5 @@
-import type { PaginatedResponse, GoalPaginationParams } from '@/types/workout.types';
+import type { PaginatedResponse } from '@/types/pagination.types';
+import type { GoalPaginationParams } from '@/types/goals.types';
 import type { Goal } from '@/types/goals.types';
 import api from '@/api/axio';
 import type { ApiResponse } from '@/types/api.types';

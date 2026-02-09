@@ -1,4 +1,5 @@
-import type { WorkoutPaginationParams, PaginatedResponse, Workout } from '@/types/workout.types';
+import type { WorkoutPaginationParams, Workout } from '@/types/workout.types';
+import type { PaginatedResponse } from '@/types/pagination.types';
 import type { ApiResponse } from '@/types/api.types';
 import api from '@/api/axio';
 
