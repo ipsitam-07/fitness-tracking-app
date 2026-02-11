@@ -13,6 +13,7 @@ import {
 import { getGoalsbyGoalID } from '../repositories/goals.repository';
 import { ExerciseType } from '../database/models/Workout';
 import { IWeeklyTrendDTO } from '../dtos/stats.dto';
+import { GoalType } from '../enums/goals';
 //Get workout statictics for an user
 export async function getWorkoutStatsService(userId: string, startDate?: Date, endDate?: Date) {
   if (!userId) {
@@ -270,10 +271,54 @@ export async function getGoalProgressService(userId: string, goalId: string) {
     throw new AppError('Forbidden: You do not have access to this goal', 403);
   }
 
-  const progress = Math.min((goal.currentValue / goal.targetValue) * 100, 100);
+  //Determine goal direction based on type and values
 
-  const remaining = Math.max(goal.targetValue - goal.currentValue, 0);
+  const isWeightGoal = goal.goalType === GoalType.WEIGHT;
 
+  let progress: number;
+  let remaining: number;
+  let isCompleted: boolean;
+
+  if (isWeightGoal) {
+    const startValue = goal.startingValue ?? goal.currentValue;
+    const isWeightLoss = goal.targetValue < startValue;
+    const isWeightGain = goal.targetValue > startValue;
+
+    if (isWeightLoss) {
+      //Calculate weightloss progress
+
+      const totalToLose = startValue - goal.targetValue;
+      const alreadyLost = startValue - goal.currentValue;
+
+      progress = totalToLose > 0 ? Math.min((alreadyLost / totalToLose) * 100, 100) : 100;
+
+      remaining = Math.max(goal.currentValue - goal.targetValue, 0);
+
+      isCompleted = goal.currentValue <= goal.targetValue;
+    } else if (isWeightGain) {
+      // Weight gain progress
+      const totalToGain = goal.targetValue - startValue;
+      const alreadyGained = goal.currentValue - startValue;
+
+      progress = totalToGain > 0 ? Math.min((alreadyGained / totalToGain) * 100, 100) : 100;
+      remaining = Math.max(goal.targetValue - goal.currentValue, 0);
+      isCompleted = goal.currentValue >= goal.targetValue;
+    } else {
+      // Current equals target
+      progress = 100;
+      remaining = 0;
+      isCompleted = true;
+    }
+  } else {
+    //For non weight workout type
+    progress =
+      goal.targetValue > 0 ? Math.min((goal.currentValue / goal.targetValue) * 100, 100) : 0;
+    remaining = Math.max(goal.targetValue - goal.currentValue, 0);
+
+    isCompleted = goal.currentValue >= goal.targetValue;
+  }
+
+  //Calculate days left
   const now = new Date();
   const startDate = new Date(goal.startDate);
   const endDate = new Date(goal.endDate);
@@ -283,33 +328,82 @@ export async function getGoalProgressService(userId: string, goalId: string) {
     0,
   );
 
-  const isCompleted = goal.currentValue >= goal.targetValue;
-
   const totalDays = Math.max(
     Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
     1,
   );
-
-  const dailyTarget = goal.targetValue / totalDays;
 
   const daysPassed = Math.max(
     Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
     0,
   );
 
-  const expectedProgress = dailyTarget * daysPassed;
-  const isOnTrack = goal.currentValue >= expectedProgress;
+  let dailyTarget: number;
+  let expectedProgress: number;
+  let isOnTrack: boolean;
+
+  if (isWeightGoal) {
+    const startValue = goal.startingValue ?? goal.currentValue;
+    const totalChange = Math.abs(goal.targetValue - startValue);
+    dailyTarget = totalChange / totalDays;
+
+    const isWeightLoss = goal.targetValue < startValue;
+
+    if (isWeightLoss) {
+      // For weight loss
+      const expectedLoss = dailyTarget * daysPassed;
+      const actualLoss = startValue - goal.currentValue;
+      expectedProgress = expectedLoss;
+      isOnTrack = actualLoss >= expectedLoss;
+    } else {
+      // For weight gain
+      const expectedGain = dailyTarget * daysPassed;
+      const actualGain = goal.currentValue - startValue;
+      expectedProgress = expectedGain;
+      isOnTrack = actualGain >= expectedGain;
+    }
+  } else {
+    // For non weight workouts
+    dailyTarget = goal.targetValue / totalDays;
+    expectedProgress = dailyTarget * daysPassed;
+    isOnTrack = goal.currentValue >= expectedProgress;
+  }
 
   let projectedCompletion: Date | null = null;
 
-  if (goal.currentValue > 0 && !isCompleted) {
-    const dailyRate = goal.currentValue / Math.max(daysPassed, 1);
+  if (!isCompleted && daysPassed > 0) {
+    if (isWeightGoal) {
+      const startValue = goal.startingValue ?? goal.currentValue;
+      const isWeightLoss = goal.targetValue < startValue;
 
-    const daysToComplete = Math.ceil((goal.targetValue - goal.currentValue) / dailyRate);
-
-    projectedCompletion = new Date(now.getTime() + daysToComplete * 24 * 60 * 60 * 1000);
+      if (isWeightLoss) {
+        const weightLost = startValue - goal.currentValue;
+        if (weightLost > 0) {
+          const lossRate = weightLost / daysPassed;
+          const remainingToLose = goal.currentValue - goal.targetValue;
+          const daysToComplete = Math.ceil(remainingToLose / lossRate);
+          projectedCompletion = new Date(now.getTime() + daysToComplete * 24 * 60 * 60 * 1000);
+        }
+      } else {
+        const weightGained = goal.currentValue - startValue;
+        if (weightGained > 0) {
+          const gainRate = weightGained / daysPassed;
+          const remainingToGain = goal.targetValue - goal.currentValue;
+          const daysToComplete = Math.ceil(remainingToGain / gainRate);
+          projectedCompletion = new Date(now.getTime() + daysToComplete * 24 * 60 * 60 * 1000);
+        }
+      }
+    } else {
+      //For non weight goals
+      if (goal.currentValue > 0) {
+        const dailyRate = goal.currentValue / daysPassed;
+        if (dailyRate > 0) {
+          const daysToComplete = Math.ceil((goal.targetValue - goal.currentValue) / dailyRate);
+          projectedCompletion = new Date(now.getTime() + daysToComplete * 24 * 60 * 60 * 1000);
+        }
+      }
+    }
   }
-
   const result: IGoalProgressDTO = {
     goal: {
       id: goal.id,

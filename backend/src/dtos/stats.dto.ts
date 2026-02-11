@@ -1,5 +1,5 @@
 import { ExerciseType } from '../database/models/Workout';
-import { GoalStatus, GoalType } from '../database/models/Goals';
+import { GoalType, GoalStatus } from '../enums/goals';
 
 export interface IWorkoutStatsDTO {
   totalWorkouts: number;

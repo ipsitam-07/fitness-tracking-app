@@ -26,7 +26,11 @@ export async function createGoalsService(userId: string, payload: ICreateGoalsDT
   if (new Date(payload.endDate) <= new Date(payload.startDate)) {
     throw new AppError('End date must be after start date', 400);
   }
-  return createGoal({ ...payload, userId });
+  return createGoal({
+    ...payload,
+    userId,
+    startingValue: payload.startingValue ?? payload.currentValue,
+  });
 }
 
 //Fetch all goals for an user

@@ -1,18 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../sequelize';
-
-export enum GoalType {
-  WORKOUT_COUNT = 'workout_count',
-  WEIGHT = 'weight',
-  CALORIES = 'calories',
-  DURATION = 'duration',
-}
-
-export enum GoalStatus {
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-  ABANDONED = 'abandoned',
-}
+import { GoalType, GoalStatus } from '../../enums/goals';
 
 interface GoalAttributes {
   id: string;
@@ -47,11 +35,11 @@ export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implemen
 
   public getProgress(): number {
     if (this.goalType === GoalType.WEIGHT && this.startingValue) {
-      // For weight loss: progress based on how much you've lost
+      // For weight loss: progress based on how much you've lost not gain
       const totalToLose = this.startingValue - this.targetValue;
       const amountLost = this.startingValue - this.currentValue;
 
-      if (totalToLose <= 0) return 100; // Already at or below target
+      if (totalToLose <= 0) return 100;
 
       return Math.min((amountLost / totalToLose) * 100, 100);
     }
