@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { Workout } from '../database/models';
 import { Goal } from '../database/models';
-import { GoalStatus } from '../database/models/Goals';
+import { GoalStatus } from '../enums/goals';
 
 //Get workout statistics for an user within a date range
 export async function getWorkoutStats(userId: string, startDate?: Date, endDate?: Date) {

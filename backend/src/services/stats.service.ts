@@ -107,7 +107,6 @@ function calculateStreak(workouts: Array<{ date: Date }>): {
 }
 
 //Get workout dashboard stats
-
 export async function getDashboardStatsService(userId: string) {
   if (!userId) {
     throw new AppError('User ID is required', 400);
@@ -149,7 +148,7 @@ export async function getDashboardStatsService(userId: string) {
     calories: monthWorkouts.reduce((sum, w) => sum + w.caloriesBurned, 0),
   };
 
-  const { currentStreak, longestStreak } = calculateStreak(await sortedWorkouts);
+  const { currentStreak, longestStreak } = calculateStreak(sortedWorkouts ?? []);
 
   const typeCount: Record<string, number> = {};
   allWorkouts.forEach((workout) => {

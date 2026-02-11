@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
 import { getDashboardStats, getWeeklyTrends } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 
@@ -115,7 +116,7 @@ router.use(apiRateLimiter);
  */
 
 //GET /stats/dashboard
-router.get('/dashboard', getDashboardStats);
+router.get('/dashboard', asyncHandler(getDashboardStats));
 
 /**
  * @swagger
@@ -182,6 +183,6 @@ router.get('/dashboard', getDashboardStats);
  */
 
 //GET /stats/weekly-stats
-router.get('/weekly-stats', getWeeklyTrends);
+router.get('/weekly-stats', asyncHandler(getWeeklyTrends));
 
 export default router;

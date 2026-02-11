@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { loginUser, registerUser } from '../controllers/auth.controller';
 import { authRateLimiter } from '../middlewares/rateLimiter';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 
@@ -37,7 +38,7 @@ router.use(authRateLimiter);
  *       404:
  *         description: Not found
  */
-router.post('/register', registerUser);
+router.post('/register', asyncHandler(registerUser));
 
 /**
  * @swagger
@@ -66,6 +67,6 @@ router.post('/register', registerUser);
  *         description: Invalid credentials
  *
  */
-router.post('/login', loginUser);
+router.post('/login', asyncHandler(loginUser));
 
 export default router;

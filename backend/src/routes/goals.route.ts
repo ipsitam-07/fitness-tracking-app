@@ -9,6 +9,7 @@ import {
 } from '../controllers/gaol.controller';
 import { getGoalProgress } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 
@@ -118,7 +119,7 @@ router.use(apiRateLimiter);
  */
 
 //GET /goals/:id/progress
-router.get('/:id/progress', getGoalProgress);
+router.get('/:id/progress', asyncHandler(getGoalProgress));
 /**
  * @swagger
  * /goals:
@@ -163,7 +164,7 @@ router.get('/:id/progress', getGoalProgress);
  */
 
 //POST /goals
-router.post('/', createGoals);
+router.post('/', asyncHandler(createGoals));
 
 /**
  * @swagger
@@ -224,7 +225,7 @@ router.post('/', createGoals);
  */
 
 //GET /goals
-router.get('/', getUserGoals);
+router.get('/', asyncHandler(getUserGoals));
 
 /**
  * @swagger
@@ -278,7 +279,7 @@ router.get('/', getUserGoals);
  */
 
 //GET /goals/:id
-router.get('/:id', getGoalsbyID);
+router.get('/:id', asyncHandler(getGoalsbyID));
 
 /**
  * @swagger
@@ -352,6 +353,6 @@ router.patch('/:id', updateGoals);
  *         description: Goal not found
  */
 //DELETE /goals/:id
-router.delete('/:id', deleteGoals);
+router.delete('/:id', asyncHandler(deleteGoals));
 
 export default router;

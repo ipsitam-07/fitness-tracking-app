@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
 import { getCurrentUser, updateCurrentUser } from '../controllers/user.controller';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 
@@ -48,7 +49,7 @@ const router = Router();
  *       401:
  *         description: Unauthorized (missing or invalid token)
  */
-router.get('/me', authenticationReq, getCurrentUser);
+router.get('/me', authenticationReq, asyncHandler(getCurrentUser));
 
 /**
  * @swagger
@@ -85,6 +86,6 @@ router.get('/me', authenticationReq, getCurrentUser);
  *       404:
  *         description: User not found
  */
-router.patch('/me', authenticationReq, updateCurrentUser);
+router.patch('/me', authenticationReq, asyncHandler(updateCurrentUser));
 
 export default router;

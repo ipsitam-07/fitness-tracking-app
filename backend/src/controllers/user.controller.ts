@@ -22,7 +22,7 @@ export const getCurrentUser = async (req: IAuthRequest, res: Response) => {
   });
 };
 
-export const updateCurrentUser = asyncHandler(async (req: IAuthRequest, res: Response) => {
+export const updateCurrentUser = async (req: IAuthRequest, res: Response) => {
   const userId = req.user!.id;
 
   const { name, weight, height, gender, age } = req.body;
@@ -48,4 +48,4 @@ export const updateCurrentUser = asyncHandler(async (req: IAuthRequest, res: Res
       age: updatedUser.age,
     },
   });
-});
+};

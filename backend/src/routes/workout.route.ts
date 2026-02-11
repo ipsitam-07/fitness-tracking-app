@@ -9,6 +9,7 @@ import {
 } from '../controllers/workout.controller';
 import { getWorkoutStats } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
+import { asyncHandler } from '../utils/asyncHandler';
 
 const router = Router();
 //JWT auth middleware
@@ -59,7 +60,7 @@ router.use(apiRateLimiter);
  *         description: Invalid workout data
  */
 //POST /workouts
-router.post('/', createWorkout);
+router.post('/', asyncHandler(createWorkout));
 
 /**
  * @swagger
@@ -120,7 +121,7 @@ router.post('/', createWorkout);
  */
 
 //GET /workouts
-router.get('/', getUserWorkout);
+router.get('/', asyncHandler(getUserWorkout));
 
 /**
  * @swagger
@@ -199,7 +200,7 @@ router.get('/', getUserWorkout);
  */
 
 //GET /workouts/stats
-router.get('/stats', getWorkoutStats);
+router.get('/stats', asyncHandler(getWorkoutStats));
 /**
  * @swagger
  * /workouts/{id}:
@@ -246,7 +247,7 @@ router.get('/stats', getWorkoutStats);
  *         description: Unauthorized
  */
 //GET /workouts/:id
-router.get('/:id', getWorkoutbyID);
+router.get('/:id', asyncHandler(getWorkoutbyID));
 
 /**
  * @swagger
@@ -295,7 +296,7 @@ router.get('/:id', getWorkoutbyID);
  */
 
 //PATCH /workouts/:id
-router.patch('/:id', updateWorkoutbyID);
+router.patch('/:id', asyncHandler(updateWorkoutbyID));
 
 /**
  * @swagger
@@ -322,6 +323,6 @@ router.patch('/:id', updateWorkoutbyID);
  *         description: Workout not found
  */
 //DELETE /workouts/:id
-router.delete('/:id', deleteWorkoutbyiD);
+router.delete('/:id', asyncHandler(deleteWorkoutbyiD));
 
 export default router;
