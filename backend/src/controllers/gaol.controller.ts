@@ -22,11 +22,7 @@ export const createGoals = async (req: IAuthRequest, res: Response) => {
 
 //Controller for fetching all goals of an user
 export const getUserGoals = async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    throw new AppError('Unauthorized', 401);
-  }
+  const userId = req.user!.id;
 
   const { page, limit, search, type, status, startDate, endDate } = req.query;
 
@@ -50,14 +46,9 @@ export const getUserGoals = async (req: IAuthRequest, res: Response) => {
 
 //Controller for fetching a specific goal by goal ID
 export const getGoalsbyID = async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-  const goalId = req.params.id;
-  if (!userId) {
-    throw new AppError('Unauthorized', 401);
-  }
-  if (!goalId || typeof goalId !== 'string') {
-    throw new AppError('Invalid goal ID', 400);
-  }
+  const userId = req.user!.id;
+  const goalId = req.params.id as string;
+
   const goal = await findGoalsbyIDService(userId, goalId);
   res.status(200).json({
     success: true,
@@ -67,15 +58,10 @@ export const getGoalsbyID = async (req: IAuthRequest, res: Response) => {
 
 //Controller for updating goals by specific ID
 export const updateGoals = async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-  const goalId = req.params.id;
+  const userId = req.user!.id;
+  const goalId = req.params.id as string;
   const payload = req.body as IUpdateGoalsDTO;
-  if (!userId) {
-    throw new AppError('Unauthorized', 401);
-  }
-  if (!goalId || typeof goalId !== 'string') {
-    throw new AppError('Invalid goal ID', 400);
-  }
+
   const goal = await updateUserGoalService(userId, goalId, payload);
   res.status(200).json({
     success: true,
@@ -85,14 +71,9 @@ export const updateGoals = async (req: IAuthRequest, res: Response) => {
 
 //Controller for deleting goals by a specific ID
 export const deleteGoals = async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-  const goalId = req.params.id;
-  if (!userId) {
-    throw new AppError('Unauthorized', 401);
-  }
-  if (!goalId || typeof goalId !== 'string') {
-    throw new AppError('Invalid goal ID', 400);
-  }
+  const userId = req.user!.id;
+  const goalId = req.params.id as string;
+
   await deleteUserGoalService(userId, goalId);
   res.status(204).send();
 };

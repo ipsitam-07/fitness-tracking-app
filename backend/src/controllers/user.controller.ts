@@ -4,11 +4,7 @@ import { IAuthRequest } from '../interfaces';
 import { AppError } from '../utils/error';
 import { asyncHandler } from '../utils/asyncHandler';
 export const getCurrentUser = async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    throw new AppError('User not found', 404);
-  }
+  const userId = req.user!.id;
 
   const user = await getCurrentUserService(userId);
 
@@ -27,11 +23,7 @@ export const getCurrentUser = async (req: IAuthRequest, res: Response) => {
 };
 
 export const updateCurrentUser = asyncHandler(async (req: IAuthRequest, res: Response) => {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    throw new AppError('Unauthorized', 401);
-  }
+  const userId = req.user!.id;
 
   const { name, weight, height, gender, age } = req.body;
 
