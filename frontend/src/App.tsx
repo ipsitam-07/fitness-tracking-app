@@ -8,11 +8,13 @@ import DashboardPage from './pages/dashboard/Dashboard';
 import WorkoutsPage from './pages/workout/Workout';
 import GoalsPage from './pages/goals/GoalsPage';
 import { Toaster } from './components/ui/sonner';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/login" element={<LoginPage />} />
 
