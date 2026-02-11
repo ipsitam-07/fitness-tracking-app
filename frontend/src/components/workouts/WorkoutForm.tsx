@@ -108,7 +108,7 @@ export function WorkoutForm({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>{workout ? 'Edit Workout' : 'Add New Workout'}</DialogTitle>
           <DialogDescription>

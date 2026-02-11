@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { WEEKLY_ACTIVITY } from '@/utils/constants';
 import {
   BarChart,
   Bar,
@@ -30,15 +31,15 @@ export function WeeklyActivity({ data, onPeriodChange }: WeeklyActivityProps) {
   return (
     <Card className="bg-white dark:bg-white/5 border-border-light dark:border-white/10 p-6">
       <div className="flex justify-between items-center mb-8">
-        <h3 className="font-bold text-foreground">Weekly Activity</h3>
+        <h3 className="font-bold text-foreground">{WEEKLY_ACTIVITY.HEADER}</h3>
         <Select defaultValue="this-week" onValueChange={onPeriodChange}>
           <SelectTrigger className="w-35 border-none bg-transparent text-sm font-semibold text-text-secondary">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="this-week">This Week</SelectItem>
-            <SelectItem value="last-week">Last Week</SelectItem>
-            <SelectItem value="this-month">This Month</SelectItem>
+            <SelectItem value="this-week">{WEEKLY_ACTIVITY.THIS_WEEK}</SelectItem>
+            <SelectItem value="last-week">{WEEKLY_ACTIVITY.LAST_WEEK}</SelectItem>
+            <SelectItem value="this-month">{WEEKLY_ACTIVITY.THIS_MONTH}</SelectItem>
           </SelectContent>
         </Select>
       </div>

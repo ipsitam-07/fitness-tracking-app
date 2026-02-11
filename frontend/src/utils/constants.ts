@@ -38,3 +38,39 @@ export const SIGN_UP_TEXT = {
     PRIVACY_TEXT: 'Privacy Policy',
   },
 };
+
+export const ACTIVE_GOALS = {
+  HEADER: 'Active Goals',
+  VIEW_ALL: 'View All',
+  ADD_GOAL: 'Add New Goal',
+};
+
+export const DASHBOARD_HEADER = {
+  WELCOME_TEXT: "Here's what's happening with your fitness today.",
+  GREETINGS: 'Good Morning',
+};
+
+export const RECENT_WORKOUTS = {
+  HEADER: 'Recent Workouts',
+  SUB_HEADING: 'Log Workout',
+  TABLE_HEAD: {
+    TYPE: 'Type',
+    DURATION: 'Duration',
+    CALORIES: 'Calories',
+    DATE: 'Date',
+    ACTION: 'Action',
+  },
+  UNIT: 'kcal',
+  ACTIONS: {
+    EDIT: 'Edit',
+    DELETE: 'Delete',
+  },
+  LOAD_MORE: 'Load more activities',
+};
+
+export const WEEKLY_ACTIVITY = {
+  HEADER: 'Weekly Activity',
+  THIS_WEEK: 'This Week',
+  LAST_WEEK: 'Last Week',
+  THIS_MONTH: 'This Month',
+};

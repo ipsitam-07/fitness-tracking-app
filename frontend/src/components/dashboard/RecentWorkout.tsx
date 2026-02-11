@@ -15,18 +15,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical, Flame, Dumbbell, Waves, Heart, PersonStanding } from 'lucide-react';
-import type { Workout } from '@/types/workout.types';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-
-interface RecentWorkoutsProps {
-  workouts: Workout[];
-  onLogWorkout?: () => void;
-  onLoadMore?: () => void;
-  onEdit?: (workout: Workout) => void;
-  onDelete?: (workout: Workout) => void;
-  hasMore?: boolean;
-}
+import { RECENT_WORKOUTS } from '@/utils/constants';
+import type { RecentWorkoutsProps } from '@/types/workout.types';
 
 const exerciseIcons: Record<string, { icon: any; color: string; bg: string }> = {
   cardio: {
@@ -72,12 +64,12 @@ export function RecentWorkouts({
   return (
     <Card className="bg-white dark:bg-white/5 border-border-light dark:border-white/10 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-bold text-foreground">Recent Workouts</h3>
+        <h3 className="font-bold text-foreground">{RECENT_WORKOUTS.HEADER}</h3>
         <Button
           onClick={onLogWorkout}
           className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold rounded-lg hover:opacity-90 transition-opacity"
         >
-          Log Workout
+          {RECENT_WORKOUTS.SUB_HEADING}
         </Button>
       </div>
 
@@ -86,19 +78,19 @@ export function RecentWorkouts({
           <TableHeader>
             <TableRow className="border-b border-border-light dark:border-white/10 hover:bg-transparent">
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase">
-                Type
+                {RECENT_WORKOUTS.TABLE_HEAD.TYPE}
               </TableHead>
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase">
-                Duration
+                {RECENT_WORKOUTS.TABLE_HEAD.DURATION}
               </TableHead>
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase">
-                Calories
+                {RECENT_WORKOUTS.TABLE_HEAD.CALORIES}
               </TableHead>
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase">
-                Date
+                {RECENT_WORKOUTS.TABLE_HEAD.DATE}
               </TableHead>
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase text-right">
-                Action
+                {RECENT_WORKOUTS.TABLE_HEAD.ACTION}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -127,7 +119,7 @@ export function RecentWorkouts({
                   </TableCell>
                   <TableCell className="text-text-secondary">{workout.duration} min</TableCell>
                   <TableCell className="text-text-secondary">
-                    {workout.caloriesBurned} kcal
+                    {workout.caloriesBurned} {RECENT_WORKOUTS.UNIT}
                   </TableCell>
                   <TableCell className="text-text-secondary">
                     {format(new Date(workout.date), 'MMM dd, yyyy')}
@@ -144,12 +136,14 @@ export function RecentWorkouts({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit?.(workout)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onEdit?.(workout)}>
+                          {RECENT_WORKOUTS.ACTIONS.EDIT}
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => onDelete?.(workout)}
                           className="text-red-500 focus:text-red-500"
                         >
-                          Delete
+                          {RECENT_WORKOUTS.ACTIONS.DELETE}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -168,7 +162,7 @@ export function RecentWorkouts({
             onClick={onLoadMore}
             className="text-text-secondary hover:text-foreground text-sm font-semibold"
           >
-            Load more activities
+            {RECENT_WORKOUTS.LOAD_MORE}
           </Button>
         </div>
       )}

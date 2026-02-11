@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -28,20 +27,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import type { Goal } from '@/types/goals.types';
-
-const goalFormSchema = z.object({
-  goalType: z.enum(['workout_count', 'weight', 'calories', 'duration'], {
-    message: 'Please select a goal type',
-  }),
-  targetValue: z.number().min(1, 'Target value must be greater than 0'),
-  currentValue: z.number().min(0, 'Current value must be 0 or greater'),
-  startDate: z.string().min(1, 'Start date is required'),
-  endDate: z.string().min(1, 'End date is required'),
-  status: z.enum(['active', 'completed', 'abandoned']),
-  description: z.string().optional(),
-});
-
-type GoalFormValues = z.infer<typeof goalFormSchema>;
+import { goalFormSchema } from '@/schemas/goal-form';
+import type { GoalFormValues } from '@/types/goals.types';
 
 interface GoalFormProps {
   open: boolean;
@@ -116,7 +103,7 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>{goal ? 'Edit Goal' : 'Set New Goal'}</DialogTitle>
           <DialogDescription>

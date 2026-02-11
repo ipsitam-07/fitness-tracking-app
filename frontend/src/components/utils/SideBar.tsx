@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Dumbbell, Flag, User, Zap, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 
-const menuItems = [
+export const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
   { icon: Dumbbell, label: 'Workout', path: '/workout' },
   { icon: Flag, label: 'Goals', path: '/goals' },

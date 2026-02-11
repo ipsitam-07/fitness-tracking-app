@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { DASHBOARD_HEADER } from '@/utils/constants';
 import { Bell, Search } from 'lucide-react';
 
 interface DashboardHeaderProps {
@@ -11,10 +12,10 @@ export function DashboardHeader({ userName, onSearch }: DashboardHeaderProps) {
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Good morning, {userName}!</h2>
-        <p className="text-text-secondary text-sm">
-          Here's what's happening with your fitness today.
-        </p>
+        <h2 className="text-2xl font-bold text-foreground">
+          {DASHBOARD_HEADER.GREETINGS}, {userName}!
+        </h2>
+        <p className="text-text-secondary text-sm">{DASHBOARD_HEADER.WELCOME_TEXT}</p>
       </div>
       <div className="flex items-center gap-4">
         <div className="relative">

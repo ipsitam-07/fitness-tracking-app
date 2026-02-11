@@ -7,16 +7,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
-import type { Workout } from '@/types/workout.types';
+import type { WorkoutCardProps } from '@/types/goals.types';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Flame, Dumbbell, Heart, PersonStanding } from 'lucide-react';
-
-interface WorkoutCardProps {
-  workout: Workout;
-  onEdit: (workout: Workout) => void;
-  onDelete: (workout: Workout) => void;
-}
 
 const exerciseTypeConfig: Record<string, { icon: any; color: string; bg: string }> = {
   cardio: {

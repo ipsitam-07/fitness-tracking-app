@@ -1,21 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import type { LucideIcon } from 'lucide-react';
-import { AreaChart, Area, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-
-interface StatCardProps {
-  icon: LucideIcon;
-  label: string;
-  value: string | number;
-  trend?: {
-    value: number;
-    label: string;
-  };
-  color: 'orange' | 'blue' | 'primary' | 'red' | 'purple' | 'green';
-  chartType?: 'progress' | 'bars' | 'area';
-  chartData?: any[];
-  className?: string;
-}
+import type { StatCardProps } from '@/types/dashboard.types';
 
 const colorStyles = {
   orange: {
@@ -69,7 +54,6 @@ export function StatsCard({
   trend,
   color,
   chartType = 'progress',
-  chartData,
   className,
 }: StatCardProps) {
   const styles = colorStyles[color];
@@ -103,37 +87,6 @@ export function StatsCard({
             </div>
             <span className={cn('text-[10px] font-bold', styles.trendText)}>{trend.value}%</span>
           </div>
-        )}
-
-        {chartType === 'bars' && chartData && (
-          <ResponsiveContainer width="100%" height={32}>
-            <BarChart data={chartData}>
-              <Bar dataKey="value" radius={[2, 2, 0, 0]}>
-                {chartData.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      index === chartData.length - 1 ? styles.chartColor : `${styles.chartColor}66`
-                    }
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-
-        {chartType === 'area' && chartData && (
-          <ResponsiveContainer width="100%" height={32}>
-            <AreaChart data={chartData}>
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke={styles.chartColor}
-                strokeWidth={2}
-                fill="none"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
         )}
       </div>
     </Card>

@@ -24,15 +24,7 @@ import {
 } from '@/hooks/useWorkouts';
 import type { Workout } from '@/types/workout.types';
 import { cn } from '@/lib/utils';
-
-const exerciseFilters = [
-  { label: 'All', value: '' },
-  { label: 'Cardio', value: 'cardio' },
-  { label: 'Strength', value: 'strength' },
-  { label: 'Flexibility', value: 'flexibility' },
-  { label: 'Sports', value: 'sports' },
-  { label: 'Other', value: 'other' },
-];
+import { exerciseFilters } from '@/constants/exercise-filter';
 
 export default function WorkoutsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -229,7 +221,7 @@ export default function WorkoutsPage() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="bg-red-500 hover:bg-red-600"
+              className="bg-red-500 hover:bg-red-600 text-white"
             >
               {deleteWorkoutMutation.isPending ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>

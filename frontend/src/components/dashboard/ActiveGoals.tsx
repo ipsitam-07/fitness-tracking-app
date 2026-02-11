@@ -3,12 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { PlusCircle } from 'lucide-react';
 import type { Goal } from '@/types/goals.types';
-
-interface ActiveGoalsProps {
-  goals: Goal[];
-  onAddGoal?: () => void;
-  onViewAll?: () => void;
-}
+import type { ActiveGoalsProps } from '@/types/goals.types';
+import { ACTIVE_GOALS } from '@/utils/constants';
 
 export function ActiveGoals({ goals, onAddGoal, onViewAll }: ActiveGoalsProps) {
   const getGoalProgress = (goal: Goal) => {
@@ -33,13 +29,13 @@ export function ActiveGoals({ goals, onAddGoal, onViewAll }: ActiveGoalsProps) {
   return (
     <Card className="bg-white dark:bg-white/5 border-border-light dark:border-white/10 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-bold text-foreground">Active Goals</h3>
+        <h3 className="font-bold text-foreground">{ACTIVE_GOALS.HEADER}</h3>
         <Button
           variant="link"
           className="text-primary text-xs font-bold hover:underline p-0 h-auto"
           onClick={onViewAll}
         >
-          View All
+          {ACTIVE_GOALS.VIEW_ALL}
         </Button>
       </div>
 
@@ -70,7 +66,7 @@ export function ActiveGoals({ goals, onAddGoal, onViewAll }: ActiveGoalsProps) {
           onClick={onAddGoal}
         >
           <PlusCircle className="w-4 h-4" />
-          Add New Goal
+          {ACTIVE_GOALS.ADD_GOAL}
         </Button>
       </div>
     </Card>

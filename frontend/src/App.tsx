@@ -23,6 +23,8 @@ function App() {
           <Route path="/goals" element={<GoalsPage />}></Route>
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
+
+        <Route path="/" element={<DashboardPage />}></Route>
       </Routes>
       <Toaster />
     </BrowserRouter>

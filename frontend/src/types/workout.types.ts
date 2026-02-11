@@ -30,3 +30,12 @@ export interface WorkoutStats {
 export interface WorkoutPaginationParams extends PaginationParams {
   type?: string;
 }
+
+export interface RecentWorkoutsProps {
+  workouts: Workout[];
+  onLogWorkout?: () => void;
+  onLoadMore?: () => void;
+  onEdit?: (workout: Workout) => void;
+  onDelete?: (workout: Workout) => void;
+  hasMore?: boolean;
+}

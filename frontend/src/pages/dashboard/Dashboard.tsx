@@ -98,7 +98,7 @@ export default function DashboardPage() {
         <DashboardHeader userName={user?.name || 'User'} onSearch={setSearchQuery} />
 
         {/* Stats Cards with Recharts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 justify-between">
           <StatsCard
             icon={Flame}
             label="Weekly Calories"
@@ -133,7 +133,7 @@ export default function DashboardPage() {
 
         {/* Recent Workouts - Navigate to workout page for CRUD */}
         <RecentWorkouts
-          workouts={filteredWorkouts}
+          workouts={dashboardStats?.recentWorkouts || []}
           onLogWorkout={() => navigate('/workout')}
           onLoadMore={() => navigate('/workout')}
           hasMore={(dashboardStats?.recentWorkouts?.length || 0) >= 5}

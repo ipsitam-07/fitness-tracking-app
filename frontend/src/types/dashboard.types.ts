@@ -1,3 +1,4 @@
+import type { LucideIcon } from 'lucide-react';
 export interface DashboardStats {
   totalWorkouts: number;
   totalCalories: number;
@@ -38,4 +39,18 @@ export interface WeeklyTrend {
   workouts: number;
   duration: number;
   calories: number;
+}
+
+export interface StatCardProps {
+  icon: LucideIcon;
+  label: string;
+  value: string | number;
+  trend?: {
+    value: number;
+    label: string;
+  };
+  color: 'orange' | 'blue' | 'primary' | 'red' | 'purple' | 'green';
+  chartType?: 'progress' | 'bars' | 'area';
+  chartData?: any[];
+  className?: string;
 }
