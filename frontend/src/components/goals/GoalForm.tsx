@@ -160,7 +160,11 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Lose 5kg for summer" {...field} />
+                    <Input
+                      placeholder="e.g., Lose 5kg for summer"
+                      {...field}
+                      className="mt-1 flex h-11 w-full items-center justify-between whitespace-nowrap rounded-xl border border-border-light dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -182,6 +186,7 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
                         onChange={(e) => field.onChange(Number(e.target.value) || 0)}
                         onBlur={field.onBlur}
                         name={field.name}
+                        className="mt-1 flex h-11 w-full items-center justify-between whitespace-nowrap rounded-xl border border-border-light dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all"
                       />
                     </FormControl>
                     <FormMessage />
@@ -203,6 +208,7 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
                         onChange={(e) => field.onChange(Number(e.target.value) || 0)}
                         onBlur={field.onBlur}
                         name={field.name}
+                        className="mt-1 flex h-11 w-full items-center justify-between whitespace-nowrap rounded-xl border border-border-light dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all"
                       />
                     </FormControl>
                     <FormMessage />
@@ -219,7 +225,11 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        {...field}
+                        className="mt-1 flex h-11 w-full items-center justify-between whitespace-nowrap rounded-xl border border-border-light dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -233,7 +243,11 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
                   <FormItem>
                     <FormLabel>End Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="date"
+                        {...field}
+                        className="mt-1 flex h-11 w-full items-center justify-between whitespace-nowrap rounded-xl border border-border-light dark:border-white/10 bg-white dark:bg-white/5 px-4 py-2 text-sm font-medium shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-0 focus:border-primary disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 transition-all"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

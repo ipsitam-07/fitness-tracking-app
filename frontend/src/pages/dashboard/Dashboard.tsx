@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Flame, Footprints, Zap, Heart } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Flame, Zap, Heart } from 'lucide-react';
 import { Sidebar } from '@/components/utils/SideBar';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { StatsCard } from '@/components/dashboard/StatsCard';
@@ -39,7 +39,6 @@ export default function DashboardPage() {
     const currentWeek = weeklyTrends[0];
     const avgPerDay = currentWeek.workouts / 7;
     const today = new Date().getDay();
-
     return [
       { day: 'Mon', value: avgPerDay * 15, isActive: today === 1 },
       { day: 'Tue', value: avgPerDay * 20, isActive: today === 2 },
@@ -64,6 +63,18 @@ export default function DashboardPage() {
   const activeMinutesProgress = dashboardStats?.thisWeek.duration
     ? Math.min(Math.round((dashboardStats.thisWeek.duration / weeklyActiveMinutesGoal) * 100), 100)
     : 0;
+
+  const filteredWorkouts = useMemo(() => {
+    if (!searchQuery || !dashboardStats?.recentWorkouts) {
+      return dashboardStats?.recentWorkouts || [];
+    }
+
+    return dashboardStats.recentWorkouts.filter(
+      (workout) =>
+        workout.exerciseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        workout.exerciseType.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [searchQuery, dashboardStats?.recentWorkouts]);
 
   if (isLoadingStats) {
     return (
@@ -122,7 +133,7 @@ export default function DashboardPage() {
 
         {/* Recent Workouts - Navigate to workout page for CRUD */}
         <RecentWorkouts
-          workouts={dashboardStats?.recentWorkouts || []}
+          workouts={filteredWorkouts}
           onLogWorkout={() => navigate('/workout')}
           onLoadMore={() => navigate('/workout')}
           hasMore={(dashboardStats?.recentWorkouts?.length || 0) >= 5}
