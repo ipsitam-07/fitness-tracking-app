@@ -95,7 +95,7 @@ export function StatsCard({
       <div className="mt-auto h-8">
         {chartType === 'progress' && trend && (
           <div className="w-full flex items-end gap-1">
-            <div className={cn('flex-grow h-3 rounded-full overflow-hidden', styles.trendBg)}>
+            <div className={cn('grow h-3 rounded-full overflow-hidden', styles.trendBg)}>
               <div
                 className={cn('h-full', styles.trendFill)}
                 style={{ width: `${trend.value}%` }}

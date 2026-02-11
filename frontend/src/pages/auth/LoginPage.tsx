@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
 import { useLogin } from '@/hooks/useLogin';
+import { LOGIN_TEXT } from '@/utils/constants';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -47,11 +48,9 @@ function LoginPage() {
                 <LogIn className="text-primary" size={28} />
               </div>
               <h1 className="text-foreground dark:text-white text-3xl font-bold mb-3">
-                Welcome Back
+                {LOGIN_TEXT.WELCOME}
               </h1>
-              <p className="text-muted-foreground text-base">
-                Enter your details to access your dashboard.
-              </p>
+              <p className="text-muted-foreground text-base">{LOGIN_TEXT.WELCOME_SUBTEXT}</p>
             </div>
 
             {/* Login Form */}
@@ -59,7 +58,7 @@ function LoginPage() {
               {/* Email Field */}
               <div>
                 <Label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2">
-                  Email Address
+                  {LOGIN_TEXT.EMAIL_LABEL}
                 </Label>
                 <div className="relative">
                   <Mail
@@ -70,7 +69,7 @@ function LoginPage() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder={LOGIN_TEXT.EMAIL_PLACEHOLDER}
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
@@ -85,13 +84,13 @@ function LoginPage() {
                     htmlFor="password"
                     className="block text-sm font-semibold text-foreground dark:text-white"
                   >
-                    Password
+                    {LOGIN_TEXT.PASSWORD_LABEL}
                   </Label>
                   <Link
                     to="/forgot-password"
                     className="text-xs font-bold text-primary hover:underline"
                   >
-                    Forgot Password?
+                    {LOGIN_TEXT.FORGOT_PASSWORD_LABEL}
                   </Link>
                 </div>
                 <div className="relative">
@@ -134,9 +133,9 @@ function LoginPage() {
 
             {/* Sign Up Link */}
             <p className="mt-8 text-center text-sm text-muted-foreground dark:text-gray-400">
-              Don't have an account?{' '}
+              {LOGIN_TEXT.NO_ACCOUNT}{' '}
               <Link to="/signup" className="text-primary hover:underline font-bold">
-                Sign Up
+                {LOGIN_TEXT.SIGN_UP}
               </Link>
             </p>
           </div>

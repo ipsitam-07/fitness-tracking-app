@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import '../../index.css';
 import { useSignup } from '@/hooks/useSignUp';
+import { SIGN_UP_TEXT } from '@/utils/constants';
 
 function SignUpForm() {
   const signUp = useSignup();
@@ -47,10 +48,10 @@ function SignUpForm() {
               <div className="flex justify-between items-end mb-3">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                    Get Started
+                    {SIGN_UP_TEXT.PROGRESS_HEADING}
                   </span>
                   <h3 className="text-foreground dark:text-white text-sm font-medium">
-                    Step 1 of 2: Profile Setup
+                    {SIGN_UP_TEXT.PROGRESS_SUB_HEADING}
                   </h3>
                 </div>
                 <span className="text-sm font-bold text-foreground dark:text-white">50%</span>
@@ -63,10 +64,10 @@ function SignUpForm() {
             {/* Form Header */}
             <div className="mb-10 text-center">
               <h1 className="text-foreground dark:text-white text-3xl font-bold mb-3">
-                Start Your Journey
+                {SIGN_UP_TEXT.HEADING}
               </h1>
               <p className="text-muted-foreground dark:text-gray-400 text-base">
-                Join 50,000+ athletes reaching their fitness goals today.
+                {SIGN_UP_TEXT.SUB_HEADING}
               </p>
             </div>
 
@@ -78,7 +79,7 @@ function SignUpForm() {
                   htmlFor="name"
                   className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
-                  Full Name
+                  {SIGN_UP_TEXT.NAME_LABEL}
                 </Label>
                 <div className="relative">
                   <User
@@ -89,7 +90,7 @@ function SignUpForm() {
                     id="name"
                     name="name"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder={SIGN_UP_TEXT.NAME_PLACEHOLDER}
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
@@ -103,7 +104,7 @@ function SignUpForm() {
                   htmlFor="email"
                   className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
-                  Email Address
+                  {SIGN_UP_TEXT.EMAIL_LABEL}
                 </Label>
                 <div className="relative">
                   <Mail
@@ -114,7 +115,7 @@ function SignUpForm() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="john@example.com"
+                    placeholder={SIGN_UP_TEXT.EMAIL_PLACEHOLDER}
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full pl-12 pr-4 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
@@ -128,7 +129,7 @@ function SignUpForm() {
                   htmlFor="password"
                   className="block text-sm font-semibold text-foreground dark:text-white mb-2"
                 >
-                  Password
+                  {SIGN_UP_TEXT.PASSWORD_LABEL}
                 </Label>
                 <div className="relative">
                   <Lock
@@ -139,7 +140,7 @@ function SignUpForm() {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Min. 8 characters"
+                    placeholder={SIGN_UP_TEXT.PASSWORD_PLACEHOLDER}
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full pl-12 pr-12 h-14 bg-background-light dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:outline focus:border-primary dark:text-white placeholder:text-muted-foreground/50"
@@ -160,23 +161,23 @@ function SignUpForm() {
                 disabled={signUp.isPending}
                 className="w-full h-14 bg-primary text-primary-foreground font-bold rounded-xl flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(19,236,128,0.4)] transition-all transform active:scale-[0.98]"
               >
-                {signUp.isPending ? 'Creating account...' : 'Continue to Goals'}
+                {signUp.isPending ? SIGN_UP_TEXT.SIGN_UP_IN_PROGRESS : SIGN_UP_TEXT.SIGN_UP_SUCCESS}
                 <ArrowRight size={20} />
               </Button>
               {signUp.isError && (
-                <p className="text-sm text-red-500 mt-2">Signup failed. Please try again.</p>
+                <p className="text-sm text-red-500 mt-2">{SIGN_UP_TEXT.SIGN_UP_ERROR}</p>
               )}
             </form>
 
             {/* T&C Section */}
             <p className="mt-8 text-center text-xs text-muted-foreground dark:text-gray-500 leading-relaxed px-4">
-              By signing up, you agree to our{' '}
+              {SIGN_UP_TEXT.TERMS_TEXT.AGREE_TEXT}{' '}
               <Link to="/terms" className="text-primary hover:underline font-semibold">
-                Terms of Service
+                {SIGN_UP_TEXT.TERMS_TEXT.TERMS_TEXT}
               </Link>{' '}
-              and{' '}
+              {SIGN_UP_TEXT.TERMS_TEXT.AND}{' '}
               <Link to="/privacy" className="text-primary hover:underline font-semibold">
-                Privacy Policy
+                {SIGN_UP_TEXT.TERMS_TEXT.PRIVACY_TEXT}
               </Link>
               .
             </p>

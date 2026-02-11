@@ -110,7 +110,7 @@ export default function WorkoutsPage() {
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
       <Sidebar />
 
-      <main className="flex-grow h-full overflow-y-auto p-8 lg:p-10">
+      <main className="grow h-full overflow-y-auto p-8 lg:p-10">
         {/* Header */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
@@ -128,7 +128,7 @@ export default function WorkoutsPage() {
 
         {/* Search and Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="relative flex-grow max-w-md">
+          <div className="relative grow max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               type="text"
@@ -190,7 +190,7 @@ export default function WorkoutsPage() {
             {/* Add New Card */}
             <button
               onClick={handleAddWorkout}
-              className="bg-white dark:bg-white/5 border-2 border-dashed border-border-light dark:border-white/10 hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-[200px] transition-all group"
+              className="bg-white dark:bg-white/5 border-2 border-dashed border-border-light dark:border-white/10 hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-50 transition-all group"
             >
               <div className="w-12 h-12 rounded-full bg-background-light dark:bg-white/5 flex items-center justify-center text-text-secondary group-hover:text-primary transition-colors">
                 <PlusCircle className="w-6 h-6" />

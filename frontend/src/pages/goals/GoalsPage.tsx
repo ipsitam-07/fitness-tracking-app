@@ -98,7 +98,7 @@ export default function GoalsPage() {
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
       <Sidebar />
 
-      <main className="flex-grow h-full overflow-y-auto p-8 lg:p-10">
+      <main className="grow h-full overflow-y-auto p-8 lg:p-10">
         {/* Header */}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <div>
@@ -222,7 +222,7 @@ export default function GoalsPage() {
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <Target className="w-6 h-6 text-primary" />
                     </div>
-                    <div className="flex-grow">
+                    <div className="grow">
                       <h5 className="font-bold text-foreground">
                         {goal.description || `${goal.goalType} Goal`}
                       </h5>

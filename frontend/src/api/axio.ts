@@ -37,10 +37,6 @@ api.interceptors.response.use(
       }
     }
 
-    if (!error.response) {
-      console.error('Network error - cannot reach server');
-    }
-
     return Promise.reject(error);
   },
 );

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
+import { PRODUCT_TITLE, SIGNUP_HEADER } from '@/utils/constants';
 
 interface HeaderProps {
   showAuthButtons?: boolean;
@@ -13,20 +14,20 @@ export function SignupHeader({ showAuthButtons = true }: HeaderProps) {
           <Zap className="text-primary-foreground font-bold" size={20} />
         </div>
         <h2 className="text-foreground dark:text-white text-xl font-bold tracking-tight">
-          FitTrack
+          {PRODUCT_TITLE}
         </h2>
       </Link>
 
       {showAuthButtons && (
         <div className="flex items-center gap-4">
           <span className="hidden md:block text-sm text-muted-foreground dark:text-gray-400">
-            Already a member?
+            {SIGNUP_HEADER.MEMBER_TEXT}
           </span>
           <Link
             to="/login"
             className="flex min-w-25 cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-primary-foreground text-sm font-bold hover:opacity-90 transition-opacity"
           >
-            Sign In
+            {SIGNUP_HEADER.SIGN_IN_TEXT}
           </Link>
         </div>
       )}

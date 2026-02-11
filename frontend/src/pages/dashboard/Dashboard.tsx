@@ -80,7 +80,7 @@ export default function DashboardPage() {
     return (
       <div className="flex h-screen bg-background-light dark:bg-background-dark">
         <Sidebar />
-        <main className="flex-grow flex items-center justify-center">
+        <main className="grow flex items-center justify-center">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-text-secondary">Loading your dashboard...</p>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
       <Sidebar />
 
-      <main className="flex-grow h-full overflow-y-auto p-8 lg:p-10">
+      <main className="grow h-full overflow-y-auto p-8 lg:p-10">
         <DashboardHeader userName={user?.name || 'User'} onSearch={setSearchQuery} />
 
         {/* Stats Cards with Recharts */}
