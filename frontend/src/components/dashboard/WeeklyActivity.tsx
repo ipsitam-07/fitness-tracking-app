@@ -14,7 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
+  Rectangle,
 } from 'recharts';
 
 interface WeeklyActivityProps {
@@ -32,7 +32,7 @@ export function WeeklyActivity({ data, onPeriodChange }: WeeklyActivityProps) {
       <div className="flex justify-between items-center mb-8">
         <h3 className="font-bold text-foreground">Weekly Activity</h3>
         <Select defaultValue="this-week" onValueChange={onPeriodChange}>
-          <SelectTrigger className="w-[140px] border-none bg-transparent text-sm font-semibold text-text-secondary">
+          <SelectTrigger className="w-35 border-none bg-transparent text-sm font-semibold text-text-secondary">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -64,15 +64,21 @@ export function WeeklyActivity({ data, onPeriodChange }: WeeklyActivityProps) {
             labelStyle={{ color: '#111814', fontWeight: 600 }}
             itemStyle={{ color: '#13ec80' }}
           />
-          <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={entry.isActive ? '#13ec80' : 'rgba(19, 236, 128, 0.2)'}
-                className="hover:opacity-80 transition-opacity cursor-pointer"
-              />
-            ))}
-          </Bar>
+          <Bar
+            dataKey="value"
+            radius={[8, 8, 0, 0]}
+            shape={(props: any) => {
+              const { payload } = props;
+
+              return (
+                <Rectangle
+                  {...props}
+                  fill={payload.isActive ? '#13ec80' : 'rgba(19, 236, 128, 0.2)'}
+                  className="hover:opacity-80 transition-opacity cursor-pointer"
+                />
+              );
+            }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </Card>
