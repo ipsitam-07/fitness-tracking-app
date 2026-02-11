@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
-import type { WorkoutCardProps } from '@/types/goals.types';
+import type { WorkoutCardProps } from '@/types/workout.types';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Flame, Dumbbell, Heart, PersonStanding } from 'lucide-react';

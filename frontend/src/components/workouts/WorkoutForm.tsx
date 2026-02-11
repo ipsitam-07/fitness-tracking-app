@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -28,27 +27,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import type { Workout } from '@/types/workout.types';
+import type { WorkoutFormProps } from '@/types/workout.types';
 import { format } from 'date-fns';
-
-const workoutFormSchema = z.object({
-  exerciseType: z.string().min(1, 'Exercise type is required'),
-  exerciseName: z.string().min(1, 'Exercise name is required'),
-  duration: z.number().min(1, 'Duration must be at least 1 minute'),
-  caloriesBurned: z.number().min(0, 'Calories must be 0 or greater'),
-  date: z.string().min(1, 'Date is required'),
-  notes: z.string().optional(),
-});
-
-type WorkoutFormValues = z.infer<typeof workoutFormSchema>;
-
-interface WorkoutFormProps {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (data: WorkoutFormValues) => void;
-  workout?: Workout | null;
-  isLoading?: boolean;
-}
+import { workoutFormSchema } from '@/schemas/workout-form';
+import type { WorkoutFormValues } from '@/types/workout.types';
 
 const exerciseTypes = [
   { value: 'cardio', label: 'Cardio' },

@@ -8,16 +8,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { MoreVertical, Target, TrendingUp, Calendar, Flame } from 'lucide-react';
-import type { Goal } from '@/types/goals.types';
 import { format, differenceInDays } from 'date-fns';
 import { cn } from '@/lib/utils';
-
-interface GoalCardProps {
-  goal: Goal;
-  onEdit: (goal: Goal) => void;
-  onDelete: (goal: Goal) => void;
-  showProgress?: boolean;
-}
+import type { GoalCardProps } from '@/types/goals.types';
+import { GOAL_DATE_FORMAT, GOAL_TEXT, GOAL_UNITS } from '@/utils/constants';
 
 const goalTypeConfig: Record<string, { icon: any; color: string; bg: string; label: string }> = {
   weight: {
@@ -53,20 +47,7 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
   const progress = Math.round((goal.currentValue / goal.targetValue) * 100);
   const daysLeft = goal.endDate ? differenceInDays(new Date(goal.endDate), new Date()) : 0;
 
-  const getGoalUnit = () => {
-    switch (goal.goalType) {
-      case 'weight':
-        return 'kg';
-      case 'workout_count':
-        return 'workouts';
-      case 'calories':
-        return 'kcal';
-      case 'duration':
-        return 'min';
-      default:
-        return '';
-    }
-  };
+  const getGoalUnit = GOAL_UNITS[goal.goalType as keyof typeof GOAL_UNITS] ?? '';
 
   const isCompleted = goal.status === 'completed';
   const isAbandoned = goal.status === 'abandoned';
@@ -104,12 +85,14 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onEdit(goal)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit(goal)}>
+              {GOAL_TEXT.ACTIONS.EDIT}
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(goal)}
               className="text-red-500 focus:text-red-500"
             >
-              Delete
+              {GOAL_TEXT.ACTIONS.DELETE}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -119,15 +102,19 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
         <div className="space-y-4">
           <div className="flex justify-between items-end">
             <div>
-              <p className="text-[10px] text-text-secondary font-bold uppercase mb-1">Current</p>
+              <p className="text-[10px] text-text-secondary font-bold uppercase mb-1">
+                {GOAL_TEXT.LABELS.CURRENT}
+              </p>
               <p className="text-xl font-bold text-foreground">
-                {goal.currentValue} <span className="text-xs font-normal">{getGoalUnit()}</span>
+                {goal.currentValue} <span className="text-xs font-normal">{getGoalUnit}</span>
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] text-text-secondary font-bold uppercase mb-1">Target</p>
+              <p className="text-[10px] text-text-secondary font-bold uppercase mb-1">
+                {GOAL_TEXT.LABELS.TARGET}
+              </p>
               <p className="text-xl font-bold text-primary">
-                {goal.targetValue} <span className="text-xs font-normal">{getGoalUnit()}</span>
+                {goal.targetValue} <span className="text-xs font-normal">{getGoalUnit}</span>
               </p>
             </div>
           </div>
@@ -136,7 +123,7 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
             <Progress value={Math.min(progress, 100)} className="h-3" />
             <div className="flex justify-between items-center">
               <p className="text-xs text-center text-text-secondary font-medium">
-                {progress}% achieved
+                {progress}% {GOAL_TEXT.LABELS.ACHIEVED}
               </p>
               {daysLeft > 0 && !isCompleted && (
                 <p
@@ -146,12 +133,12 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
                     config.bg,
                   )}
                 >
-                  {daysLeft} days left
+                  {daysLeft} {GOAL_TEXT.LABELS.DAYS_LEFT}
                 </p>
               )}
               {isCompleted && (
                 <p className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  Completed
+                  {GOAL_TEXT.LABELS.COMPLETED}
                 </p>
               )}
             </div>
@@ -162,8 +149,12 @@ export function GoalCard({ goal, onEdit, onDelete, showProgress = true }: GoalCa
       {goal.startDate && goal.endDate && (
         <div className="mt-4 pt-4 border-t border-border-light dark:border-white/10">
           <div className="flex justify-between text-xs text-text-secondary">
-            <span>Start: {format(new Date(goal.startDate), 'MMM dd, yyyy')}</span>
-            <span>End: {format(new Date(goal.endDate), 'MMM dd, yyyy')}</span>
+            <span>
+              {GOAL_TEXT.LABELS.START}: {format(new Date(goal.startDate), GOAL_DATE_FORMAT)}
+            </span>
+            <span>
+              {GOAL_TEXT.LABELS.END}: {format(new Date(goal.endDate), GOAL_DATE_FORMAT)}
+            </span>
           </div>
         </div>
       )}

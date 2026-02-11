@@ -1,4 +1,7 @@
 import type { PaginationParams } from './pagination.types';
+import * as z from 'zod';
+import { workoutFormSchema } from '@/schemas/workout-form';
+
 export interface Workout {
   id: string;
   userId?: string;
@@ -38,4 +41,19 @@ export interface RecentWorkoutsProps {
   onEdit?: (workout: Workout) => void;
   onDelete?: (workout: Workout) => void;
   hasMore?: boolean;
+}
+export interface WorkoutCardProps {
+  workout: Workout;
+  onEdit: (workout: Workout) => void;
+  onDelete: (workout: Workout) => void;
+}
+
+export type WorkoutFormValues = z.infer<typeof workoutFormSchema>;
+
+export interface WorkoutFormProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (data: WorkoutFormValues) => void;
+  workout?: Workout | null;
+  isLoading?: boolean;
 }

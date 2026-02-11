@@ -2,7 +2,6 @@ import type { PaginationParams } from './pagination.types';
 export type GoalType = 'workout_count' | 'weight' | 'calories' | 'duration';
 import * as z from 'zod';
 import { goalFormSchema } from '@/schemas/goal-form';
-import type { Workout } from './workout.types';
 
 export interface CreateGoalRequest {
   type: GoalType;
@@ -41,14 +40,15 @@ export interface GoalPaginationParams extends PaginationParams {
 
 export type GoalFormValues = z.infer<typeof goalFormSchema>;
 
-export interface WorkoutCardProps {
-  workout: Workout;
-  onEdit: (workout: Workout) => void;
-  onDelete: (workout: Workout) => void;
-}
-
 export interface ActiveGoalsProps {
   goals: Goal[];
   onAddGoal?: () => void;
   onViewAll?: () => void;
+}
+
+export interface GoalCardProps {
+  goal: Goal;
+  onEdit: (goal: Goal) => void;
+  onDelete: (goal: Goal) => void;
+  showProgress?: boolean;
 }

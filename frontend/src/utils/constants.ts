@@ -74,3 +74,31 @@ export const WEEKLY_ACTIVITY = {
   LAST_WEEK: 'Last Week',
   THIS_MONTH: 'This Month',
 };
+
+export const GOAL_TEXT = {
+  FALLBACK_SUFFIX: 'Goal',
+
+  ACTIONS: {
+    EDIT: 'Edit',
+    DELETE: 'Delete',
+  },
+
+  LABELS: {
+    CURRENT: 'Current',
+    TARGET: 'Target',
+    ACHIEVED: 'achieved',
+    DAYS_LEFT: 'days left',
+    COMPLETED: 'Completed',
+    START: 'Start',
+    END: 'End',
+  },
+} as const;
+
+export const GOAL_UNITS = {
+  weight: 'kg',
+  workout_count: 'workouts',
+  calories: 'kcal',
+  duration: 'min',
+} as const;
+
+export const GOAL_DATE_FORMAT = 'MMM dd, yyyy';

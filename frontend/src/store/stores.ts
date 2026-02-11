@@ -1,5 +1,7 @@
+import { clearToken, getToken, setToken } from '@/utils/storage';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 
 //Types
 
@@ -79,7 +81,7 @@ const createAuthSlice = (set: any): AuthSlice => ({
   token: null,
 
   setAuth: (user, token) => {
-    localStorage.setItem('authToken', token);
+    setToken(token);
     set({
       user,
       token,
@@ -90,7 +92,7 @@ const createAuthSlice = (set: any): AuthSlice => ({
   setUser: (user) => set({ user }),
 
   logout: () => {
-    localStorage.removeItem('authToken');
+    clearToken();
     set({
       user: null,
       token: null,
@@ -99,7 +101,7 @@ const createAuthSlice = (set: any): AuthSlice => ({
   },
 
   hydrate: () => {
-    const token = localStorage.getItem('authToken');
+    const token = getToken();
     if (token) {
       set({ token, isAuthenticated: true });
     }
@@ -193,64 +195,77 @@ export const useStore = create<StoreState>()(
 //Selectors
 
 export const useAuth = () =>
-  useStore((state) => ({
-    isAuthenticated: state.isAuthenticated,
-    user: state.user,
-    token: state.token,
-    setAuth: state.setAuth,
-    setUser: state.setUser,
-    logout: state.logout,
-    hydrate: state.hydrate,
-  }));
+  useStore(
+    useShallow((state) => ({
+      isAuthenticated: state.isAuthenticated,
+      user: state.user,
+      token: state.token,
+      setAuth: state.setAuth,
+      setUser: state.setUser,
+      logout: state.logout,
+      hydrate: state.hydrate,
+    })),
+  );
 
 export const useUI = () =>
-  useStore((state) => ({
-    sidebarOpen: state.sidebarOpen,
-    theme: state.theme,
-    setSidebarOpen: state.setSidebarOpen,
-    toggleSidebar: state.toggleSidebar,
-    setTheme: state.setTheme,
-  }));
+  useStore(
+    useShallow((state) => ({
+      sidebarOpen: state.sidebarOpen,
+      theme: state.theme,
+      setSidebarOpen: state.setSidebarOpen,
+      toggleSidebar: state.toggleSidebar,
+      setTheme: state.setTheme,
+    })),
+  );
 
 export const useWorkoutForm = () =>
-  useStore((state) => ({
-    isOpen: state.isWorkoutFormOpen,
-    editingId: state.editingWorkoutId,
-    open: state.openWorkoutForm,
-    close: state.closeWorkoutForm,
-  }));
+  useStore(
+    useShallow((state) => ({
+      isOpen: state.isWorkoutFormOpen,
+      editingId: state.editingWorkoutId,
+      open: state.openWorkoutForm,
+      close: state.closeWorkoutForm,
+    })),
+  );
 
 export const useGoalForm = () =>
-  useStore((state) => ({
-    isOpen: state.isGoalFormOpen,
-    editingId: state.editingGoalId,
-    open: state.openGoalForm,
-    close: state.closeGoalForm,
-  }));
+  useStore(
+    useShallow((state) => ({
+      isOpen: state.isGoalFormOpen,
+      editingId: state.editingGoalId,
+      open: state.openGoalForm,
+      close: state.closeGoalForm,
+    })),
+  );
 
 export const useWorkoutFilters = () =>
-  useStore((state) => ({
-    searchQuery: state.workoutSearchQuery,
-    typeFilter: state.workoutTypeFilter,
-    setSearchQuery: state.setWorkoutSearchQuery,
-    setTypeFilter: state.setWorkoutTypeFilter,
-  }));
+  useStore(
+    useShallow((state) => ({
+      searchQuery: state.workoutSearchQuery,
+      typeFilter: state.workoutTypeFilter,
+      setSearchQuery: state.setWorkoutSearchQuery,
+      setTypeFilter: state.setWorkoutTypeFilter,
+    })),
+  );
 
 export const useGoalFilters = () =>
-  useStore((state) => ({
-    statusFilter: state.goalStatusFilter,
-    setStatusFilter: state.setGoalStatusFilter,
-  }));
+  useStore(
+    useShallow((state) => ({
+      statusFilter: state.goalStatusFilter,
+      setStatusFilter: state.setGoalStatusFilter,
+    })),
+  );
 
 export const useAppState = () =>
-  useStore((state) => ({
-    isLoading: state.isLoading,
-    error: state.error,
-    setLoading: state.setLoading,
-    setError: state.setError,
-    clearError: state.clearError,
-  }));
-
+  useStore(
+    useShallow((state) => ({
+      isLoading: state.isLoading,
+      error: state.error,
+      setLoading: state.setLoading,
+      setError: state.setError,
+      clearError: state.clearError,
+    })),
+  );
 //Helper hooks
 
 export const useResetStore = () => {

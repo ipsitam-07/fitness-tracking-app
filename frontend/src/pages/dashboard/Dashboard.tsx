@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react';
 import { Flame, Zap, Heart } from 'lucide-react';
 import { Sidebar } from '@/components/utils/SideBar';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
@@ -15,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { data: user } = useCurrentUser();
-  const [searchQuery, setSearchQuery] = useState('');
 
   const { data: dashboardResponse, isLoading: isLoadingStats } = useDashboardStats();
   const { data: goalsData } = useGoals({ status: 'active', limit: 3 });
@@ -64,18 +62,6 @@ export default function DashboardPage() {
     ? Math.min(Math.round((dashboardStats.thisWeek.duration / weeklyActiveMinutesGoal) * 100), 100)
     : 0;
 
-  const filteredWorkouts = useMemo(() => {
-    if (!searchQuery || !dashboardStats?.recentWorkouts) {
-      return dashboardStats?.recentWorkouts || [];
-    }
-
-    return dashboardStats.recentWorkouts.filter(
-      (workout) =>
-        workout.exerciseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        workout.exerciseType.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [searchQuery, dashboardStats?.recentWorkouts]);
-
   if (isLoadingStats) {
     return (
       <div className="flex h-screen bg-background-light dark:bg-background-dark">
@@ -95,10 +81,10 @@ export default function DashboardPage() {
       <Sidebar />
 
       <main className="grow h-full overflow-y-auto p-8 lg:p-10">
-        <DashboardHeader userName={user?.name || 'User'} onSearch={setSearchQuery} />
+        <DashboardHeader userName={user?.name || 'User'} />
 
         {/* Stats Cards with Recharts */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <StatsCard
             icon={Flame}
             label="Weekly Calories"
@@ -115,6 +101,13 @@ export default function DashboardPage() {
             color="primary"
             chartType="progress"
             trend={{ value: activeMinutesProgress, label: `${activeMinutesProgress}%` }}
+          />
+
+          <StatsCard
+            icon={Flame}
+            label="Longest Streak"
+            value={dashboardStats?.longestStreak ?? 0}
+            color="purple"
           />
         </div>
 

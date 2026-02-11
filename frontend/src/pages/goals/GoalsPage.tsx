@@ -24,16 +24,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useGoalForm, useGoalFilters } from '@/store/stores';
 
 export default function GoalsPage() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
+  const { isOpen, editingId, open, close } = useGoalForm();
+  const { statusFilter, setStatusFilter } = useGoalFilters();
   const [deletingGoal, setDeletingGoal] = useState<Goal | null>(null);
-  const [activeTab, setActiveTab] = useState<'active' | 'completed' | 'all'>('active');
 
   // Fetch goals based on active tab
   const { data: goalsData, isLoading } = useGoals({
-    status: activeTab === 'all' ? undefined : activeTab,
+    status: statusFilter === 'all' ? undefined : statusFilter,
     limit: 50,
   });
 
@@ -42,13 +42,11 @@ export default function GoalsPage() {
   const deleteGoalMutation = useDeleteGoal();
 
   const handleAddGoal = () => {
-    setEditingGoal(null);
-    setIsFormOpen(true);
+    open();
   };
 
   const handleEditGoal = (goal: Goal) => {
-    setEditingGoal(goal);
-    setIsFormOpen(true);
+    open(goal.id);
   };
 
   const handleDeleteClick = (goal: Goal) => {
@@ -57,9 +55,9 @@ export default function GoalsPage() {
 
   const handleSubmit = async (data: any) => {
     try {
-      if (editingGoal) {
+      if (editingId) {
         await updateGoalMutation.mutateAsync({
-          id: editingGoal.id,
+          id: editingId,
           data,
         });
         toast.success('Goal updated successfully');
@@ -67,8 +65,7 @@ export default function GoalsPage() {
         await createGoalMutation.mutateAsync(data);
         toast.success('Goal created successfully');
       }
-      setIsFormOpen(false);
-      setEditingGoal(null);
+      close();
     } catch (error) {
       toast.error('Failed to save goal', {
         description: 'Please try again.',
@@ -119,47 +116,49 @@ export default function GoalsPage() {
         {/* Tabs */}
         <div className="flex gap-4 mb-8 border-b border-border-light dark:border-white/10">
           <button
-            onClick={() => setActiveTab('active')}
+            onClick={() => setStatusFilter('active')}
             className={cn(
               'px-4 py-2 font-semibold text-sm transition-colors relative',
-              activeTab === 'active' ? 'text-primary' : 'text-text-secondary hover:text-foreground',
+              statusFilter === 'active'
+                ? 'text-primary'
+                : 'text-text-secondary hover:text-foreground',
             )}
           >
             Active
-            {activeTab === 'active' && (
+            {statusFilter === 'active' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
             )}
           </button>
           <button
-            onClick={() => setActiveTab('completed')}
+            onClick={() => setStatusFilter('completed')}
             className={cn(
               'px-4 py-2 font-semibold text-sm transition-colors relative',
-              activeTab === 'completed'
+              statusFilter === 'active'
                 ? 'text-primary'
                 : 'text-text-secondary hover:text-foreground',
             )}
           >
             Completed
-            {activeTab === 'completed' && (
+            {statusFilter === 'completed' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
             )}
           </button>
           <button
-            onClick={() => setActiveTab('all')}
+            onClick={() => setStatusFilter('all')}
             className={cn(
               'px-4 py-2 font-semibold text-sm transition-colors relative',
-              activeTab === 'all' ? 'text-primary' : 'text-text-secondary hover:text-foreground',
+              statusFilter === 'all' ? 'text-primary' : 'text-text-secondary hover:text-foreground',
             )}
           >
             All
-            {activeTab === 'all' && (
+            {statusFilter === 'all' && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
             )}
           </button>
         </div>
 
         {/* Active Goals Section */}
-        {activeTab === 'active' && (
+        {statusFilter === 'active' && (
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-foreground">Active Goals</h3>
@@ -196,7 +195,7 @@ export default function GoalsPage() {
         )}
 
         {/* Completed Goals Section */}
-        {activeTab === 'completed' && (
+        {statusFilter === 'completed' && (
           <section>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-foreground">Completed Goals</h3>
@@ -260,7 +259,7 @@ export default function GoalsPage() {
         )}
 
         {/* All Goals Section */}
-        {activeTab === 'all' && (
+        {statusFilter === 'all' && (
           <section>
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
@@ -292,13 +291,10 @@ export default function GoalsPage() {
 
       {/* Goal Form Modal */}
       <GoalForm
-        open={isFormOpen}
-        onClose={() => {
-          setIsFormOpen(false);
-          setEditingGoal(null);
-        }}
+        open={isOpen}
+        onClose={close}
         onSubmit={handleSubmit}
-        goal={editingGoal}
+        goal={editingId ? goals.find((g) => g.id === editingId) || null : null}
         isLoading={createGoalMutation.isPending || updateGoalMutation.isPending}
       />
 

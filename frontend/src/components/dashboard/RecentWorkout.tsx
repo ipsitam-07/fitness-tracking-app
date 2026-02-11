@@ -8,13 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MoreVertical, Flame, Dumbbell, Waves, Heart, PersonStanding } from 'lucide-react';
+import { Flame, Dumbbell, Waves, Heart, PersonStanding } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { RECENT_WORKOUTS } from '@/utils/constants';
@@ -52,8 +46,6 @@ export function RecentWorkouts({
   workouts,
   onLogWorkout,
   onLoadMore,
-  onEdit,
-  onDelete,
   hasMore = false,
 }: RecentWorkoutsProps) {
   const getExerciseIcon = (type: string) => {
@@ -89,9 +81,6 @@ export function RecentWorkouts({
               <TableHead className="text-[10px] font-bold text-text-secondary uppercase">
                 {RECENT_WORKOUTS.TABLE_HEAD.DATE}
               </TableHead>
-              <TableHead className="text-[10px] font-bold text-text-secondary uppercase text-right">
-                {RECENT_WORKOUTS.TABLE_HEAD.ACTION}
-              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -123,30 +112,6 @@ export function RecentWorkouts({
                   </TableCell>
                   <TableCell className="text-text-secondary">
                     {format(new Date(workout.date), 'MMM dd, yyyy')}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-text-secondary hover:text-primary"
-                        >
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit?.(workout)}>
-                          {RECENT_WORKOUTS.ACTIONS.EDIT}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onDelete?.(workout)}
-                          className="text-red-500 focus:text-red-500"
-                        >
-                          {RECENT_WORKOUTS.ACTIONS.DELETE}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );
