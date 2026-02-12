@@ -2,6 +2,7 @@ import { clearToken, getToken, setToken } from '@/utils/storage';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
+import type { GoalType } from '@/types/goals.types';
 
 //Types
 
@@ -24,7 +25,26 @@ export interface AuthSlice {
   logout: () => void;
   hydrate: () => void;
 }
+export interface FormSlice {
+  // Login State
+  loginForm: { email: string; password: string };
+  showLoginPassword: boolean;
+  setLoginForm: (update: Partial<{ email: string; password: string }>) => void;
+  toggleLoginPassword: () => void;
 
+  // Signup State
+  signupForm: { name: string; email: string; password: string };
+  showSignupPassword: boolean;
+  setSignupForm: (update: Partial<{ name: string; email: string; password: string }>) => void;
+  toggleSignupPassword: () => void;
+
+  // Onboarding State
+  onboardingGoal: GoalType;
+  setOnboardingGoal: (goal: GoalType) => void;
+
+  // Reset Action
+  resetAuthForms: () => void;
+}
 export interface UISlice {
   // State
   isMobileMenuOpen: boolean;
@@ -74,7 +94,7 @@ export interface AppSlice {
 }
 
 // Combined store type
-export type StoreState = AuthSlice & UISlice & AppSlice;
+export type StoreState = AuthSlice & UISlice & AppSlice & FormSlice;
 
 //Slices
 
@@ -109,6 +129,42 @@ const createAuthSlice = (set: any): AuthSlice => ({
       set({ token, isAuthenticated: true });
     }
   },
+});
+
+const createFormSlice = (set: any): FormSlice => ({
+  // Login
+  loginForm: { email: '', password: '' },
+  showLoginPassword: false,
+  setLoginForm: (update) =>
+    set((state: StoreState) => ({
+      loginForm: { ...state.loginForm, ...update },
+    })),
+  toggleLoginPassword: () =>
+    set((state: StoreState) => ({ showLoginPassword: !state.showLoginPassword })),
+
+  // Signup
+  signupForm: { name: '', email: '', password: '' },
+  showSignupPassword: false,
+  setSignupForm: (update) =>
+    set((state: StoreState) => ({
+      signupForm: { ...state.signupForm, ...update },
+    })),
+  toggleSignupPassword: () =>
+    set((state: StoreState) => ({ showSignupPassword: !state.showSignupPassword })),
+
+  // Onboarding
+  onboardingGoal: 'workout_count', // Default value
+  setOnboardingGoal: (goal) => set({ onboardingGoal: goal }),
+
+  // Reset
+  resetAuthForms: () =>
+    set({
+      loginForm: { email: '', password: '' },
+      signupForm: { name: '', email: '', password: '' },
+      showLoginPassword: false,
+      showSignupPassword: false,
+      onboardingGoal: 'workout_count',
+    }),
 });
 
 const createUISlice = (set: any): UISlice => ({
@@ -185,6 +241,7 @@ export const useStore = create<StoreState>()(
         ...createAuthSlice(set),
         ...createUISlice(set),
         ...createAppSlice(set),
+        ...createFormSlice(set),
       }),
       {
         name: 'fittrack-storage',
@@ -201,20 +258,26 @@ export const useStore = create<StoreState>()(
 );
 
 //Selectors
-
-export const useAuth = () =>
+export const useAuthForms = () =>
   useStore(
     useShallow((state) => ({
-      isAuthenticated: state.isAuthenticated,
-      user: state.user,
-      token: state.token,
-      setAuth: state.setAuth,
-      setUser: state.setUser,
-      logout: state.logout,
-      hydrate: state.hydrate,
+      // Login
+      loginForm: state.loginForm,
+      showLoginPassword: state.showLoginPassword,
+      setLoginForm: state.setLoginForm,
+      toggleLoginPassword: state.toggleLoginPassword,
+      // Signup
+      signupForm: state.signupForm,
+      showSignupPassword: state.showSignupPassword,
+      setSignupForm: state.setSignupForm,
+      toggleSignupPassword: state.toggleSignupPassword,
+      // Onboarding
+      onboardingGoal: state.onboardingGoal,
+      setOnboardingGoal: state.setOnboardingGoal,
+      // Reset
+      resetForms: state.resetAuthForms,
     })),
   );
-
 export const useUI = () =>
   useStore(
     useShallow((state) => ({
@@ -283,10 +346,12 @@ export const useResetStore = () => {
   const logout = useStore((state) => state.logout);
   const resetFilters = useStore((state) => state.resetFilters);
   const clearError = useStore((state) => state.clearError);
+  const resetForms = useStore((state) => state.resetAuthForms);
 
   return () => {
     logout();
     resetFilters();
     clearError();
+    resetForms();
   };
 };

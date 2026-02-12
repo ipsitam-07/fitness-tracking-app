@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SignupHeader } from '@/components/auth/SignupHeader';
 import { Footer } from '@/components/auth/Footer';
@@ -11,6 +10,7 @@ import '../../index.css';
 
 import { useCreateGoal } from '@/hooks/useGoals';
 import type { GoalType } from '@/types/goals.types';
+import { useAuthForms } from '@/store/stores';
 
 type GoalOption = {
   id: GoalType;
@@ -55,26 +55,21 @@ function GoalsRegisterPage() {
   const navigate = useNavigate();
   const createGoal = useCreateGoal();
 
-  const [selectedGoal, setSelectedGoal] = useState<GoalType>('workout_count');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { onboardingGoal, setOnboardingGoal, resetForms } = useAuthForms();
 
   const handleFinish = async () => {
-    setIsSubmitting(true);
-
-    const selectedGoalOption = goalOptions.find((g) => g.id === selectedGoal);
+    const selectedGoalOption = goalOptions.find((g) => g.id === onboardingGoal);
 
     if (!selectedGoalOption) {
       toast.error('Please select a goal');
-      setIsSubmitting(false);
       return;
     }
-
     const startDate = new Date();
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 30);
 
     const payload = {
-      goalType: selectedGoal,
+      goalType: onboardingGoal,
       targetValue: selectedGoalOption.defaultTarget,
       currentValue: 0,
       startDate: startDate.toISOString().split('T')[0],
@@ -83,23 +78,23 @@ function GoalsRegisterPage() {
       description: `${selectedGoalOption.title} - Started ${startDate.toLocaleDateString()}`,
     };
 
-    console.log('Creating goal with payload:', payload); // Debug log
-
     try {
-      const result = await createGoal.mutateAsync(payload);
-      console.log('Goal created successfully:', result); // Debug log
+      await createGoal.mutateAsync(payload);
 
-      toast.success('Goal Created! 🎉', {
+      toast.success('Goal Created!', {
         description: 'Your fitness journey begins now!',
       });
+
+      resetForms();
+
+      // Navigate to login
+      navigate('/login');
     } catch (error) {
-      console.error('Failed to create goal:', error); // Debug log
+      console.error('Failed to create goal:', error);
 
       toast.error('Failed to create goal', {
         description: error instanceof Error ? error.message : 'Please try again or skip this step.',
       });
-
-      setIsSubmitting(false);
     }
   };
 
@@ -107,7 +102,7 @@ function GoalsRegisterPage() {
     navigate(-1);
   };
 
-  const isLoading = isSubmitting || createGoal.isPending;
+  const isLoading = createGoal.isPending;
 
   return (
     <>
@@ -146,8 +141,8 @@ function GoalsRegisterPage() {
 
             {/* Goals Selection */}
             <RadioGroup
-              value={selectedGoal}
-              onValueChange={(value) => setSelectedGoal(value as GoalType)}
+              value={onboardingGoal}
+              onValueChange={(value) => setOnboardingGoal(value as GoalType)}
               className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10"
               disabled={isLoading}
             >
