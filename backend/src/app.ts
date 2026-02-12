@@ -7,6 +7,9 @@ import userRoutes from './routes/user.route';
 import statsRoutes from './routes/stats.route';
 import workoutRoutes from './routes/workout.route';
 import goalsRoutes from './routes/goals.route';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
