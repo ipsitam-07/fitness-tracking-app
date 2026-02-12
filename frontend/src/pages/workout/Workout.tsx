@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, PlusCircle, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { Sidebar } from '@/components/utils/SideBar';
@@ -25,17 +25,16 @@ import {
 import type { Workout } from '@/types/workout.types';
 import { cn } from '@/lib/utils';
 import { exerciseFilters } from '@/constants/exercise-filter';
+import { useWorkoutFilters, useWorkoutForm } from '@/store/stores';
 
 export default function WorkoutsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null);
+  const { searchQuery, setSearchQuery, typeFilter, setTypeFilter } = useWorkoutFilters();
+  const { isOpen: isFormOpen, open: openForm, close: closeForm, editingId } = useWorkoutForm();
+
   const [deletingWorkout, setDeletingWorkout] = useState<Workout | null>(null);
 
   // Fetch workouts with filters
   const { data: workoutsData, isLoading } = useWorkouts({
-    search: searchQuery,
     limit: 50,
   } as any);
 
@@ -43,14 +42,17 @@ export default function WorkoutsPage() {
   const updateWorkoutMutation = useUpdateWorkout();
   const deleteWorkoutMutation = useDeleteWorkout();
 
+  const editingWorkout = useMemo(() => {
+    if (!editingId || !workoutsData?.data) return null;
+    return workoutsData.data.find((w) => w.id === editingId) || null;
+  }, [editingId, workoutsData?.data]);
+
   const handleAddWorkout = () => {
-    setEditingWorkout(null);
-    setIsFormOpen(true);
+    openForm();
   };
 
   const handleEditWorkout = (workout: Workout) => {
-    setEditingWorkout(workout);
-    setIsFormOpen(true);
+    openForm(workout.id);
   };
 
   const handleDeleteClick = (workout: Workout) => {
@@ -69,8 +71,7 @@ export default function WorkoutsPage() {
         await createWorkoutMutation.mutateAsync(data);
         toast.success('Workout created successfully');
       }
-      setIsFormOpen(false);
-      setEditingWorkout(null);
+      closeForm();
     } catch (error) {
       toast.error('Failed to save workout', {
         description: 'Please try again.',
@@ -92,11 +93,21 @@ export default function WorkoutsPage() {
     }
   };
 
-  // Filter workouts by type on the client side
   const allWorkouts = workoutsData?.data || [];
-  const workouts = selectedType
-    ? allWorkouts.filter((w) => w.exerciseType === selectedType)
-    : allWorkouts;
+
+  const workouts = useMemo(() => {
+    return allWorkouts.filter((workout) => {
+      // Filter by Type
+      const matchesType = typeFilter ? workout.exerciseType === typeFilter : true;
+
+      const matchesSearch = searchQuery
+        ? workout.exerciseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          workout.exerciseType.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+
+      return matchesType && matchesSearch;
+    });
+  }, [allWorkouts, typeFilter, searchQuery]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
@@ -134,10 +145,10 @@ export default function WorkoutsPage() {
             {exerciseFilters.map((filter) => (
               <Button
                 key={filter.value}
-                onClick={() => setSelectedType(filter.value)}
+                onClick={() => setTypeFilter(filter.value === typeFilter ? '' : filter.value)}
                 className={cn(
                   'px-6 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all',
-                  selectedType === filter.value
+                  typeFilter === filter.value
                     ? 'bg-primary/10 text-primary border border-primary/20'
                     : 'bg-white dark:bg-white/5 text-muted-foreground border border-border-light dark:border-white/10 hover:border-primary/40 hover:text-primary',
                 )}
@@ -157,7 +168,7 @@ export default function WorkoutsPage() {
         ) : workouts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 gap-4">
             <p className="text-text-secondary">
-              {selectedType || searchQuery ? 'No workouts match your filters' : 'No workouts found'}
+              {typeFilter || searchQuery ? 'No workouts match your filters' : 'No workouts found'}
             </p>
             <Button
               onClick={handleAddWorkout}
@@ -180,17 +191,19 @@ export default function WorkoutsPage() {
             ))}
 
             {/* Add New Card */}
-            <button
-              onClick={handleAddWorkout}
-              className="bg-white dark:bg-white/5 border-2 border-dashed border-border-light dark:border-white/10 hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-50 transition-all group"
-            >
-              <div className="w-12 h-12 rounded-full bg-background-light dark:bg-white/5 flex items-center justify-center text-text-secondary group-hover:text-primary transition-colors">
-                <PlusCircle className="w-6 h-6" />
-              </div>
-              <span className="text-sm font-semibold text-text-secondary group-hover:text-primary">
-                Add New Workout
-              </span>
-            </button>
+            {!searchQuery && (
+              <button
+                onClick={handleAddWorkout}
+                className="bg-white dark:bg-white/5 border-2 border-dashed border-border-light dark:border-white/10 hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center gap-3 min-h-50 transition-all group"
+              >
+                <div className="w-12 h-12 rounded-full bg-background-light dark:bg-white/5 flex items-center justify-center text-text-secondary group-hover:text-primary transition-colors">
+                  <PlusCircle className="w-6 h-6" />
+                </div>
+                <span className="text-sm font-semibold text-text-secondary group-hover:text-primary">
+                  Add New Workout
+                </span>
+              </button>
+            )}
           </div>
         )}
       </main>
@@ -198,10 +211,7 @@ export default function WorkoutsPage() {
       {/* Workout Form Modal */}
       <WorkoutForm
         open={isFormOpen}
-        onClose={() => {
-          setIsFormOpen(false);
-          setEditingWorkout(null);
-        }}
+        onClose={closeForm}
         onSubmit={handleSubmit}
         workout={editingWorkout}
         isLoading={createWorkoutMutation.isPending || updateWorkoutMutation.isPending}
