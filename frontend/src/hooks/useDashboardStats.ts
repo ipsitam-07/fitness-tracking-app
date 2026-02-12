@@ -8,7 +8,7 @@ export const useDashboardStats = () => {
   return useQuery({
     queryKey: queryKeys.dashboardStats,
     queryFn: statsService.getDashboardStats,
-    staleTime: 1000 * 60 * 5,
+    //staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -18,6 +18,14 @@ export const useWeeklyTrends = (weeks: number = 4) => {
     queryKey: queryKeys.weeklyTrends(weeks),
     queryFn: () => statsService.getWeeklyTrends(weeks),
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+//Show daily workout counts for current week
+export const useDailyWorkouts = () => {
+  return useQuery({
+    queryKey: ['dailyWorkouts'],
+    queryFn: statsService.getDailyWorkouts,
   });
 };
 

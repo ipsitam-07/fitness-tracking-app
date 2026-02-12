@@ -6,7 +6,7 @@ import { WeeklyActivity } from '@/components/dashboard/WeeklyActivity';
 import { ActiveGoals } from '@/components/dashboard/ActiveGoals';
 import { RecentWorkouts } from '@/components/dashboard/RecentWorkout';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import { useDashboardStats, useWeeklyTrends } from '@/hooks/useDashboardStats';
+import { useDashboardStats, useDailyWorkouts } from '@/hooks/useDashboardStats';
 import { useGoals } from '@/hooks/useGoals';
 
 import { useNavigate } from 'react-router-dom';
@@ -17,12 +17,12 @@ export default function DashboardPage() {
 
   const { data: dashboardResponse, isLoading: isLoadingStats } = useDashboardStats();
   const { data: goalsData } = useGoals({ status: 'active', limit: 3 });
-  const { data: weeklyTrends } = useWeeklyTrends(4);
+  const { data: dailyWorkoutsData } = useDailyWorkouts();
 
   const dashboardStats = dashboardResponse?.result;
 
   const getWeeklyChartData = () => {
-    if (!weeklyTrends || weeklyTrends.length === 0) {
+    if (!dailyWorkoutsData) {
       return [
         { day: 'Mon', value: 0, isActive: false },
         { day: 'Tue', value: 0, isActive: false },
@@ -33,18 +33,16 @@ export default function DashboardPage() {
         { day: 'Sun', value: 0, isActive: false },
       ];
     }
-
-    const currentWeek = weeklyTrends[0];
-    const avgPerDay = currentWeek.workouts / 7;
-    const today = new Date().getDay();
+    const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+    const { dailyCounts } = dailyWorkoutsData;
     return [
-      { day: 'Mon', value: avgPerDay * 15, isActive: today === 1 },
-      { day: 'Tue', value: avgPerDay * 20, isActive: today === 2 },
-      { day: 'Wed', value: avgPerDay * 12, isActive: today === 3 },
-      { day: 'Thu', value: avgPerDay * 25, isActive: today === 4 },
-      { day: 'Fri', value: avgPerDay * 10, isActive: today === 5 },
-      { day: 'Sat', value: avgPerDay * 18, isActive: today === 6 },
-      { day: 'Sun', value: avgPerDay * 8, isActive: today === 0 },
+      { day: 'Mon', value: dailyCounts.Monday, isActive: today === 1 },
+      { day: 'Tue', value: dailyCounts.Tuesday, isActive: today === 2 },
+      { day: 'Wed', value: dailyCounts.Wednesday, isActive: today === 3 },
+      { day: 'Thu', value: dailyCounts.Thursday, isActive: today === 4 },
+      { day: 'Fri', value: dailyCounts.Friday, isActive: today === 5 },
+      { day: 'Sat', value: dailyCounts.Saturday, isActive: today === 6 },
+      { day: 'Sun', value: dailyCounts.Sunday, isActive: today === 0 },
     ];
   };
 

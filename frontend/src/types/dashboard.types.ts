@@ -41,6 +41,20 @@ export interface WeeklyTrend {
   calories: number;
 }
 
+export interface DailyWorkoutData {
+  dailyCounts: {
+    Monday: number;
+    Tuesday: number;
+    Wednesday: number;
+    Thursday: number;
+    Friday: number;
+    Saturday: number;
+    Sunday: number;
+  };
+  weekStart: string;
+  weekEnd: string;
+}
+
 export interface StatCardProps {
   icon: LucideIcon;
   label: string;

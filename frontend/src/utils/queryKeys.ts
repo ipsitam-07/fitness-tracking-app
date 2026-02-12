@@ -11,4 +11,5 @@ export const queryKeys = {
   goals: (params?: PaginationParams & { status?: string }) => ['goals', params] as const,
   goal: (id: string) => ['goal', id] as const,
   goalProgress: (id: string) => ['goal-progress', id] as const,
+  dailyWorkouts: ['dailyWorkouts'] as const,
 };

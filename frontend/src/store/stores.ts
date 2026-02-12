@@ -1,8 +1,6 @@
-import { clearToken, getToken, setToken } from '@/utils/storage';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { useShallow } from 'zustand/react/shallow';
-import type { GoalType } from '@/types/goals.types';
 
 //Types
 
@@ -23,8 +21,8 @@ export interface AuthSlice {
   setAuth: (user: User, token: string) => void;
   setUser: (user: User) => void;
   logout: () => void;
-  hydrate: () => void;
 }
+
 export interface FormSlice {
   // Login State
   loginForm: { email: string; password: string };
@@ -38,13 +36,10 @@ export interface FormSlice {
   setSignupForm: (update: Partial<{ name: string; email: string; password: string }>) => void;
   toggleSignupPassword: () => void;
 
-  // Onboarding State
-  onboardingGoal: GoalType;
-  setOnboardingGoal: (goal: GoalType) => void;
-
   // Reset Action
   resetAuthForms: () => void;
 }
+
 export interface UISlice {
   // State
   isMobileMenuOpen: boolean;
@@ -104,7 +99,6 @@ const createAuthSlice = (set: any): AuthSlice => ({
   token: null,
 
   setAuth: (user, token) => {
-    setToken(token);
     set({
       user,
       token,
@@ -115,19 +109,11 @@ const createAuthSlice = (set: any): AuthSlice => ({
   setUser: (user) => set({ user }),
 
   logout: () => {
-    clearToken();
     set({
       user: null,
       token: null,
       isAuthenticated: false,
     });
-  },
-
-  hydrate: () => {
-    const token = getToken();
-    if (token) {
-      set({ token, isAuthenticated: true });
-    }
   },
 });
 
@@ -151,10 +137,6 @@ const createFormSlice = (set: any): FormSlice => ({
     })),
   toggleSignupPassword: () =>
     set((state: StoreState) => ({ showSignupPassword: !state.showSignupPassword })),
-
-  // Onboarding
-  onboardingGoal: 'workout_count', // Default value
-  setOnboardingGoal: (goal) => set({ onboardingGoal: goal }),
 
   // Reset
   resetAuthForms: () =>
@@ -245,9 +227,10 @@ export const useStore = create<StoreState>()(
       }),
       {
         name: 'fittrack-storage',
-        // Only persist auth and theme
         partialize: (state) => ({
           token: state.token,
+          isAuthenticated: state.isAuthenticated,
+          user: state.user,
           theme: state.theme,
           isSidebarCollapsed: state.isSidebarCollapsed,
         }),
@@ -268,7 +251,6 @@ export const useAuth = () =>
       setAuth: state.setAuth,
       setUser: state.setUser,
       logout: state.logout,
-      hydrate: state.hydrate,
     })),
   );
 
@@ -285,13 +267,11 @@ export const useAuthForms = () =>
       showSignupPassword: state.showSignupPassword,
       setSignupForm: state.setSignupForm,
       toggleSignupPassword: state.toggleSignupPassword,
-      // Onboarding
-      onboardingGoal: state.onboardingGoal,
-      setOnboardingGoal: state.setOnboardingGoal,
       // Reset
       resetForms: state.resetAuthForms,
     })),
   );
+
 export const useUI = () =>
   useStore(
     useShallow((state) => ({
@@ -354,6 +334,7 @@ export const useAppState = () =>
       clearError: state.clearError,
     })),
   );
+
 //Helper hooks
 
 export const useResetStore = () => {
