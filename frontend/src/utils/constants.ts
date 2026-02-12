@@ -1,5 +1,6 @@
+import { LayoutDashboard, Dumbbell, Flag, User } from 'lucide-react';
 export const FOOTER_TEXT = '@ 2026 FitTrack. All rights reserved.';
-export const PRODUCT_TITLE = 'FitTrack';
+export const APP_NAME = 'FitTrack';
 export const SIGNUP_HEADER = {
   MEMBER_TEXT: 'Already a member?',
   SIGN_IN_TEXT: 'Sign In',
@@ -102,3 +103,28 @@ export const GOAL_UNITS = {
 } as const;
 
 export const GOAL_DATE_FORMAT = 'MMM dd, yyyy';
+
+export const ROUTES = {
+  LOGIN: '/login',
+  DASHBOARD: '/dashboard',
+  WORKOUT: '/workout',
+  GOALS: '/goals',
+  PROFILE: '/profile',
+} as const;
+
+export const SIDEBAR_LINKS = [
+  { ICON: LayoutDashboard, LABEL: 'DASHBOARD', PATH: ROUTES.DASHBOARD },
+  { ICON: Dumbbell, LABEL: 'WORKOUT', PATH: ROUTES.WORKOUT },
+  { ICON: Flag, LABEL: 'GOALS', PATH: ROUTES.GOALS },
+  { ICON: User, LABEL: 'PROFILE', PATH: ROUTES.PROFILE },
+] as const;
+
+export const SIDEBAR_UI_STRINGS = {
+  LOGOUT: 'LOGOUT',
+  PREMIUM_MEMBER: 'PREMIUM MEMBER',
+  DEFAULT_USER: 'USER',
+  OPEN_MENU: 'OPEN MENU',
+  CLOSE_MENU: 'CLOSE MENU',
+  EXPAND_SIDEBAR: 'EXPAND SIDEBAR',
+  COLLAPSE_SIDEBAR: 'COLLAPSE SIDEBAR',
+} as const;

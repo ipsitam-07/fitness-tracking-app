@@ -51,17 +51,6 @@ export default function DashboardPage() {
   const weeklyData = getWeeklyChartData();
 
   // Calculate progress
-  const dailyCaloriesGoal = 2500;
-  const weeklyCaloriesGoal = dailyCaloriesGoal * 7;
-  const caloriesProgress = dashboardStats?.thisWeek.calories
-    ? Math.min(Math.round((dashboardStats.thisWeek.calories / weeklyCaloriesGoal) * 100), 100)
-    : 0;
-
-  const weeklyActiveMinutesGoal = 150;
-  const activeMinutesProgress = dashboardStats?.thisWeek.duration
-    ? Math.min(Math.round((dashboardStats.thisWeek.duration / weeklyActiveMinutesGoal) * 100), 100)
-    : 0;
-
   if (isLoadingStats) {
     return (
       <div className="flex h-screen bg-background-light dark:bg-background-dark">
@@ -90,8 +79,6 @@ export default function DashboardPage() {
             label="Weekly Calories"
             value={dashboardStats?.thisWeek.calories || 0}
             color="orange"
-            chartType="progress"
-            trend={{ value: caloriesProgress, label: `${caloriesProgress}%` }}
           />
 
           <StatsCard
@@ -99,8 +86,6 @@ export default function DashboardPage() {
             label="Active Minutes"
             value={dashboardStats?.thisWeek.duration || 0}
             color="primary"
-            chartType="progress"
-            trend={{ value: activeMinutesProgress, label: `${activeMinutesProgress}%` }}
           />
 
           <StatsCard

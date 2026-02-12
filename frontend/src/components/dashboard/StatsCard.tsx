@@ -47,15 +47,7 @@ const colorStyles = {
   },
 };
 
-export function StatsCard({
-  icon: Icon,
-  label,
-  value,
-  trend,
-  color,
-  chartType = 'progress',
-  className,
-}: StatCardProps) {
+export function StatsCard({ icon: Icon, label, value, color, className }: StatCardProps) {
   const styles = colorStyles[color];
 
   return (
@@ -73,21 +65,6 @@ export function StatsCard({
           <span className="text-xs font-bold text-text-secondary uppercase">{label}</span>
           <p className="text-2xl font-bold text-foreground">{value}</p>
         </div>
-      </div>
-
-      {/* Chart Section */}
-      <div className="mt-auto h-8">
-        {chartType === 'progress' && trend && (
-          <div className="w-full flex items-end gap-1">
-            <div className={cn('grow h-3 rounded-full overflow-hidden', styles.trendBg)}>
-              <div
-                className={cn('h-full', styles.trendFill)}
-                style={{ width: `${trend.value}%` }}
-              />
-            </div>
-            <span className={cn('text-[10px] font-bold', styles.trendText)}>{trend.value}%</span>
-          </div>
-        )}
       </div>
     </Card>
   );

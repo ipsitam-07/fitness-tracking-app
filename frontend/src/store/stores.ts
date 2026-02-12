@@ -27,7 +27,8 @@ export interface AuthSlice {
 
 export interface UISlice {
   // State
-  sidebarOpen: boolean;
+  isMobileMenuOpen: boolean;
+  isSidebarCollapsed: boolean;
   theme: 'light' | 'dark' | 'system';
 
   // Modal states
@@ -42,8 +43,10 @@ export interface UISlice {
   goalStatusFilter: 'active' | 'completed' | 'all';
 
   // Actions
-  setSidebarOpen: (open: boolean) => void;
-  toggleSidebar: () => void;
+  setMobileMenuOpen: (open: boolean) => void;
+  toggleMobileMenu: () => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  toggleSidebarCollapse: () => void;
   setTheme: (theme: 'light' | 'dark' | 'system') => void;
 
   // Modal actions
@@ -109,7 +112,8 @@ const createAuthSlice = (set: any): AuthSlice => ({
 });
 
 const createUISlice = (set: any): UISlice => ({
-  sidebarOpen: true,
+  isMobileMenuOpen: false,
+  isSidebarCollapsed: false,
   theme: 'system',
 
   isWorkoutFormOpen: false,
@@ -121,8 +125,12 @@ const createUISlice = (set: any): UISlice => ({
   workoutTypeFilter: '',
   goalStatusFilter: 'active',
 
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
-  toggleSidebar: () => set((state: UISlice) => ({ sidebarOpen: !state.sidebarOpen })),
+  setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
+  toggleMobileMenu: () => set((state: UISlice) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
+  setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
+  toggleSidebarCollapse: () =>
+    set((state: UISlice) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+
   setTheme: (theme) => set({ theme }),
 
   openWorkoutForm: (workoutId) =>
@@ -184,7 +192,7 @@ export const useStore = create<StoreState>()(
         partialize: (state) => ({
           token: state.token,
           theme: state.theme,
-          sidebarOpen: state.sidebarOpen,
+          isSidebarCollapsed: state.isSidebarCollapsed,
         }),
       },
     ),
@@ -210,10 +218,13 @@ export const useAuth = () =>
 export const useUI = () =>
   useStore(
     useShallow((state) => ({
-      sidebarOpen: state.sidebarOpen,
+      isMobileMenuOpen: state.isMobileMenuOpen,
+      isSidebarCollapsed: state.isSidebarCollapsed,
       theme: state.theme,
-      setSidebarOpen: state.setSidebarOpen,
-      toggleSidebar: state.toggleSidebar,
+      setMobileMenuOpen: state.setMobileMenuOpen,
+      toggleMobileMenu: state.toggleMobileMenu,
+      setSidebarCollapsed: state.setSidebarCollapsed,
+      toggleSidebarCollapse: state.toggleSidebarCollapse,
       setTheme: state.setTheme,
     })),
   );

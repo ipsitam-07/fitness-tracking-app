@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
-import { PRODUCT_TITLE } from '@/utils/constants';
+import { APP_NAME } from '@/utils/constants';
 
 export function LoginHeader() {
   return (
@@ -10,7 +10,7 @@ export function LoginHeader() {
           <Zap className="text-primary-foreground font-bold" size={20} />
         </div>
         <h2 className="text-foreground dark:text-white text-xl font-bold tracking-tight">
-          {PRODUCT_TITLE}
+          {APP_NAME}
         </h2>
       </Link>
     </header>
