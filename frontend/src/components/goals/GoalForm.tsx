@@ -66,36 +66,37 @@ export function GoalForm({ open, onClose, onSubmit, goal, isLoading = false }: G
   });
 
   useEffect(() => {
-    if (goal) {
-      form.reset({
-        goalType: goal.goalType as 'workout_count' | 'weight' | 'calories' | 'duration',
-        targetValue: goal.targetValue,
-        currentValue: goal.currentValue,
-        startDate: goal.startDate
-          ? new Date(goal.startDate).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0],
-        endDate: goal.endDate
-          ? new Date(goal.endDate).toISOString().split('T')[0]
-          : new Date().toISOString().split('T')[0],
-        status: goal.status as 'active' | 'completed' | 'abandoned',
-        description: goal.description || '',
-      });
-    } else {
-      form.reset({
-        goalType: 'workout_count',
-        targetValue: 0,
-        currentValue: 0,
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
-        status: 'active',
-        description: '',
-      });
+    if (open) {
+      if (goal) {
+        form.reset({
+          goalType: goal.goalType as 'workout_count' | 'weight' | 'calories' | 'duration',
+          targetValue: goal.targetValue,
+          currentValue: goal.currentValue,
+          startDate: goal.startDate
+            ? new Date(goal.startDate).toISOString().split('T')[0]
+            : new Date().toISOString().split('T')[0],
+          endDate: goal.endDate
+            ? new Date(goal.endDate).toISOString().split('T')[0]
+            : new Date().toISOString().split('T')[0],
+          status: goal.status as 'active' | 'completed' | 'abandoned',
+          description: goal.description || '',
+        });
+      } else {
+        form.reset({
+          goalType: 'workout_count',
+          targetValue: 0,
+          currentValue: 0,
+          startDate: new Date().toISOString().split('T')[0],
+          endDate: new Date().toISOString().split('T')[0],
+          status: 'active',
+          description: '',
+        });
+      }
     }
-  }, [goal, form]);
+  }, [goal, open, form]);
 
   const handleSubmit = (data: GoalFormValues) => {
     onSubmit(data);
-    form.reset();
   };
 
   const selectedGoalType = form.watch('goalType');

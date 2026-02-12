@@ -83,9 +83,34 @@ export function WorkoutForm({
     }
   }, [workout, form]);
 
+  useEffect(() => {
+    if (open) {
+      if (workout) {
+        form.reset({
+          exerciseType: workout.exerciseType,
+          exerciseName: workout.exerciseName,
+          duration: workout.duration,
+          caloriesBurned: workout.caloriesBurned,
+          date: workout.date
+            ? format(new Date(workout.date), 'yyyy-MM-dd')
+            : format(new Date(), 'yyyy-MM-dd'),
+          notes: workout.notes || '',
+        });
+      } else {
+        form.reset({
+          exerciseType: '',
+          exerciseName: '',
+          duration: 0,
+          caloriesBurned: 0,
+          date: format(new Date(), 'yyyy-MM-dd'),
+          notes: '',
+        });
+      }
+    }
+  }, [workout, open, form]);
+
   const handleSubmit = (data: WorkoutFormValues) => {
     onSubmit(data);
-    form.reset();
   };
 
   return (
