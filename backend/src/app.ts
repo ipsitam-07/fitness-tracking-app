@@ -8,6 +8,7 @@ import statsRoutes from './routes/stats.route';
 import workoutRoutes from './routes/workout.route';
 import goalsRoutes from './routes/goals.route';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.set('trust proxy', 1);
+app.use(helmet());
 
 //swagger
 swaggerDocs(app);
