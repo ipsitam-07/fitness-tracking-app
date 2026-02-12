@@ -13,7 +13,7 @@ export async function getWorkoutStats(userId: string, startDate?: Date, endDate?
       where.date[Op.gte] = startDate;
     }
     if (endDate) {
-      where.date[Op.gte] = endDate;
+      where.date[Op.lte] = endDate;
     }
   }
 

@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { authenticationReq } from '../middlewares/auth.middleware';
-import { getDashboardStats, getWeeklyTrends } from '../controllers/stats.controller';
+import {
+  getDashboardStats,
+  getWeeklyTrends,
+  getDailyWorkouts,
+} from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
 import { asyncHandler } from '../utils/asyncHandler';
 
@@ -184,5 +188,67 @@ router.get('/dashboard', asyncHandler(getDashboardStats));
 
 //GET /stats/weekly-stats
 router.get('/weekly-stats', asyncHandler(getWeeklyTrends));
+
+/**
+ * @swagger
+ * /stats/daily-workouts:
+ *   get:
+ *     summary: Get daily workout counts for current week
+ *     description: Retrieve workout counts for each day of the current week (Monday to Sunday)
+ *     tags: [Statistics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Daily workout counts retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     dailyCounts:
+ *                       type: object
+ *                       properties:
+ *                         Monday:
+ *                           type: number
+ *                           example: 2
+ *                         Tuesday:
+ *                           type: number
+ *                           example: 1
+ *                         Wednesday:
+ *                           type: number
+ *                           example: 0
+ *                         Thursday:
+ *                           type: number
+ *                           example: 3
+ *                         Friday:
+ *                           type: number
+ *                           example: 1
+ *                         Saturday:
+ *                           type: number
+ *                           example: 0
+ *                         Sunday:
+ *                           type: number
+ *                           example: 1
+ *                     weekStart:
+ *                       type: string
+ *                       format: date
+ *                       example: "2026-02-09"
+ *                     weekEnd:
+ *                       type: string
+ *                       format: date
+ *                       example: "2026-02-15"
+ *       401:
+ *         description: Unauthorized
+ */
+
+//GET /stats/daily-workouts
+router.get('/daily-workouts', asyncHandler(getDailyWorkouts));
 
 export default router;

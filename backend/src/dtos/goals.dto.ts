@@ -4,8 +4,9 @@ export interface ICreateGoalsDTO {
   targetValue: number;
   currentValue: number;
   startingValue: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
+  status?: GoalStatus;
   description?: string;
 }
 export interface IUpdateGoalsDTO {

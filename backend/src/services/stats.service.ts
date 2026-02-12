@@ -57,7 +57,16 @@ function calculateStreak(workouts: Array<{ date: Date }>): {
     return { currentStreak: 0, longestStreak: 0 };
   }
 
-  const dates = workouts.map((w) => new Date(w.date).toDateString());
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
+  const validWorkouts = workouts.filter((w) => new Date(w.date) <= today);
+
+  if (validWorkouts.length === 0) {
+    return { currentStreak: 0, longestStreak: 0 };
+  }
+
+  const dates = validWorkouts.map((w) => new Date(w.date).toDateString());
   const uniqueDates = [...new Set(dates)].sort(
     (a, b) => new Date(b).getTime() - new Date(a).getTime(),
   );
@@ -66,11 +75,10 @@ function calculateStreak(workouts: Array<{ date: Date }>): {
   let longestStreak = 0;
   let tempStreak = 1;
 
-  const today = new Date().toDateString();
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  const todayString = new Date().toDateString();
+  const yesterdayString = new Date(Date.now() - 86400000).toDateString();
 
-  // current streak
-  if (uniqueDates[0] === today || uniqueDates[0] === yesterday) {
+  if (uniqueDates[0] === todayString || uniqueDates[0] === yesterdayString) {
     currentStreak = 1;
     for (let i = 1; i < uniqueDates.length; i++) {
       const prevDate = new Date(uniqueDates[i - 1]!);
@@ -87,7 +95,6 @@ function calculateStreak(workouts: Array<{ date: Date }>): {
     }
   }
 
-  // longest streak
   for (let i = 1; i < uniqueDates.length; i++) {
     const prevDate = new Date(uniqueDates[i - 1]!);
     const currDate = new Date(uniqueDates[i]!);
@@ -105,7 +112,6 @@ function calculateStreak(workouts: Array<{ date: Date }>): {
 
   return { currentStreak, longestStreak };
 }
-
 //Get workout dashboard stats
 export async function getDashboardStatsService(userId: string) {
   if (!userId) {
@@ -248,6 +254,56 @@ function getWeekDates(year: number, week: number): { startDate: Date; endDate: D
   weekEnd.setDate(weekStart.getDate() + 6);
 
   return { startDate: weekStart, endDate: weekEnd };
+}
+
+//Get daily workout counts for the current week
+export async function getDailyWorkoutsService(userId: string) {
+  if (!userId) {
+    throw new AppError('User ID is required', 400);
+  }
+
+  const now = new Date();
+
+  const currentDay = now.getDay();
+  const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + mondayOffset);
+  monday.setHours(0, 0, 0, 0);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  sunday.setHours(23, 59, 59, 999);
+
+  const workouts = await getWorkoutStats(userId, monday, sunday);
+
+  const dailyCounts = {
+    Monday: 0,
+    Tuesday: 0,
+    Wednesday: 0,
+    Thursday: 0,
+    Friday: 0,
+    Saturday: 0,
+    Sunday: 0,
+  };
+
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  workouts.forEach((workout) => {
+    const workoutDate = new Date(workout.date);
+
+    const dayName = dayNames[workoutDate.getDay()];
+
+    if (dayName && dayName in dailyCounts) {
+      dailyCounts[dayName as keyof typeof dailyCounts]++;
+    }
+  });
+
+  return {
+    dailyCounts,
+    weekStart: monday.toISOString().split('T')[0],
+    weekEnd: sunday.toISOString().split('T')[0],
+  };
 }
 
 //Get goal progress
