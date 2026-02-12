@@ -6,7 +6,7 @@ import {
   getGoalsbyID,
   updateGoals,
   deleteGoals,
-} from '../controllers/gaol.controller';
+} from '../controllers/goal.controller';
 import { getGoalProgress } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
 import { asyncHandler } from '../utils/asyncHandler';
