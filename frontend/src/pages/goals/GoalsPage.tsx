@@ -133,7 +133,7 @@ export default function GoalsPage() {
             onClick={() => setStatusFilter('completed')}
             className={cn(
               'px-4 py-2 font-semibold text-sm transition-colors relative',
-              statusFilter === 'active'
+              statusFilter === 'completed'
                 ? 'text-primary'
                 : 'text-text-secondary hover:text-foreground',
             )}

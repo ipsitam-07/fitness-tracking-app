@@ -1,5 +1,5 @@
 import type { DashboardStatsResponse, WeeklyTrend } from '@/types/dashboard.types';
-import api from '@/api/axio';
+import api from '@/config/axio';
 import type { ApiResponse } from '@/types/api.types';
 import type { WorkoutStats } from '@/types/workout.types';
 import type { GoalProgress } from '@/types/goals.types';

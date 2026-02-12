@@ -1,7 +1,7 @@
 import type { PaginatedResponse } from '@/types/pagination.types';
 import type { GoalPaginationParams } from '@/types/goals.types';
 import type { Goal } from '@/types/goals.types';
-import api from '@/api/axio';
+import api from '@/config/axio';
 import type { ApiResponse } from '@/types/api.types';
 
 export const goalService = {

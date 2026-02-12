@@ -1,4 +1,4 @@
-import api from './axio';
+import api from '../config/axio';
 import type { User } from '@/types/user.types';
 
 export async function getCurrentUser(): Promise<User> {

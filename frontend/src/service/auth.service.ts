@@ -1,4 +1,4 @@
-import api from './axio';
+import api from '../config/axio';
 import type { SignupRequest, LoginRequest, AuthResponse } from '@/types/auth.types';
 
 export async function signup(data: SignupRequest): Promise<AuthResponse> {

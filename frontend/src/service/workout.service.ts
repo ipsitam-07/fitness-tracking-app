@@ -1,7 +1,7 @@
 import type { WorkoutPaginationParams, Workout } from '@/types/workout.types';
 import type { PaginatedResponse } from '@/types/pagination.types';
 import type { ApiResponse } from '@/types/api.types';
-import api from '@/api/axio';
+import api from '@/config/axio';
 
 export const workoutService = {
   // Get all workouts for the current user with pagination and filtering
