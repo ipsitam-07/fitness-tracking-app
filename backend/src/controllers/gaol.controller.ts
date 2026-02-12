@@ -8,7 +8,6 @@ import {
   deleteUserGoalService,
 } from '../services/goal.service';
 import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
-import { AppError } from '../utils/error';
 
 //Controller for goal creation
 export const createGoals = async (req: IAuthRequest, res: Response) => {
