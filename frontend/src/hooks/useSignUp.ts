@@ -1,14 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { signup } from '@/service/auth.service';
-import { useAuthStore } from '../store/auth.store';
+import { useAuth } from '@/store/stores';
+import { setToken } from '@/utils/storage';
 
 export function useSignup() {
-  const setAuthToken = useAuthStore((s) => s.setAuthToken);
+  const { hydrate } = useAuth();
 
   return useMutation({
     mutationFn: signup,
     onSuccess: (data) => {
-      setAuthToken(data.token);
+      setToken(data.data.accessToken);
+      hydrate();
     },
   });
 }

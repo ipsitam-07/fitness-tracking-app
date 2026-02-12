@@ -258,6 +258,20 @@ export const useStore = create<StoreState>()(
 );
 
 //Selectors
+
+export const useAuth = () =>
+  useStore(
+    useShallow((state) => ({
+      isAuthenticated: state.isAuthenticated,
+      user: state.user,
+      token: state.token,
+      setAuth: state.setAuth,
+      setUser: state.setUser,
+      logout: state.logout,
+      hydrate: state.hydrate,
+    })),
+  );
+
 export const useAuthForms = () =>
   useStore(
     useShallow((state) => ({

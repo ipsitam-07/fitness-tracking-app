@@ -24,7 +24,7 @@ function SignUpForm() {
     e.preventDefault();
     signUp.mutate(formData, {
       onSuccess: () => {
-        navigate('/goalsRegister');
+        navigate('/login');
       },
     });
   };
@@ -43,24 +43,6 @@ function SignUpForm() {
 
         <main className="grow flex items-center justify-center p-6 bg-gradient-mesh">
           <div className="auth-card">
-            {/* Progress Section */}
-            <div className="mb-10">
-              <div className="flex justify-between items-end mb-3">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                    {SIGN_UP_TEXT.PROGRESS_HEADING}
-                  </span>
-                  <h3 className="text-foreground dark:text-white text-sm font-medium">
-                    {SIGN_UP_TEXT.PROGRESS_SUB_HEADING}
-                  </h3>
-                </div>
-                <span className="text-sm font-bold text-foreground dark:text-white">50%</span>
-              </div>
-              <div className="w-full bg-border-light dark:bg-white/10 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-primary h-full w-1/2 rounded-full transition-all duration-500"></div>
-              </div>
-            </div>
-
             {/* Form Header */}
             <div className="mb-10 text-center">
               <h1 className="text-foreground dark:text-white text-3xl font-bold mb-3">

@@ -17,7 +17,7 @@ export interface Goal {
   currentValue: number;
   startDate: string;
   endDate: string;
-  status: 'active' | 'completed' | 'abandoned';
+  status?: 'active' | 'completed' | 'abandoned';
   description?: string;
   createdAt: string;
   updatedAt: string;

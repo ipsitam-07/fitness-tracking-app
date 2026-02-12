@@ -30,7 +30,7 @@ export const SIGN_UP_TEXT = {
   PASSWORD_LABEL: 'Password',
   PASSWORD_PLACEHOLDER: 'Min. 8 characters',
   SIGN_UP_IN_PROGRESS: 'Creating Account...',
-  SIGN_UP_SUCCESS: 'Continue to Goals',
+  SIGN_UP_SUCCESS: 'Continue to Login',
   SIGN_UP_ERROR: 'Signup failed. Please try again.',
   TERMS_TEXT: {
     AGREE_TEXT: 'By signing up, you agree to our',

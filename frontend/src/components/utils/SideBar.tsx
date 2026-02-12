@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { User, Zap, LogOut, Menu, X, ChevronLeft } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useEffect, useCallback } from 'react';
-import { useAuthStore } from '@/store/auth.store';
+import { useAuth } from '@/store/stores';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useUI } from '@/store/stores';
@@ -12,7 +12,7 @@ import { APP_NAME, ROUTES, SIDEBAR_LINKS, SIDEBAR_UI_STRINGS } from '@/utils/con
 
 export function Sidebar() {
   const location = useLocation();
-  const logout = useAuthStore((s) => s.logout);
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const { data: user } = useCurrentUser();
 
