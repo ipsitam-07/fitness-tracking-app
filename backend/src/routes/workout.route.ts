@@ -10,6 +10,8 @@ import {
 import { getWorkoutStats } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
 import { asyncHandler } from '../utils/asyncHandler';
+import { validate } from '../middlewares/validation.middleware';
+import { createWorkoutSchema, updateWorkoutSchema } from '../schemas/workout.schema';
 
 const router = Router();
 //JWT auth middleware
@@ -60,7 +62,7 @@ router.use(apiRateLimiter);
  *         description: Invalid workout data
  */
 //POST /workouts
-router.post('/', asyncHandler(createWorkout));
+router.post('/', validate(createWorkoutSchema), asyncHandler(createWorkout));
 
 /**
  * @swagger
@@ -296,7 +298,7 @@ router.get('/:id', asyncHandler(getWorkoutbyID));
  */
 
 //PATCH /workouts/:id
-router.patch('/:id', asyncHandler(updateWorkoutbyID));
+router.patch('/:id', validate(updateWorkoutSchema), asyncHandler(updateWorkoutbyID));
 
 /**
  * @swagger

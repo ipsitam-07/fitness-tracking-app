@@ -9,15 +9,15 @@ interface GoalAttributes {
   targetValue: number;
   currentValue: number;
   startingValue?: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   status: GoalStatus;
   description?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-interface GoalCreationAttributes extends Optional<GoalAttributes, 'id' | 'status'> {}
+export interface GoalCreationAttributes extends Optional<GoalAttributes, 'id' | 'status'> {}
 
 export class Goal extends Model<GoalAttributes, GoalCreationAttributes> implements GoalAttributes {
   public id!: string;

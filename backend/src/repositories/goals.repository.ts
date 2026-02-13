@@ -1,5 +1,5 @@
 import { Goal } from '../database/models';
-import { ICreateGoalsDTO, IUpdateGoalsDTO } from '../dtos/goals.dto';
+import { IUpdateGoalsDTO, ICreateGoalsDTO } from '../dtos/goals.dto';
 import { Op } from 'sequelize';
 import { GoalFilters } from '../interfaces/goals';
 
@@ -21,11 +21,11 @@ export async function getGoalbyUserID(filters: GoalFilters) {
     whereClause[Op.or] = [{ type: { [Op.iLike]: `%${search}%` } }];
   }
 
-  if (type) whereClause.type = type;
+  if (type) whereClause.goalType = type;
   if (status) whereClause.status = status;
 
   if (startDate && endDate) {
-    whereClause.createdAt = {
+    whereClause.startDate = {
       [Op.between]: [new Date(startDate), new Date(endDate)],
     };
   } else if (startDate) {

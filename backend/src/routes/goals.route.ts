@@ -10,6 +10,8 @@ import {
 import { getGoalProgress } from '../controllers/stats.controller';
 import { apiRateLimiter } from '../middlewares/rateLimiter';
 import { asyncHandler } from '../utils/asyncHandler';
+import { validate } from '../middlewares/validation.middleware';
+import { createGoalSchema, updateGoalSchema } from '../schemas/goal.schema';
 
 const router = Router();
 
@@ -164,7 +166,7 @@ router.get('/:id/progress', asyncHandler(getGoalProgress));
  */
 
 //POST /goals
-router.post('/', asyncHandler(createGoals));
+router.post('/', validate(createGoalSchema), asyncHandler(createGoals));
 
 /**
  * @swagger
@@ -326,7 +328,7 @@ router.get('/:id', asyncHandler(getGoalsbyID));
  */
 
 //PATCH /goals/:id
-router.patch('/:id', updateGoals);
+router.patch('/:id', validate(updateGoalSchema), updateGoals);
 
 /**
  * @swagger
